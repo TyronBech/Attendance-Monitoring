@@ -1,4 +1,4 @@
-import { Form, Head, usePage } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -7,10 +7,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import AuthSimpleLayout from '@/layouts/auth/auth-simple-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
-import AuthSimpleLayout from '@/layouts/auth/auth-simple-layout';
 
 type Props = {
     status?: string;
@@ -59,7 +59,7 @@ export default function Login({
                                     <Label htmlFor="password">Password</Label>
                                     {canResetPassword && (
                                         <TextLink
-                                            href={request()}
+                                            href={request().url}
                                             className="ml-auto text-sm text-primary-600 hover:text-primary-700"
                                             tabIndex={5}
                                         >
@@ -104,7 +104,7 @@ export default function Login({
                         {canRegister && (
                             <div className="text-center text-sm text-muted-foreground">
                                 Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5} className="text-primary-600 hover:text-primary-700">
+                                <TextLink href={register().url} tabIndex={5} className="text-primary-600 hover:text-primary-700">
                                     Sign up
                                 </TextLink>
                             </div>

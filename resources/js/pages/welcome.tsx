@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { login } from '@/routes';
+import { home, login } from '@/routes';
 
 export default function Welcome() {
     const { ui } = usePage().props as any;
@@ -11,8 +11,8 @@ export default function Welcome() {
             {/* Header */}
             <header className="sticky top-0 z-50">
                 <nav className="bg-primary-500 border-gray-200 dark:bg-primary-500">
-                    <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                        <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+                    <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
+                        <Link href={home().url} className="flex items-center space-x-3 rtl:space-x-reverse">
                             {ui?.org_logo ? (
                                 <img 
                                     className="rounded-full w-16 h-16 md:w-20 md:h-20 object-cover" 
@@ -49,7 +49,7 @@ export default function Welcome() {
                                 </li>
                                 <li>
                                     <Link 
-                                        href={login()}
+                                        href={login().url}
                                         className="block py-2 px-3 text-white rounded hover:bg-tertiary-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white lg:dark:hover:text-tertiary-500 dark:hover:bg-tertiary-500 dark:hover:text-white lg:dark:hover:bg-transparent"
                                     >
                                         Login
@@ -63,7 +63,7 @@ export default function Welcome() {
 
             <main className="container relative mx-auto px-2 flex flex-col">
                 {/* Hero Section */}
-                <div id="main-welcome" className="flex items-center justify-center max-w-screen-xl my-16 md:my-24 lg:my-48 mx-auto px-4 sm:px-6 md:px-10">
+                <div id="main-welcome" className="flex items-center justify-center max-w-7xl my-16 md:my-24 lg:my-48 mx-auto px-4 sm:px-6 md:px-10">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10 lg:gap-12">
                         {ui?.org_logo ? (
                             <img
@@ -99,8 +99,8 @@ export default function Welcome() {
 
                 {/* About Section */}
                 <div id="about" className="min-h-screen flex items-center justify-center py-16 sm:py-24">
-                    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16">
-                        <div className="md:w-1/3 flex-shrink-0">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16">
+                        <div className="md:w-1/3 shrink-0">
                             <div className="mx-auto w-48 h-48 sm:w-56 sm:h-56 md:w-full md:h-auto bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
                                 [Animated Logo Placeholder]
                             </div>
@@ -124,7 +124,7 @@ export default function Welcome() {
                     <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-center text-gray-900 dark:text-white mb-12">
                         Our Services
                     </h2>
-                    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                         <ServiceCard 
                             title="Attendance Tracking" 
                             description="Efficiently monitor and manage attendance with real-time logging and automated record-keeping." 
@@ -155,18 +155,18 @@ export default function Welcome() {
 
             {/* Footer */}
             <footer className="bg-white dark:bg-gray-900 mt-10 border-t border-gray-200 dark:border-gray-700">
-                <div className="mx-auto w-full max-w-screen-xl px-4 py-6 lg:py-8">
+                <div className="mx-auto w-full max-w-7xl px-4 py-6 lg:py-8">
                     <div className="md:flex md:justify-between md:gap-6 lg:gap-8">
                         <div className="mb-6 md:mb-0 md:max-w-xs lg:max-w-md">
                             <a href={ui?.social_links?.website || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center">
                                 {ui?.org_logo && (
-                                    <img src={ui.org_logo} className="h-12 w-12 md:h-16 md:w-16 me-3 rounded-full flex-shrink-0 object-cover" alt="Logo" />
+                                    <img src={ui.org_logo} className="h-12 w-12 md:h-16 md:w-16 me-3 rounded-full shrink-0 object-cover" alt="Logo" />
                                 )}
                                 <div className="min-w-0">
-                                    <span className="self-center text-sm md:text-lg font-semibold dark:text-white break-words">
+                                    <span className="self-center text-sm md:text-lg font-semibold dark:text-white wrap-break-word">
                                         {ui?.org_name || 'Organization Name'}
                                     </span>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 break-words">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 wrap-break-word">
                                         {ui?.org_address || 'Address not set'}
                                     </p>
                                 </div>

@@ -100,7 +100,7 @@ export function AppHeader() {
                                 </SheetHeader>
                                 <div className="flex flex-col space-y-4">
                                     <Link 
-                                        href={dashboard()}
+                                        href={dashboard().url}
                                         className={cn(
                                             "flex items-center space-x-2 p-2 rounded-lg transition-colors",
                                             isCurrentUrl(dashboard().url) ? "bg-primary-50 text-primary-700 font-bold" : "text-gray-600 hover:bg-gray-50"

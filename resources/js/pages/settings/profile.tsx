@@ -1,7 +1,6 @@
-import { FormEventHandler, useState, useRef } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Camera, CheckCircle2, Edit3, Eye, EyeOff, Lock, ShieldCheck, ShieldAlert, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useRef, type FormEventHandler } from 'react';
 
 import AppLayout from '@/layouts/app-layout';
 import profile from '@/routes/profile';
@@ -48,7 +47,7 @@ export default function Profile() {
     
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { data, setData, patch, post, processing, errors, reset } = useForm({
+    const { data, setData, patch, processing, errors, reset } = useForm({
         first_name: user.first_name,
         middle_name: user.middle_name || '',
         last_name: user.last_name,
@@ -90,6 +89,7 @@ export default function Profile() {
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+
         if (file) {
             setData('profile_image', file);
             const reader = new FileReader();
@@ -105,6 +105,7 @@ export default function Profile() {
             reset();
             setPreviewImage(user.profile_image);
         }
+
         setIsEditMode(enable);
     };
 
@@ -297,7 +298,7 @@ export default function Profile() {
                                                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400 peer pr-10"
                                                         placeholder=" "
                                                     />
-                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Current Password</label>
+                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Current Password</label>
                                                     <button 
                                                         type="button" 
                                                         onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -317,7 +318,7 @@ export default function Profile() {
                                                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400 peer pr-10"
                                                         placeholder=" "
                                                     />
-                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">New Password</label>
+                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">New Password</label>
                                                     <button 
                                                         type="button" 
                                                         onClick={() => setShowNewPassword(!showNewPassword)}
@@ -337,7 +338,7 @@ export default function Profile() {
                                                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400 peer pr-10"
                                                         placeholder=" "
                                                     />
-                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm Password</label>
+                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm Password</label>
                                                     <button 
                                                         type="button" 
                                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -380,7 +381,7 @@ export default function Profile() {
                 </div>
 
                 {/* Two-Factor Authentication Card */}
-                <div className="max-w-5xl mx-auto p-6 sm:p-8 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="max-w-5xl mx-auto p-6 sm:p-8 bg-linear-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
@@ -397,7 +398,7 @@ export default function Profile() {
                             <div className="flex flex-wrap items-center gap-4">
                                 {user.two_factor_enabled ? (
                                     <>
-                                        <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 shadow-sm">
+                                        <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-linear-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 shadow-sm">
                                             <CheckCircle2 size={16} className="mr-2" />
                                             <span>Active & Protected</span>
                                         </div>
@@ -408,7 +409,7 @@ export default function Profile() {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 dark:from-amber-900 dark:to-amber-800 dark:text-amber-200 shadow-sm">
+                                        <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-linear-to-r from-amber-100 to-amber-200 text-amber-800 dark:from-amber-900 dark:to-amber-800 dark:text-amber-200 shadow-sm">
                                             <ShieldAlert size={16} className="mr-2" />
                                             <span>Not Configured</span>
                                         </div>
@@ -421,12 +422,12 @@ export default function Profile() {
                             </div>
                         </div>
 
-                        <div className="flex-shrink-0">
+                        <div className="shrink-0">
                             {user.two_factor_enabled ? (
                                 <button 
                                     type="button" 
                                     onClick={() => openTwoFactorModal('disable')}
-                                    className="group relative inline-flex items-center justify-center px-6 py-3 text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-lg text-sm transition-all duration-300 shadow-md hover:shadow-lg"
+                                    className="group relative inline-flex items-center justify-center px-6 py-3 text-white bg-linear-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-lg text-sm transition-all duration-300 shadow-md hover:shadow-lg"
                                 >
                                     <ShieldAlert size={18} className="mr-2 transition-transform group-hover:scale-110" />
                                     <span>Disable 2FA</span>
@@ -448,7 +449,7 @@ export default function Profile() {
                     {!user.two_factor_enabled && (
                         <div className="mt-6 p-4 rounded-r-lg border-l-4" style={{ backgroundColor: `${settings.theme_colors.secondary}10`, borderColor: settings.theme_colors.primary }}>
                             <div className="flex items-start">
-                                <ShieldCheck size={18} className="mt-0.5 flex-shrink-0" style={{ color: settings.theme_colors.primary }} />
+                                <ShieldCheck size={18} className="mt-0.5 shrink-0" style={{ color: settings.theme_colors.primary }} />
                                 <div className="ml-3">
                                     <p className="text-sm font-medium" style={{ color: settings.theme_colors.primary }}>Security Tip</p>
                                     <p className="text-xs mt-1 text-gray-600 dark:text-gray-400">Enable 2FA to add an extra layer of protection to your account. You'll need an authenticator app like Google Authenticator or Microsoft Authenticator.</p>
@@ -491,7 +492,7 @@ export default function Profile() {
                                         autoFocus
                                         required
                                     />
-                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
                                     <button 
                                         type="button" 
                                         onClick={() => setShowModalPassword(!showModalPassword)}

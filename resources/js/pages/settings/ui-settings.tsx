@@ -1,6 +1,6 @@
-import { FormEventHandler, useState, useEffect } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Edit3, Facebook, Globe, Instagram, Mail, MapPin, Phone, Twitter, Youtube, X, UploadCloud, Info } from 'lucide-react';
+import { useState, type FormEventHandler } from 'react';
 
 import AppLayout from '@/layouts/app-layout';
 import settingsRoutes from '@/routes/settings';
@@ -38,7 +38,7 @@ export default function UISettingsPage() {
     const [previewLogo, setPreviewLogo] = useState<string | null>(settings.org_logo_base64);
     const [previewLogoFull, setPreviewLogoFull] = useState<string | null>(settings.org_logo_full_base64);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing } = useForm({
         org_name: settings.org_name || '',
         org_initial: settings.org_initial || '',
         org_address: settings.org_address || '',
@@ -67,6 +67,7 @@ export default function UISettingsPage() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'logo_full') => {
         const file = e.target.files?.[0];
+
         if (file) {
             if (type === 'logo') {
                 setData('org_logo', file);
@@ -349,7 +350,7 @@ export default function UISettingsPage() {
                                         </div>
                                     </div>
                                     <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg flex items-start gap-3">
-                                        <Info className="text-amber-500 flex-shrink-0 mt-0.5" size={18} />
+                                        <Info className="text-amber-500 shrink-0 mt-0.5" size={18} />
                                         <p className="text-xs text-amber-700 dark:text-amber-300">
                                             Please use high-quality PNG images with transparent backgrounds for the best visual results.
                                         </p>
