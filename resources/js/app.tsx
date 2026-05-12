@@ -6,6 +6,8 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
+import { DynamicTheme } from '@/components/dynamic-theme';
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -26,6 +28,7 @@ createInertiaApp({
     withApp(app) {
         return (
             <TooltipProvider delayDuration={0}>
+                <DynamicTheme />
                 {app}
                 <Toaster />
             </TooltipProvider>

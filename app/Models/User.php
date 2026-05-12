@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     protected $table = 'usr_users';
+
     protected $guarded = [];
+
     public $timestamps = true;
 
     /**
@@ -59,30 +61,30 @@ class User extends Authenticatable
 
     public static function getTableName()
     {
-        return (new self())->getTable();
+        return (new self)->getTable();
     }
 
-    public function students() : HasOne
+    public function students(): HasOne
     {
         return $this->hasOne(StudentDetail::class, 'user_id', 'id');
     }
 
-    public function employees() : HasOne
+    public function employees(): HasOne
     {
         return $this->hasOne(EmployeeDetail::class, 'user_id', 'id');
     }
 
-    public function visitors() : HasOne
+    public function visitors(): HasOne
     {
         return $this->hasOne(VisitorDetail::class, 'user_id', 'id');
     }
 
-    public function privileges() : BelongsTo
+    public function privileges(): BelongsTo
     {
         return $this->belongsTo(UserGroup::class, 'privilege_id', 'id');
     }
 
-    public function logs() : HasMany
+    public function logs(): HasMany
     {
         return $this->hasMany(Log::class, 'user_id', 'id');
     }
@@ -90,7 +92,7 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::deleting(function ($user) {
-            if (!$user->isForceDeleting()) {
+            if (! $user->isForceDeleting()) {
                 $user->logs()->delete();
             }
         });

@@ -14,11 +14,11 @@ class AdminAuthentication
      * Handle an incoming request.
      * Ensures user is authenticated and has admin role.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login')->with('error', 'You must be logged in.');
         }
 
@@ -26,12 +26,12 @@ class AdminAuthentication
 
         // Check if user has admin or super_admin role
         // Use case-insensitive check for flexibility with existing data
-        $userRoles = $user->getRoleNames()->map(fn($role) => strtolower($role))->toArray();
+        $userRoles = $user->getRoleNames()->map(fn ($role) => strtolower($role))->toArray();
         $adminRoles = [strtolower(RolesEnum::SUPER_ADMIN->value), strtolower(RolesEnum::ADMIN->value)];
 
-        $isAdmin = !empty(array_intersect($userRoles, $adminRoles));
+        $isAdmin = ! empty(array_intersect($userRoles, $adminRoles));
 
-        if (!$isAdmin) {
+        if (! $isAdmin) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
