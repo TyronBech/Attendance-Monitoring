@@ -170,7 +170,7 @@ class ProfileController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Information updated successfully!']);
 
-        return redirect()->back();
+        return to_route('profile.edit');
     }
 
     /**
@@ -209,6 +209,9 @@ class ProfileController extends Controller
                 $backupCodes[] = strtoupper(Str::random(8));
             }
             $user->two_factor_backup_codes = json_encode($backupCodes);
+            $user->two_factor_secret = encrypt('secret');
+            $user->two_factor_recovery_codes = encrypt(json_encode($backupCodes));
+            $user->two_factor_confirmed_at = now();
 
             $user->save();
 
@@ -265,6 +268,8 @@ class ProfileController extends Controller
             $user = User::findOrFail(Auth::id());
             $user->two_factor_enabled = 0;
             $user->two_factor_secret = null;
+            $user->two_factor_recovery_codes = null;
+            $user->two_factor_confirmed_at = null;
             $user->two_factor_backup_codes = null;
             $user->save();
 
@@ -296,6 +301,10 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
         $user = $request->user();
 
         Auth::logout();
