@@ -20,7 +20,9 @@ test('two factor challenge can be rendered', function () {
         'confirmPassword' => true,
     ]);
 
+    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
+    $user->assignRole($role);
 
     $user->forceFill([
         'two_factor_secret' => encrypt('test-secret'),

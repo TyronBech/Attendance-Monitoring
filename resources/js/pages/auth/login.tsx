@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import AuthSimpleLayout from '@/layouts/auth/auth-simple-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -23,7 +24,10 @@ export default function Login({
     canRegister,
 }: Props) {
     return (
-        <>
+        <AuthSimpleLayout
+            title="Log in to your account"
+            description="Enter your email and password below to log in"
+        >
             <Head title="Log in" />
 
             <Form
@@ -45,6 +49,7 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
+                                    className="focus-visible:ring-primary-500"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -54,8 +59,8 @@ export default function Login({
                                     <Label htmlFor="password">Password</Label>
                                     {canResetPassword && (
                                         <TextLink
-                                            href={request()}
-                                            className="ml-auto text-sm"
+                                            href={request().url}
+                                            className="ml-auto text-sm text-primary-600 hover:text-primary-700"
                                             tabIndex={5}
                                         >
                                             Forgot password?
@@ -69,6 +74,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
+                                    className="focus-visible:ring-primary-500"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -78,13 +84,14 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
+                                    className="data-[state=checked]:bg-primary-600 data-[state=checked]:border-primary-600"
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember" className="font-normal">Remember me</Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-4 w-full bg-primary-600 hover:bg-primary-700 text-white"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -97,7 +104,7 @@ export default function Login({
                         {canRegister && (
                             <div className="text-center text-sm text-muted-foreground">
                                 Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5}>
+                                <TextLink href={register().url} tabIndex={5} className="text-primary-600 hover:text-primary-700">
                                     Sign up
                                 </TextLink>
                             </div>
@@ -111,11 +118,6 @@ export default function Login({
                     {status}
                 </div>
             )}
-        </>
+        </AuthSimpleLayout>
     );
 }
-
-Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
-};

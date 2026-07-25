@@ -26,7 +26,7 @@ Appearance.layout = {
     breadcrumbs: [
         {
             title: 'Appearance settings',
-            href: editAppearance(),
+            href: editAppearance().url,
         },
     ],
 };

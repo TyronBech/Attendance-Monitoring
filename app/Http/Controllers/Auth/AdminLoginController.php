@@ -30,7 +30,7 @@ class AdminLoginController
         ]);
 
         // Rate limiting
-        $throttleKey = Str::transliterate(Str::lower($email) . '|' . $request->ip());
+        $throttleKey = Str::transliterate(Str::lower($email).'|'.$request->ip());
 
         if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
             $seconds = RateLimiter::availableIn($throttleKey);
@@ -50,7 +50,7 @@ class AdminLoginController
         // Find user by email
         $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             Log::error('Admin Login: Failed - User not found', [
                 'email' => $email,
                 'ip_address' => $request->ip(),
@@ -58,11 +58,12 @@ class AdminLoginController
             ]);
 
             $this->handleFailedAttempt($throttleKey);
+
             return back()->with('error', 'Invalid email or password.')->withInput();
         }
 
         // Verify password
-        if (!Hash::check($password, $user->password)) {
+        if (! Hash::check($password, $user->password)) {
             Log::error('Admin Login: Failed - Invalid password', [
                 'email' => $email,
                 'ip_address' => $request->ip(),
@@ -70,15 +71,16 @@ class AdminLoginController
             ]);
 
             $this->handleFailedAttempt($throttleKey);
+
             return back()->with('error', 'Invalid email or password.')->withInput();
         }
 
         // Check if user has admin role
-        $userRoles = $user->getRoleNames()->map(fn($role) => strtolower($role))->toArray();
+        $userRoles = $user->getRoleNames()->map(fn ($role) => strtolower($role))->toArray();
         $adminRoles = [strtolower(RolesEnum::SUPER_ADMIN->value), strtolower(RolesEnum::ADMIN->value)];
-        $isAdmin = !empty(array_intersect($userRoles, $adminRoles));
+        $isAdmin = ! empty(array_intersect($userRoles, $adminRoles));
 
-        if (!$isAdmin) {
+        if (! $isAdmin) {
             Log::error('Admin Login: Failed - User has no admin role', [
                 'user_id' => $user->id,
                 'email' => $email,

@@ -76,8 +76,12 @@
     @endif
     @endif
 
+    @if($ui && !empty($ui['org_logo_base64']))
+    <link rel="icon" type="image/x-icon" href="{{ $ui['org_logo_base64'] }}">
+    @else
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    @endif
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     @fonts

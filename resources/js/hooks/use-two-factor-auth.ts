@@ -1,5 +1,5 @@
-import { useHttp } from '@inertiajs/react';
 import { useCallback, useState } from 'react';
+import { useHttp } from '@inertiajs/react';
 import { qrCode, recoveryCodes, secretKey } from '@/routes/two-factor';
 
 export type UseTwoFactorAuthReturn = {

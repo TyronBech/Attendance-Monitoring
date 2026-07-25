@@ -11,7 +11,9 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
+    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
+    $user->assignRole($role);
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,
@@ -30,7 +32,9 @@ test('users with two factor enabled are redirected to two factor challenge', fun
         'confirmPassword' => true,
     ]);
 
+    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
+    $user->assignRole($role);
 
     $user->forceFill([
         'two_factor_secret' => encrypt('test-secret'),

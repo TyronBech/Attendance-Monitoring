@@ -10,7 +10,9 @@ class UISetting extends Model
     use SoftDeletes;
 
     protected $table = 'ui_settings';
+
     protected $primaryKey = 'id';
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -37,11 +39,11 @@ class UISetting extends Model
      */
     public function getOrgLogoBase64Attribute()
     {
-        if (!$this->org_logo) {
+        if (! $this->org_logo) {
             return null;
         }
 
-        return 'data:image/png;base64,' . $this->org_logo;
+        return 'data:image/png;base64,'.$this->org_logo;
     }
 
     /**
@@ -49,10 +51,10 @@ class UISetting extends Model
      */
     public function getOrgLogoFullBase64Attribute()
     {
-        if (!$this->org_logo_full) {
+        if (! $this->org_logo_full) {
             return null;
         }
 
-        return 'data:image/png;base64,' . $this->org_logo_full;
+        return 'data:image/png;base64,'.$this->org_logo_full;
     }
 }
