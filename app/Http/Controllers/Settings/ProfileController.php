@@ -71,9 +71,9 @@ class ProfileController extends Controller
         ]);
 
         $rules = [
-            'first_name' => ['required', 'string', 'max:50'],
+            'first_name' => ['required_without:name', 'nullable', 'string', 'max:50'],
             'middle_name' => ['nullable', 'string', 'max:50'],
-            'last_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required_without:name', 'nullable', 'string', 'max:50'],
             'suffix' => ['nullable', 'string', 'max:10'],
             'email' => ['required', 'string', 'max:50', 'email'],
             'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
@@ -109,11 +109,33 @@ class ProfileController extends Controller
 
         try {
             $user = User::findOrFail(Auth::id());
-            $user->first_name = $request->input('first_name');
-            $user->middle_name = $request->input('middle_name');
-            $user->last_name = $request->input('last_name');
-            $user->suffix = $request->input('suffix');
-            $user->email = $request->input('email');
+
+            if ($request->has('name') && ! $request->has('first_name')) {
+                $user->name = $request->input('name');
+            }
+
+            if ($request->has('first_name')) {
+                $user->first_name = $request->input('first_name');
+            }
+
+            if ($request->has('middle_name')) {
+                $user->middle_name = $request->input('middle_name');
+            }
+
+            if ($request->has('last_name')) {
+                $user->last_name = $request->input('last_name');
+            }
+
+            if ($request->has('suffix')) {
+                $user->suffix = $request->input('suffix');
+            }
+
+            if ($request->has('email')) {
+                if ($user->email !== $request->input('email')) {
+                    $user->email_verified_at = null;
+                }
+                $user->email = $request->input('email');
+            }
 
             if ($request->hasFile('profile_image')) {
                 $base64Image = base64_encode(file_get_contents($request->file('profile_image')->getRealPath()));

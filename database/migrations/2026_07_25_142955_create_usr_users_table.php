@@ -15,14 +15,22 @@ return new class extends Migration
         Schema::create('usr_users', function (Blueprint $table) {
             $table->id();
             $table->string('rfid', 20)->nullable();
-            $table->bigInteger('privilege_id')->unsigned();
-            $table->string('first_name', 100);
+            $table->bigInteger('privilege_id')->unsigned()->nullable();
+            $table->string('first_name', 100)->nullable();
             $table->string('middle_name', 100)->nullable();
             $table->string('suffix', 10)->nullable();
-            $table->enum('gender', ['Male', 'Female']);
+            $table->enum('gender', ['Male', 'Female'])->default('Male');
             $table->binary('profile_image')->nullable();
-            $table->string('last_name', 100);
+            $table->string('last_name', 100)->nullable();
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
+            $table->rememberToken();
+            $table->text('two_factor_secret')->nullable();
+            $table->text('two_factor_recovery_codes')->nullable();
+            $table->timestamp('two_factor_confirmed_at')->nullable();
+            $table->boolean('two_factor_enabled')->default(false);
+            $table->text('two_factor_backup_codes')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
