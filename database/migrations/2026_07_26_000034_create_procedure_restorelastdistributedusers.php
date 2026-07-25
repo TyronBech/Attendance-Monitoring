@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 DROP PROCEDURE IF EXISTS `RestoreLastDistributedUsers`;
 CREATE PROCEDURE `RestoreLastDistributedUsers`()
@@ -70,6 +74,10 @@ SQL);
 
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 DROP PROCEDURE IF EXISTS `RestoreLastDistributedUsers`;
 SQL);

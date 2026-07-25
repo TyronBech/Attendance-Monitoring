@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 CREATE TRIGGER `trg_usr_users_after_insert` AFTER INSERT ON `usr_users` FOR EACH ROW BEGIN
     DECLARE actor VARCHAR(50);
@@ -29,6 +33,10 @@ SQL);
 
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 DROP TRIGGER IF EXISTS `trg_usr_users_after_insert`;
 SQL);

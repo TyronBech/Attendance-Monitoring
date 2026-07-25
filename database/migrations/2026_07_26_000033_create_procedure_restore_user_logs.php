@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 DROP PROCEDURE IF EXISTS `restore_user_logs`;
 CREATE PROCEDURE `restore_user_logs`(IN restore_date DATE)
@@ -41,6 +45,10 @@ SQL);
 
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 DROP PROCEDURE IF EXISTS `restore_user_logs`;
 SQL);

@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 CREATE TRIGGER `soft_delete_user_details` AFTER UPDATE ON `usr_users` FOR EACH ROW BEGIN
     IF NEW.deleted_at IS NOT NULL THEN
@@ -24,6 +28,10 @@ SQL);
 
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
 DROP TRIGGER IF EXISTS `soft_delete_user_details`;
 SQL);

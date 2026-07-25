@@ -12,6 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::statement("ALTER TABLE import_progress MODIFY COLUMN type ENUM('materials', 'students', 'employees', 'user_images') NOT NULL");
     }
 
@@ -20,6 +24,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         // First delete any rows with the new enum value to avoid errors when rolling back
         DB::table('import_progress')->where('type', 'user_images')->delete();
 

@@ -10,6 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared("DROP PROCEDURE IF EXISTS `DistributeStagingUsers`;");
         DB::unprepared(<<<'SQL'
 CREATE PROCEDURE `DistributeStagingUsers`()
@@ -109,6 +113,10 @@ SQL);
      */
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::unprepared("DROP PROCEDURE IF EXISTS `DistributeStagingUsers`;");
         DB::unprepared(<<<'SQL'
 CREATE PROCEDURE `DistributeStagingUsers`()
