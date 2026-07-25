@@ -1,6 +1,7 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Camera, CheckCircle2, Edit3, Eye, EyeOff, Lock, ShieldCheck, ShieldAlert, X } from 'lucide-react';
-import { useState, useRef, type FormEventHandler } from 'react';
+import { useState, useRef } from 'react';
+import type { FormEventHandler } from 'react';
 
 import AppLayout from '@/layouts/app-layout';
 import profile from '@/routes/profile';
