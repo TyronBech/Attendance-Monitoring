@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('ui_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('org_name')->nullable();
-            $table->string('org_initial', 10)->nullable();
-            $table->text('org_address')->nullable();
-            $table->longText('org_logo')->nullable();
-            $table->longText('org_logo_full')->nullable();
-            $table->string('email')->nullable();
-            $table->string('contact_number')->nullable();
+            $table->string('org_name', 100);
+            $table->string('org_initial', 45)->nullable();
+            $table->text('org_address');
+            $table->binary('org_logo');
+            $table->binary('org_logo_full');
+            $table->string('email', 100);
+            $table->string('contact_number', 45);
             $table->json('social_links')->nullable();
             $table->json('theme_colors')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
