@@ -22,15 +22,30 @@ function validateField(name: string, value: string) {
     switch (name) {
         case 'first_name':
         case 'last_name':
-            if (!trimmedValue) return 'This field is required.';
-            if (!namePattern.test(trimmedValue)) return 'Only letters and spaces are allowed.';
+            if (!trimmedValue) {
+return 'This field is required.';
+}
+
+            if (!namePattern.test(trimmedValue)) {
+return 'Only letters and spaces are allowed.';
+}
+
             return '';
         case 'middle_name':
-            if (trimmedValue && !namePattern.test(trimmedValue)) return 'Only letters and spaces are allowed.';
+            if (trimmedValue && !namePattern.test(trimmedValue)) {
+return 'Only letters and spaces are allowed.';
+}
+
             return '';
         case 'email':
-            if (!trimmedValue) return 'Email is required.';
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) return 'Invalid email address.';
+            if (!trimmedValue) {
+return 'Email is required.';
+}
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
+return 'Invalid email address.';
+}
+
             return '';
         case 'gender':
         case 'school_org':
@@ -51,10 +66,18 @@ type Props = {
 };
 
 function getCsrfToken(): string {
-    if (typeof document === 'undefined') return '';
+    if (typeof document === 'undefined') {
+return '';
+}
+
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
-    if (metaToken) return metaToken;
+
+    if (metaToken) {
+return metaToken;
+}
+
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
+
     return match ? decodeURIComponent(match[2]) : '';
 }
 
@@ -78,15 +101,21 @@ export default function VisitorForm({
     }, [active]);
 
     useEffect(() => {
-        if (!active) return undefined;
+        if (!active) {
+return undefined;
+}
+
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
 
         const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') onClose();
+            if (event.key === 'Escape') {
+onClose();
+}
         };
 
         window.addEventListener('keydown', handleEscape);
+
         return () => {
             document.body.style.overflow = previousOverflow;
             window.removeEventListener('keydown', handleEscape);
@@ -95,6 +124,7 @@ export default function VisitorForm({
 
     const handleFieldChange = (field: string, value: string) => {
         setForm((prev) => ({ ...prev, [field]: value }));
+
         if (errors[field]) {
             setErrors((prev) => ({ ...prev, [field]: validateField(field, value) }));
         }
@@ -103,13 +133,18 @@ export default function VisitorForm({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors: Record<string, string> = {};
+
         for (const [key, val] of Object.entries(form)) {
             const err = validateField(key, val as string);
-            if (err) newErrors[key] = err;
+
+            if (err) {
+newErrors[key] = err;
+}
         }
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+
             return;
         }
 
@@ -139,11 +174,13 @@ export default function VisitorForm({
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
+
                 return;
             }
 
             if (!res.ok || data.status !== 'success') {
                 onNotify?.(data.message || 'Error processing visitor submission.', { type: 'error' });
+
                 return;
             }
 
@@ -161,7 +198,9 @@ export default function VisitorForm({
         }
     };
 
-    if (!active) return null;
+    if (!active) {
+return null;
+}
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200" onClick={onClose}>

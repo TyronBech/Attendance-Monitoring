@@ -5,6 +5,7 @@ export default function ClockDisplay() {
 
     useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
+
         return () => clearInterval(timer);
     }, []);
 

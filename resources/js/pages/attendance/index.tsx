@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useEffect, useRef, useState } from 'react';
+import { home } from '@/routes';
 import ClockDisplay from './components/clock-display';
 import PCInputForm from './components/pc-input-form';
 import RFIDForm from './components/rfid-form';
 import VisitorForm from './components/visitor-form';
-import { home } from '@/routes';
 
 const AVATAR_RETRY_LIMIT = 2;
 const RECENT_SCANS_KEEP_ALIVE_INTERVAL_MS = 1000;
@@ -20,8 +20,15 @@ type RecentScan = {
 
 function getRecentScanGroupLabel(scan: RecentScan) {
     const normalizedGroup = String(scan?.groupName || '').trim().toLowerCase();
-    if (normalizedGroup === 'visitor') return 'Visitor';
-    if (normalizedGroup === 'student') return 'Student';
+
+    if (normalizedGroup === 'visitor') {
+return 'Visitor';
+}
+
+    if (normalizedGroup === 'student') {
+return 'Student';
+}
+
     return 'Employee';
 }
 
@@ -35,36 +42,55 @@ function getAvatarInitials(name = '') {
 }
 
 function hasAvatarImage(imageSource = '') {
-    if (typeof imageSource !== 'string') return false;
+    if (typeof imageSource !== 'string') {
+return false;
+}
+
     const normalized = imageSource.trim().toLowerCase();
+
     return normalized !== '' && !normalized.includes('id_default.png') && !normalized.includes('sncs-logo');
 }
 
 function buildRetryableAvatarSource(imageSource: string | null | undefined, attempt: number) {
-    if (typeof imageSource !== 'string' || imageSource.trim() === '') return '';
-    if (imageSource.startsWith('data:image/')) return imageSource;
-    if (attempt <= 0) return imageSource;
+    if (typeof imageSource !== 'string' || imageSource.trim() === '') {
+return '';
+}
+
+    if (imageSource.startsWith('data:image/')) {
+return imageSource;
+}
+
+    if (attempt <= 0) {
+return imageSource;
+}
+
     const separator = imageSource.includes('?') ? '&' : '?';
+
     return `${imageSource}${separator}retry=${attempt}`;
 }
 
 function RecentScanAvatar({ scan }: { scan: RecentScan }) {
+    const imageSource = typeof scan?.image === 'string' ? scan.image.trim() : '';
+    const [prevImageSource, setPrevImageSource] = useState(imageSource);
     const [retryCount, setRetryCount] = useState(0);
     const [imageFailed, setImageFailed] = useState(false);
-    const imageSource = typeof scan?.image === 'string' ? scan.image.trim() : '';
-    const resolvedImageSource = buildRetryableAvatarSource(imageSource, retryCount);
-    const canShowImage = hasAvatarImage(imageSource) && !imageFailed;
 
-    useEffect(() => {
+    if (prevImageSource !== imageSource) {
+        setPrevImageSource(imageSource);
         setRetryCount(0);
         setImageFailed(false);
-    }, [imageSource]);
+    }
+
+    const resolvedImageSource = buildRetryableAvatarSource(imageSource, retryCount);
+    const canShowImage = hasAvatarImage(imageSource) && !imageFailed;
 
     function handleImageError() {
         if (retryCount < AVATAR_RETRY_LIMIT) {
             setRetryCount((currentCount) => currentCount + 1);
+
             return;
         }
+
         setImageFailed(true);
     }
 
@@ -90,17 +116,22 @@ export default function AttendanceIndex() {
 
     const [showVisitorForm, setShowVisitorForm] = useState(false);
     const [showPcForm, setShowPcForm] = useState(false);
-    const [isGlobalLoading, setIsGlobalLoading] = useState(false);
+    const [, setIsGlobalLoading] = useState(false);
+    const [prevRecentScans, setPrevRecentScans] = useState(recentScans);
     const [recentActivity, setRecentActivity] = useState<RecentScan[]>(Array.isArray(recentScans) ? recentScans : []);
+
+    if (prevRecentScans !== recentScans) {
+        setPrevRecentScans(recentScans);
+        setRecentActivity(Array.isArray(recentScans) ? recentScans : []);
+    }
 
     const isRecentScansRequestInFlightRef = useRef(false);
 
-    useEffect(() => {
-        setRecentActivity(Array.isArray(recentScans) ? recentScans : []);
-    }, [recentScans]);
-
     const handleScanSuccess = (scanEntry: RecentScan) => {
-        if (!scanEntry) return;
+        if (!scanEntry) {
+return;
+}
+
         setRecentActivity((currentEntries) => [
             scanEntry,
             ...currentEntries.filter((entry) => entry.id !== scanEntry.id),
@@ -108,7 +139,10 @@ export default function AttendanceIndex() {
     };
 
     const syncRecentScans = () => {
-        if (isRecentScansRequestInFlightRef.current) return;
+        if (isRecentScansRequestInFlightRef.current) {
+return;
+}
+
         isRecentScansRequestInFlightRef.current = true;
 
         fetch('/attendance/recent-scans', {
@@ -128,14 +162,18 @@ export default function AttendanceIndex() {
     };
 
     useEffect(() => {
-        if (typeof window === 'undefined' || typeof document === 'undefined') return undefined;
+        if (typeof window === 'undefined' || typeof document === 'undefined') {
+return undefined;
+}
 
         const pollIntervalId = window.setInterval(() => {
             syncRecentScans();
         }, RECENT_SCANS_KEEP_ALIVE_INTERVAL_MS);
 
         const handleVisibilityChange = () => {
-            if (!document.hidden) syncRecentScans();
+            if (!document.hidden) {
+syncRecentScans();
+}
         };
 
         const handleWindowFocus = () => {
@@ -154,8 +192,14 @@ export default function AttendanceIndex() {
     }, []);
 
     const getBadgeVariant = (type: string) => {
-        if (type === 'Time Out') return 'bg-rose-100 text-rose-700 border-rose-200';
-        if (type === 'Online Research Use') return 'bg-blue-100 text-blue-700 border-blue-200';
+        if (type === 'Time Out') {
+return 'bg-rose-100 text-rose-700 border-rose-200';
+}
+
+        if (type === 'Online Research Use') {
+return 'bg-blue-100 text-blue-700 border-blue-200';
+}
+
         return 'bg-emerald-100 text-emerald-700 border-emerald-200';
     };
 

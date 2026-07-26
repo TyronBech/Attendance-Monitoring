@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import TapIdPanel from './tap-id-panel';
 import useScannerCapture from '@/hooks/use-scanner-capture';
+import TapIdPanel from './tap-id-panel';
 
 function encodePayload(payload: any) {
     return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -12,19 +12,31 @@ function getDisplayName(userData: any) {
 
 function getDetailText(userData: any) {
     const isStudent = userData?.group_name?.toLowerCase() === 'student';
+
     if (isStudent) {
         return [userData?.level, userData?.section].filter(Boolean).join(' - ');
     }
+
     return userData?.role || userData?.group_name || 'Online Research Use';
 }
 
 function getCsrfToken(): string {
-    if (typeof document === 'undefined') return '';
+    if (typeof document === 'undefined') {
+return '';
+}
+
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
-    if (metaToken) return metaToken;
+
+    if (metaToken) {
+        return metaToken;
+    }
+
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
+
     return match ? decodeURIComponent(match[2]) : '';
 }
+
+const PANEL_DISPLAY_DURATION_MS = 1400;
 
 type Props = {
     showForm: boolean;
@@ -50,19 +62,20 @@ export default function PCInputForm({
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const clearUserTimeoutRef = useRef<any>(null);
-    const PANEL_DISPLAY_DURATION_MS = 1400;
-
-    useEffect(() => {
-        if (showForm) {
-            inputRef.current?.focus();
-            return;
-        }
+    const handleClose = () => {
         setIdentifier('');
         setIsSubmitting(false);
         setUserData(null);
         setErrorMessage(null);
         setSuccessMessage(null);
         clearTimeout(clearUserTimeoutRef.current);
+        onClose();
+    };
+
+    useEffect(() => {
+        if (showForm) {
+            inputRef.current?.focus();
+        }
     }, [showForm]);
 
     useEffect(() => () => {
@@ -77,6 +90,7 @@ export default function PCInputForm({
             setSuccessMessage(null);
             setIdentifier('');
             setErrorMessage('Please scan the RFID or enter your ID Number.');
+
             return;
         }
 
@@ -112,6 +126,7 @@ export default function PCInputForm({
                 onNotify?.(data.message || 'There was an error. Please try again.', {
                     type: 'error',
                 });
+
                 return;
             }
 
@@ -164,10 +179,12 @@ export default function PCInputForm({
     const hasProfileImage = Boolean(resolvedProfileImage) && !resolvedProfileImage.includes('id_default.png');
     const detailText = userData ? getDetailText(userData) : null;
 
-    if (!showForm) return null;
+    if (!showForm) {
+return null;
+}
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200" onClick={onClose}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200" onClick={handleClose}>
             <div className="w-full max-w-4xl my-auto bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-200 space-y-8 text-slate-900" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-start justify-between pb-5 border-b border-slate-200">
                     <div>
@@ -179,7 +196,7 @@ export default function PCInputForm({
                     </div>
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
                         aria-label="Close Online Research Use Form"
                     >

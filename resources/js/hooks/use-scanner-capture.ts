@@ -37,6 +37,7 @@ function isEditableElement(element: EventTarget | null): boolean {
     }
 
     const inputType = (element.getAttribute('type') || 'text').toLowerCase();
+
     return !['button', 'checkbox', 'color', 'file', 'hidden', 'radio', 'range', 'submit'].includes(inputType);
 }
 
@@ -99,18 +100,28 @@ export default function useScannerCapture({
         if (!enabled) {
             bufferRef.current = '';
             lastKeyTimestampRef.current = 0;
-            if (clearTimerRef.current) window.clearTimeout(clearTimerRef.current);
+
+            if (clearTimerRef.current) {
+window.clearTimeout(clearTimerRef.current);
+}
+
             return undefined;
         }
 
         const resetBuffer = () => {
             bufferRef.current = '';
             lastKeyTimestampRef.current = 0;
-            if (clearTimerRef.current) window.clearTimeout(clearTimerRef.current);
+
+            if (clearTimerRef.current) {
+window.clearTimeout(clearTimerRef.current);
+}
         };
 
         const scheduleBufferReset = () => {
-            if (clearTimerRef.current) window.clearTimeout(clearTimerRef.current);
+            if (clearTimerRef.current) {
+window.clearTimeout(clearTimerRef.current);
+}
+
             clearTimerRef.current = window.setTimeout(() => {
                 bufferRef.current = '';
                 lastKeyTimestampRef.current = 0;
@@ -130,6 +141,7 @@ export default function useScannerCapture({
 
             if (shouldIgnoreTarget(event.target, targetElement)) {
                 resetBuffer();
+
                 return;
             }
 
@@ -146,6 +158,7 @@ export default function useScannerCapture({
                 event.preventDefault();
                 mirrorValueRef.current?.(scannedValue);
                 onScanRef.current?.(scannedValue);
+
                 return;
             }
 

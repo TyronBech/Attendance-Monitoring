@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 export default function ClockWidget() {
-    const [time, setTime] = useState<Date | null>(null);
+    const [time, setTime] = useState<Date>(() => new Date());
 
     useEffect(() => {
-        setTime(new Date());
         const timer = setInterval(() => setTime(new Date()), 1000);
+
         return () => clearInterval(timer);
     }, []);
 

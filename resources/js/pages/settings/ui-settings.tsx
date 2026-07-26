@@ -1,6 +1,7 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Edit3, Facebook, Globe, Instagram, Mail, MapPin, Phone, Twitter, Youtube, X, UploadCloud, Info } from 'lucide-react';
-import { useState, type FormEventHandler } from 'react';
+import { useState  } from 'react';
+import type {FormEventHandler} from 'react';
 
 import AppLayout from '@/layouts/app-layout';
 import settingsRoutes from '@/routes/settings';

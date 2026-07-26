@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const AVATAR_RETRY_LIMIT = 2;
 
 function buildRetryableAvatarSource(imageSource: string | null, attempt: number) {
-    if (typeof imageSource !== 'string' || imageSource.trim() === '') return '';
-    if (imageSource.startsWith('data:image/')) return imageSource;
-    if (attempt <= 0) return imageSource;
+    if (typeof imageSource !== 'string' || imageSource.trim() === '') {
+return '';
+}
+
+    if (imageSource.startsWith('data:image/')) {
+return imageSource;
+}
+
+    if (attempt <= 0) {
+return imageSource;
+}
+
     const separator = imageSource.includes('?') ? '&' : '?';
+
     return `${imageSource}${separator}retry=${attempt}`;
 }
 
@@ -37,27 +47,37 @@ export default function TapIdPanel({
 }: Props) {
     const showProfile = Boolean(profileImage || displayName);
     const showError = Boolean(errorMessage && !showProfile);
-    const showFineNotice = Boolean(hasLibraryFine && showProfile);
+    const [prevProfileImage, setPrevProfileImage] = useState(profileImage);
     const [retryCount, setRetryCount] = useState(0);
     const [imageFailed, setImageFailed] = useState(false);
-    const resolvedProfileImage = buildRetryableAvatarSource(profileImage, retryCount);
 
-    useEffect(() => {
+    if (prevProfileImage !== profileImage) {
+        setPrevProfileImage(profileImage);
         setRetryCount(0);
         setImageFailed(false);
-    }, [profileImage]);
+    }
+
+    const resolvedProfileImage = buildRetryableAvatarSource(profileImage, retryCount);
 
     function handleImageError() {
         if (retryCount < AVATAR_RETRY_LIMIT) {
             setRetryCount((currentCount) => currentCount + 1);
+
             return;
         }
+
         setImageFailed(true);
     }
 
     const getBadgeStyle = (value: string | null) => {
-        if (value === 'Time Out') return 'bg-rose-600 text-white';
-        if (value === 'Online Research Use') return 'bg-blue-600 text-white';
+        if (value === 'Time Out') {
+return 'bg-rose-600 text-white';
+}
+
+        if (value === 'Online Research Use') {
+return 'bg-blue-600 text-white';
+}
+
         return 'bg-emerald-600 text-white';
     };
 
@@ -66,7 +86,10 @@ export default function TapIdPanel({
     const shouldShowScanBadge = Boolean(scanLabel) && !showFineNotice;
 
     const getInitials = (name: string | null) => {
-        if (!name) return 'U';
+        if (!name) {
+return 'U';
+}
+
         return name
             .split(' ')
             .filter(Boolean)

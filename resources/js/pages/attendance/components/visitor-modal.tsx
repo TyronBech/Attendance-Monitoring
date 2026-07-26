@@ -11,10 +11,18 @@ type Props = {
 };
 
 function getCsrfToken(): string {
-    if (typeof document === 'undefined') return '';
+    if (typeof document === 'undefined') {
+return '';
+}
+
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
-    if (metaToken) return metaToken;
+
+    if (metaToken) {
+return metaToken;
+}
+
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
+
     return match ? decodeURIComponent(match[2]) : '';
 }
 
@@ -32,7 +40,9 @@ export default function VisitorModal({ isOpen, onClose, onSuccess, onNotify }: P
     });
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    if (!isOpen) return null;
+    if (!isOpen) {
+return null;
+}
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -63,18 +73,20 @@ export default function VisitorModal({ isOpen, onClose, onSuccess, onNotify }: P
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
+
                 return;
             }
 
             if (!res.ok || data.status !== 'success') {
                 setErrorMsg(data.message || 'Error processing visitor submission.');
+
                 return;
             }
 
             onNotify(data.message || 'Visitor Time In recorded!', { type: 'success' });
             onSuccess(data.recentScan);
             onClose();
-        } catch (err: any) {
+        } catch {
             setErrorMsg('Network error. Please try again.');
         } finally {
             setLoading(false);

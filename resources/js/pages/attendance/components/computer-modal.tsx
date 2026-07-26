@@ -11,10 +11,18 @@ type Props = {
 };
 
 function getCsrfToken(): string {
-    if (typeof document === 'undefined') return '';
+    if (typeof document === 'undefined') {
+return '';
+}
+
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
-    if (metaToken) return metaToken;
+
+    if (metaToken) {
+return metaToken;
+}
+
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
+
     return match ? decodeURIComponent(match[2]) : '';
 }
 
@@ -23,11 +31,16 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    if (!isOpen) return null;
+    if (!isOpen) {
+return null;
+}
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!identifier.trim()) return;
+
+        if (!identifier.trim()) {
+return;
+}
 
         setLoading(true);
         setErrorMsg(null);
@@ -52,11 +65,13 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
+
                 return;
             }
 
             if (!res.ok || data.status !== 'success') {
                 setErrorMsg(data.message || 'Error recording computer use.');
+
                 return;
             }
 
@@ -64,7 +79,7 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
             onSuccess(data.recentScan);
             setIdentifier('');
             onClose();
-        } catch (err: any) {
+        } catch {
             setErrorMsg('Network error. Please try again.');
         } finally {
             setLoading(false);

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import TapIdPanel from './tap-id-panel';
 import useScannerCapture from '@/hooks/use-scanner-capture';
+import TapIdPanel from './tap-id-panel';
 
 function encodePayload(payload: any) {
     return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -19,10 +19,18 @@ function strMatches(a: string, b: string) {
 }
 
 function getCsrfToken(): string {
-    if (typeof document === 'undefined') return '';
+    if (typeof document === 'undefined') {
+return '';
+}
+
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
-    if (metaToken) return metaToken;
+
+    if (metaToken) {
+return metaToken;
+}
+
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
+
     return match ? decodeURIComponent(match[2]) : '';
 }
 
@@ -74,6 +82,7 @@ export default function RFIDForm({
             clearUserTimeoutRef.current = setTimeout(() => {
                 setErrorMessage(null);
             }, 3000);
+
             return;
         }
 
@@ -106,6 +115,7 @@ export default function RFIDForm({
                 clearUserTimeoutRef.current = setTimeout(() => {
                     setErrorMessage(null);
                 }, 3000);
+
                 return;
             }
 
