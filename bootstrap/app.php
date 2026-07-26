@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminAuthentication;
+use App\Http\Middleware\AttendanceDisplayAuthentication;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\PreventBackHistory;
@@ -18,8 +19,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
+        $middleware->validateCsrfTokens(except: [
+            'attendance/scan',
+            'attendance/visitor',
+            'attendance/computer-use',
+        ]);
+
         $middleware->alias([
             'admin' => AdminAuthentication::class,
+            'attendance_display' => AttendanceDisplayAuthentication::class,
         ]);
 
         $middleware->web(append: [

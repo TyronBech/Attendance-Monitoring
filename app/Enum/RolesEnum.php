@@ -9,4 +9,5 @@ enum RolesEnum: string
     case LIBRARIAN = 'Librarian';
     case IMMERSION = 'Immersion';
     case ENCODER = 'Encoder';
+    case ATTENDANCE_DISPLAY = 'Attendance Display';
 }

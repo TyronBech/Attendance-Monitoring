@@ -1,6 +1,8 @@
 <?php
 
+use App\Enum\RolesEnum;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 test('guests are redirected to the login page', function () {
     $response = $this->get(route('dashboard'));
@@ -8,7 +10,7 @@ test('guests are redirected to the login page', function () {
 });
 
 test('authenticated users can visit the dashboard', function () {
-    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
+    $role = Role::firstOrCreate(['name' => RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
     $user->assignRole($role);
     $this->actingAs($user);

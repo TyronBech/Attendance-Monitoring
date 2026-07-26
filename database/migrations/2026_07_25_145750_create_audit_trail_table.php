@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('field_changed', 100)->nullable();
             $table->text('old_value')->nullable();
             $table->text('new_value')->nullable();
-            $table->enum('action_type', ['INSERT','UPDATE','DELETE','LOGIN','LOGOUT']);
+            $table->enum('action_type', ['INSERT', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT']);
             $table->string('changed_by', 50)->nullable();
             $table->timestamps();
         });

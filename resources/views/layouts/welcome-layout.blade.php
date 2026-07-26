@@ -33,22 +33,34 @@
   }
   @endphp
 
+  <script>
+    (function() {
+      const appearance = '{{ $appearance ?? "system" }}';
+      if (appearance === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('dark');
+        }
+      } else if (appearance === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    html {
+      background-color: oklch(1 0 0);
+    }
+    html.dark {
+      background-color: oklch(0.145 0 0);
+    }
+  </style>
+
   @if(!empty($vars))
   <style>
     :root {
-      @foreach($vars as $name => $val) {
-          {
-          $name
-        }
-      }
-
-      : {
-          {
-          $val
-        }
-      }
-
-      ;
+      @foreach($vars as $name => $val)
+        {{ $name }}: {{ $val }};
       @endforeach
     }
   </style>
