@@ -19,6 +19,7 @@ export function DynamicTheme() {
     const root = document.documentElement;
 
     Object.entries(colors).forEach(([name, hex]) => {
+      root.style.setProperty(`--color-${name}`, hex);
       const palette = ColorHelper.generatePalette(hex);
       Object.entries(palette).forEach(([shade, rgbValue]) => {
         root.style.setProperty(`--color-${name}-${shade}`, rgbValue);

@@ -35,7 +35,7 @@ export class ColorHelper {
       else if (key >= 800) sAdj *= 0.9;
 
       const [rr, gg, bb] = this.hslToRgb(h, sAdj, l);
-      palette[key] = `${rr} ${gg} ${bb}`;
+      palette[key] = `rgb(${rr}, ${gg}, ${bb})`;
     }
 
     return palette;

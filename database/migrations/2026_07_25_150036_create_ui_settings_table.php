@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('org_name', 100);
             $table->string('org_initial', 45)->nullable();
             $table->text('org_address');
-            $table->binary('org_logo');
-            $table->binary('org_logo_full');
+            $table->binary('org_logo')->nullable();
+            $table->binary('org_logo_full')->nullable();
             $table->string('email', 100);
             $table->string('contact_number', 45);
             $table->json('social_links')->nullable();
