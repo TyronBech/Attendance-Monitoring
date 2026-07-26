@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceScanController;
 use App\Http\Controllers\Report\ComputerUseController;
 use App\Http\Controllers\Report\UserLogsController;
 use App\Models\UISetting;
@@ -15,6 +16,13 @@ Route::get('/', function () {
 
     return view('main-welcome', ['settings' => $settings]);
 })->name('home');
+
+// Public Attendance Scanning Routes (Time In / Time Out)
+Route::get('/attendance', [AttendanceScanController::class, 'index'])->name('attendance.index');
+Route::post('/attendance/scan', [AttendanceScanController::class, 'scanRfid'])->name('attendance.scan');
+Route::get('/attendance/recent-scans', [AttendanceScanController::class, 'recentScans'])->name('attendance.recent-scans');
+Route::post('/attendance/visitor', [AttendanceScanController::class, 'storeVisitor'])->name('attendance.visitor');
+Route::post('/attendance/computer-use', [AttendanceScanController::class, 'storeComputerUse'])->name('attendance.computer-use');
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

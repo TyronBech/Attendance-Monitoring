@@ -1,8 +1,10 @@
 <?php
 
+use App\Enum\RolesEnum;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
@@ -20,7 +22,7 @@ test('two factor challenge can be rendered', function () {
         'confirmPassword' => true,
     ]);
 
-    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
+    $role = Role::firstOrCreate(['name' => RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
     $user->assignRole($role);
 

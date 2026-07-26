@@ -24,7 +24,7 @@ return new class extends Migration
 
             /** Lifecycle status */
             $table->enum('status', ['pending', 'processing', 'completed', 'failed'])
-                  ->default('pending');
+                ->default('pending');
 
             /** The user who initiated this import */
             $table->unsignedBigInteger('initiated_by');
@@ -47,9 +47,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('initiated_by')
-                  ->references('id')
-                  ->on('usr_users')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('usr_users')
+                ->onDelete('cascade');
         });
     }
 

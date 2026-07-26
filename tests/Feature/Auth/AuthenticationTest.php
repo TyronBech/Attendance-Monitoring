@@ -1,8 +1,10 @@
 <?php
 
+use App\Enum\RolesEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
+use Spatie\Permission\Models\Role;
 
 test('login screen can be rendered', function () {
     $response = $this->get(route('login'));
@@ -11,7 +13,7 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
+    $role = Role::firstOrCreate(['name' => RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
     $user->assignRole($role);
 
@@ -32,7 +34,7 @@ test('users with two factor enabled are redirected to two factor challenge', fun
         'confirmPassword' => true,
     ]);
 
-    $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => \App\Enum\RolesEnum::ADMIN->value]);
+    $role = Role::firstOrCreate(['name' => RolesEnum::ADMIN->value]);
     $user = User::factory()->create();
     $user->assignRole($role);
 

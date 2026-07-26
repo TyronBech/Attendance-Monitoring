@@ -18,6 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
+        $middleware->validateCsrfTokens(except: [
+            'attendance/scan',
+            'attendance/visitor',
+            'attendance/computer-use',
+        ]);
+
         $middleware->alias([
             'admin' => AdminAuthentication::class,
         ]);

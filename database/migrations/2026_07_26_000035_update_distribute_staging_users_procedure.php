@@ -14,7 +14,7 @@ return new class extends Migration
             return;
         }
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `DistributeStagingUsers`;");
+        DB::unprepared('DROP PROCEDURE IF EXISTS `DistributeStagingUsers`;');
         DB::unprepared(<<<'SQL'
 CREATE PROCEDURE `DistributeStagingUsers`()
 BEGIN
@@ -117,7 +117,7 @@ SQL);
             return;
         }
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `DistributeStagingUsers`;");
+        DB::unprepared('DROP PROCEDURE IF EXISTS `DistributeStagingUsers`;');
         DB::unprepared(<<<'SQL'
 CREATE PROCEDURE `DistributeStagingUsers`()
 BEGIN

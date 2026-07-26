@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('log_user_logs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->enum('computer_use', ['Yes','No'])->default('no');
+            $table->enum('computer_use', ['Yes', 'No'])->default('no');
             $table->dateTime('time_in')->nullable();
             $table->dateTime('time_out')->nullable();
             $table->string('remarks', 45)->nullable();
