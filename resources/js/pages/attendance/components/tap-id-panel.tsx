@@ -30,7 +30,6 @@ type Props = {
     scanType?: string | null;
     errorMessage?: string | null;
     successMessage?: string | null;
-    hasLibraryFine?: boolean;
 };
 
 export default function TapIdPanel({
@@ -43,7 +42,6 @@ export default function TapIdPanel({
     scanType = null,
     errorMessage = null,
     successMessage = null,
-    hasLibraryFine = false,
 }: Props) {
     const showProfile = Boolean(profileImage || displayName);
     const showError = Boolean(errorMessage && !showProfile);
@@ -81,9 +79,8 @@ return 'bg-blue-600 text-white';
         return 'bg-emerald-600 text-white';
     };
 
-    const fineDescription = [displayName, detailText].filter(Boolean).join(' - ');
-    const scanLabel = scanType || (hasLibraryFine ? 'Time In / Time Out' : null);
-    const shouldShowScanBadge = Boolean(scanLabel) && !showFineNotice;
+    const scanLabel = scanType;
+    const shouldShowScanBadge = Boolean(scanLabel);
 
     const getInitials = (name: string | null) => {
         if (!name) {
@@ -141,17 +138,6 @@ return 'U';
                     <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-extrabold tracking-wide uppercase shadow-sm ${getBadgeStyle(scanLabel)}`}>
                         {scanLabel}
                     </span>
-                ) : null}
-
-                {showFineNotice ? (
-                    <div className="w-full p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs space-y-2">
-                        <p className="font-extrabold text-sm text-red-800">Library Fine Detected</p>
-                        <p className="leading-relaxed">
-                            {fineDescription
-                                ? `${fineDescription} - Please proceed to the front desk before borrowing.`
-                                : 'Please proceed to the front desk before borrowing.'}
-                        </p>
-                    </div>
                 ) : null}
             </div>
         );

@@ -49,7 +49,17 @@ class FortifyServiceProvider extends ServiceProvider
             {
                 public function toResponse($request): Response
                 {
-                    // Simply redirect to dashboard; middleware will handle role checks
+                    $user = auth()->user();
+                    if ($user) {
+                        $userRoles = $user->getRoleNames()->map(fn ($role) => strtolower($role))->toArray();
+                        $adminRoles = [strtolower(RolesEnum::SUPER_ADMIN->value), strtolower(RolesEnum::ADMIN->value)];
+                        $isAdmin = ! empty(array_intersect($userRoles, $adminRoles));
+
+                        if (! $isAdmin && in_array(strtolower(RolesEnum::ATTENDANCE_DISPLAY->value), $userRoles)) {
+                            return redirect()->intended(route('attendance.index'));
+                        }
+                    }
+
                     return redirect()->intended(route('dashboard'));
                 }
             };
@@ -64,16 +74,19 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
 
-        // Custom authentication with admin role checking
+        // Custom authentication with role checking
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
-                // Check if user has admin role
                 $userRoles = $user->getRoleNames()->map(fn ($role) => strtolower($role))->toArray();
-                $adminRoles = [strtolower(RolesEnum::SUPER_ADMIN->value), strtolower(RolesEnum::ADMIN->value)];
+                $allowedRoles = [
+                    strtolower(RolesEnum::SUPER_ADMIN->value),
+                    strtolower(RolesEnum::ADMIN->value),
+                    strtolower(RolesEnum::ATTENDANCE_DISPLAY->value),
+                ];
 
-                if (! empty(array_intersect($userRoles, $adminRoles))) {
+                if (! empty(array_intersect($userRoles, $allowedRoles))) {
                     return $user;
                 }
             }

@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Enum\RolesEnum;
 use App\Models\UISetting;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +22,21 @@ class DatabaseSeeder extends Seeder
                 ['name' => $role->value],
                 ['guard_name' => 'web']
             );
+        }
+
+        // Create default attendance display user
+        $displayUser = User::firstOrCreate(
+            ['email' => 'attendance@ams.local'],
+            [
+                'first_name' => 'Attendance',
+                'last_name' => 'Display',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        if (! $displayUser->hasRole(RolesEnum::ATTENDANCE_DISPLAY->value)) {
+            $displayUser->assignRole(RolesEnum::ATTENDANCE_DISPLAY->value);
         }
 
         // Ensure UI settings exist with default values

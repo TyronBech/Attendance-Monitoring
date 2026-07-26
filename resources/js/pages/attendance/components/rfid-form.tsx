@@ -20,14 +20,14 @@ function strMatches(a: string, b: string) {
 
 function getCsrfToken(): string {
     if (typeof document === 'undefined') {
-return '';
-}
+        return '';
+    }
 
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
 
     if (metaToken) {
-return metaToken;
-}
+        return metaToken;
+    }
 
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
 
@@ -182,7 +182,6 @@ export default function RFIDForm({
                         displayName={userData ? getDisplayName(userData) : null}
                         detailText={userData ? detailLine : null}
                         scanType={userData ? userData.scanType : null}
-                        hasLibraryFine={Boolean(userData?.hasLibraryFine)}
                         errorMessage={errorMessage}
                     />
                 </div>

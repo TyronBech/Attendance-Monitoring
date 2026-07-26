@@ -1,6 +1,16 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { ChevronDown, LayoutGrid, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { home } from '@/routes';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import ClockDisplay from './components/clock-display';
 import PCInputForm from './components/pc-input-form';
 import RFIDForm from './components/rfid-form';
@@ -110,9 +120,13 @@ function RecentScanAvatar({ scan }: { scan: RecentScan }) {
 
 export default function AttendanceIndex() {
     const {
+        auth = {},
         ui = {},
         recentScans = [],
     } = usePage().props as any;
+
+    const userRoles = Array.isArray(auth?.user?.roles) ? auth.user.roles : [];
+    const isAdmin = userRoles.includes('admin') || userRoles.includes('super admin');
 
     const [showVisitorForm, setShowVisitorForm] = useState(false);
     const [showPcForm, setShowPcForm] = useState(false);
@@ -210,7 +224,7 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
             {/* Header Navbar */}
             <header className="sticky top-0 z-40 bg-primary-600 dark:bg-slate-900 shadow-lg border-b border-primary-500/30">
                 <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <Link href={home().url} className="flex items-center space-x-3 rtl:space-x-reverse">
+                    <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                         {ui?.org_logo ? (
                             <img
                                 className="rounded-full w-12 h-12 md:w-14 md:h-14 object-cover border-2 border-white/20"
@@ -233,29 +247,55 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                         </div>
                     </Link>
 
-                    <div className="hidden w-full lg:block lg:w-auto">
-                        <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 lg:flex-row lg:space-x-8 rtl:space-x-reverse lg:mt-0">
-                            <li>
-                                <Link href={home().url} className="block py-2 px-3 text-white font-bold rounded hover:text-white/80">
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <a href="/#services" className="block py-2 px-3 text-white/90 font-medium hover:text-white">
-                                    Services
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/#about" className="block py-2 px-3 text-white/90 font-medium hover:text-white">
-                                    About
-                                </a>
-                            </li>
-                            <li>
-                                <Link href="/login" className="block py-2 px-3 text-white/90 font-medium hover:text-white">
-                                    Login
-                                </Link>
-                            </li>
-                        </ul>
+                    <div className="flex items-center gap-3">
+                        {auth?.user ? (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <button className="inline-flex items-center gap-2.5 py-1.5 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all cursor-pointer outline-none">
+                                        <Avatar className="h-7 w-7 rounded-full overflow-hidden border border-white/30 shrink-0">
+                                            <AvatarImage src={auth.user.avatar || auth.user.profile_image} alt={auth.user.name} />
+                                            <AvatarFallback className="bg-primary-700 text-white text-xs font-bold">
+                                                {getAvatarInitials(auth.user.name)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-xs sm:text-sm font-semibold truncate max-w-[140px]">{auth.user.name}</span>
+                                        <ChevronDown className="w-4 h-4 text-white/80 shrink-0" />
+                                    </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-xl">
+                                    <DropdownMenuLabel className="p-2 font-normal">
+                                        <div className="flex flex-col space-y-1">
+                                            <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{auth.user.name}</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 leading-none truncate mt-1">{auth.user.email}</p>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="my-1 bg-slate-200 dark:bg-slate-800" />
+                                    <DropdownMenuGroup>
+                                        {isAdmin && (
+                                            <DropdownMenuItem asChild>
+                                                <Link href="/dashboard" className="flex items-center gap-2 p-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer">
+                                                    <LayoutGrid className="w-4 h-4 text-primary-600" />
+                                                    Admin Dashboard
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        )}
+                                        <DropdownMenuItem asChild>
+                                            <Link href="/logout" method="post" as="button" className="w-full flex items-center gap-2 p-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg cursor-pointer">
+                                                <LogOut className="w-4 h-4" />
+                                                Logout
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="inline-flex items-center gap-1.5 py-1.5 px-3.5 text-xs sm:text-sm font-bold text-white bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 transition-all cursor-pointer"
+                            >
+                                Login
+                            </Link>
+                        )}
                     </div>
                 </div>
             </header>

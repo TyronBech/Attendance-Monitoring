@@ -1,28 +1,40 @@
 <?php
 
+use App\Enum\RolesEnum;
 use App\Http\Controllers\AttendanceScanController;
 use App\Http\Controllers\Report\ComputerUseController;
 use App\Http\Controllers\Report\UserLogsController;
 use App\Models\UISetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     if (Auth::check()) {
+        $user = Auth::user();
+        $userRoles = $user->getRoleNames()->map(fn ($role) => strtolower($role))->toArray();
+        $adminRoles = [strtolower(RolesEnum::SUPER_ADMIN->value), strtolower(RolesEnum::ADMIN->value)];
+
+        if (empty(array_intersect($userRoles, $adminRoles)) && in_array(strtolower(RolesEnum::ATTENDANCE_DISPLAY->value), $userRoles)) {
+            return redirect()->route('attendance.index');
+        }
+
         return redirect()->route('dashboard');
     }
 
     $settings = UISetting::latest()->first();
 
-    return view('main-welcome', ['settings' => $settings]);
+    return Inertia::render('welcome', ['ui' => $settings]);
 })->name('home');
 
-// Public Attendance Scanning Routes (Time In / Time Out)
-Route::get('/attendance', [AttendanceScanController::class, 'index'])->name('attendance.index');
-Route::post('/attendance/scan', [AttendanceScanController::class, 'scanRfid'])->name('attendance.scan');
-Route::get('/attendance/recent-scans', [AttendanceScanController::class, 'recentScans'])->name('attendance.recent-scans');
-Route::post('/attendance/visitor', [AttendanceScanController::class, 'storeVisitor'])->name('attendance.visitor');
-Route::post('/attendance/computer-use', [AttendanceScanController::class, 'storeComputerUse'])->name('attendance.computer-use');
+// Attendance Scanning Routes (Requires Auth & Attendance Display / Admin Role)
+Route::middleware(['auth', 'attendance_display'])->group(function () {
+    Route::get('/attendance', [AttendanceScanController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/scan', [AttendanceScanController::class, 'scanRfid'])->name('attendance.scan');
+    Route::get('/attendance/recent-scans', [AttendanceScanController::class, 'recentScans'])->name('attendance.recent-scans');
+    Route::post('/attendance/visitor', [AttendanceScanController::class, 'storeVisitor'])->name('attendance.visitor');
+    Route::post('/attendance/computer-use', [AttendanceScanController::class, 'storeComputerUse'])->name('attendance.computer-use');
+});
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');

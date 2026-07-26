@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminAuthentication;
+use App\Http\Middleware\AttendanceDisplayAuthentication;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\PreventBackHistory;
@@ -26,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'admin' => AdminAuthentication::class,
+            'attendance_display' => AttendanceDisplayAuthentication::class,
         ]);
 
         $middleware->web(append: [
