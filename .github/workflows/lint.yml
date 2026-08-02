@@ -40,5 +40,5 @@ jobs:
         run: npm run format
 
       - name: Lint Frontend
-        run: npm run lint:check
+        run: npm run lint
 
