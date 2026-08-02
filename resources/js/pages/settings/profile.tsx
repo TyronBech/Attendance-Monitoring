@@ -79,8 +79,8 @@ export default function Profile() {
     const handleTwoFactorAction: FormEventHandler = (e) => {
         e.preventDefault();
         const actionUrl = twoFactorAction === 'enable' 
-            ? profile['2fa'].enable.url() 
-            : profile['2fa'].disable.url();
+            ? profile.twoFactor.enable.url() 
+            : profile.twoFactor.disable.url();
             
         twoFactorForm.post(actionUrl, {
             onSuccess: () => {

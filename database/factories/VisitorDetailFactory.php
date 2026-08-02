@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\VisitorDetail;
 use App\Models\User;
+use App\Models\VisitorDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

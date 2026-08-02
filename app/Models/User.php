@@ -87,6 +87,8 @@ class User extends Authenticatable implements MustVerifyEmail
             $parts = explode(' ', trim($value), 2);
             $this->attributes['first_name'] = $parts[0] ?? '';
             $this->attributes['last_name'] = $parts[1] ?? '';
+            $this->attributes['middle_name'] = null;
+            $this->attributes['suffix'] = null;
         }
         unset($this->attributes['name']);
     }
