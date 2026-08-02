@@ -464,7 +464,7 @@ export default function Profile() {
 
             {/* Two-Factor Authentication Modal */}
             {showTwoFactorModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all duration-200">
                     <div className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-xl animate-in fade-in zoom-in duration-200">
                         <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">

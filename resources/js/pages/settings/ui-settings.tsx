@@ -238,7 +238,7 @@ export default function UISettingsPage() {
 
             {/* Edit Modal */}
             {showEditModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all duration-200">
                     <div className="relative w-full max-w-4xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
                         <div className="flex items-center justify-between p-6 border-b dark:border-gray-700">
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Edit System Settings</h3>
@@ -391,17 +391,17 @@ export default function UISettingsPage() {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div className="flex flex-col items-center gap-2">
                                             <label className="text-sm font-medium">Primary</label>
-                                            <input type="color" value={data.primary} onChange={e => setData('primary', e.target.value)} className="w-full h-12 rounded cursor-pointer border-none p-0" />
+                                            <input type="color" value={data.primary} onChange={e => setData('primary', e.target.value)} className="w-full h-12 rounded-md cursor-pointer border-none p-0" />
                                             <span className="text-xs font-mono">{data.primary}</span>
                                         </div>
                                         <div className="flex flex-col items-center gap-2">
                                             <label className="text-sm font-medium">Secondary</label>
-                                            <input type="color" value={data.secondary} onChange={e => setData('secondary', e.target.value)} className="w-full h-12 rounded cursor-pointer border-none p-0" />
+                                            <input type="color" value={data.secondary} onChange={e => setData('secondary', e.target.value)} className="w-full h-12 rounded-md cursor-pointer border-none p-0" />
                                             <span className="text-xs font-mono">{data.secondary}</span>
                                         </div>
                                         <div className="flex flex-col items-center gap-2">
                                             <label className="text-sm font-medium">Tertiary</label>
-                                            <input type="color" value={data.tertiary} onChange={e => setData('tertiary', e.target.value)} className="w-full h-12 rounded cursor-pointer border-none p-0" />
+                                            <input type="color" value={data.tertiary} onChange={e => setData('tertiary', e.target.value)} className="w-full h-12 rounded-md cursor-pointer border-none p-0" />
                                             <span className="text-xs font-mono">{data.tertiary}</span>
                                         </div>
                                     </div>
