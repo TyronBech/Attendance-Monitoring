@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -25,6 +26,11 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('ALTER TABLE `ui_settings` MODIFY `org_logo` LONGBLOB NULL');
+            DB::statement('ALTER TABLE `ui_settings` MODIFY `org_logo_full` LONGBLOB NULL');
+        }
     }
 
     /**

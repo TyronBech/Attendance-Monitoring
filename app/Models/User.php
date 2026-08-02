@@ -91,6 +91,24 @@ class User extends Authenticatable implements MustVerifyEmail
         unset($this->attributes['name']);
     }
 
+    public function getAvatarAttribute(): ?string
+    {
+        if (! $this->profile_image) {
+            return null;
+        }
+
+        if (str_starts_with($this->profile_image, 'data:')) {
+            return $this->profile_image;
+        }
+
+        $decoded = base64_decode($this->profile_image, true);
+        if ($decoded !== false && base64_encode($decoded) === $this->profile_image) {
+            return 'data:image/jpeg;base64,'.$this->profile_image;
+        }
+
+        return 'data:image/jpeg;base64,'.base64_encode($this->profile_image);
+    }
+
     public static function getTableName()
     {
         return (new self)->getTable();

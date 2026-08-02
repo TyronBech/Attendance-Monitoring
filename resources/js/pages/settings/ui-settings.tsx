@@ -2,8 +2,8 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Edit3, Facebook, Globe, Instagram, Mail, MapPin, Phone, Twitter, Youtube, X, UploadCloud, Info } from 'lucide-react';
 import { useState  } from 'react';
 import type {FormEventHandler} from 'react';
-
-import AppLayout from '@/layouts/app-layout';
+import { Input } from '@/components/ui/input';
+import SettingsLayout from '@/layouts/settings/layout';
 import settingsRoutes from '@/routes/settings';
 
 interface UISettings {
@@ -85,13 +85,11 @@ export default function UISettingsPage() {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="System Settings" />
 
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-white mt-8 mb-8">System Settings</h1>
-
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 relative shadow-md max-w-5xl mx-auto">
+            <SettingsLayout>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 relative shadow-md w-full">
                     {/* Edit Button */}
                     <button 
                         onClick={() => setShowEditModal(true)}
@@ -236,11 +234,11 @@ export default function UISettingsPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </SettingsLayout>
 
             {/* Edit Modal */}
             {showEditModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all duration-200">
                     <div className="relative w-full max-w-4xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
                         <div className="flex items-center justify-between p-6 border-b dark:border-gray-700">
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Edit System Settings</h3>
@@ -259,48 +257,44 @@ export default function UISettingsPage() {
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium mb-1">Organization Name</label>
-                                            <input 
+                                            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Organization Name</label>
+                                            <Input 
                                                 type="text" 
                                                 value={data.org_name}
                                                 onChange={e => setData('org_name', e.target.value)}
-                                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary-500"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium mb-1">Organization Initial</label>
-                                            <input 
+                                            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Organization Initial</label>
+                                            <Input 
                                                 type="text" 
                                                 value={data.org_initial}
                                                 onChange={e => setData('org_initial', e.target.value)}
-                                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium mb-1">Contact Number</label>
-                                            <input 
+                                            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Contact Number</label>
+                                            <Input 
                                                 type="text" 
                                                 value={data.contact_number}
                                                 onChange={e => setData('contact_number', e.target.value)}
-                                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                             />
                                         </div>
                                         <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium mb-1">Email Address</label>
-                                            <input 
+                                            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Email Address</label>
+                                            <Input 
                                                 type="email" 
                                                 value={data.email}
                                                 onChange={e => setData('email', e.target.value)}
-                                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                             />
                                         </div>
                                         <div className="md:col-span-2">
-                                            <label className="block text-sm font-medium mb-1">Address</label>
+                                            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Address</label>
                                             <textarea 
                                                 rows={2}
                                                 value={data.org_address}
                                                 onChange={e => setData('org_address', e.target.value)}
-                                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                                className="w-full rounded-xl border border-gray-200 bg-gray-50/60 px-3.5 py-2.5 text-sm text-gray-900 shadow-xs transition-all duration-200 focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary-500/15 dark:border-gray-700/80 dark:bg-gray-900/40 dark:text-gray-100 dark:focus:bg-gray-900 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
                                             ></textarea>
                                         </div>
                                     </div>
@@ -332,13 +326,13 @@ export default function UISettingsPage() {
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="block text-sm font-medium">Full Banner Logo (PNG, max 5MB)</label>
+                                            <label className="block text-sm font-medium">Full Logo with Text (PNG, max 5MB)</label>
                                             <div 
                                                 className="h-48 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer hover:border-primary-500 transition-colors"
                                                 onClick={() => document.getElementById('logo_full_input')?.click()}
                                             >
                                                 {previewLogoFull ? (
-                                                    <img src={previewLogoFull.startsWith('data:') ? previewLogoFull : `data:image/png;base64,${previewLogoFull}`} alt="Preview" className="absolute inset-0 w-full h-full object-contain p-4 group-hover:blur-sm transition-all" />
+                                                    <img src={previewLogoFull.startsWith('data:') ? previewLogoFull : `data:image/png;base64,${previewLogoFull}`} alt="Preview Full" className="absolute inset-0 w-full h-full object-contain p-4 group-hover:blur-sm transition-all" />
                                                 ) : (
                                                     <UploadCloud size={48} className="text-gray-300" />
                                                 )}
@@ -367,23 +361,23 @@ export default function UISettingsPage() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-1">
                                             <label className="text-xs font-semibold text-gray-500">Facebook URL</label>
-                                            <input type="url" value={data.facebook} onChange={e => setData('facebook', e.target.value)} className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700" placeholder="https://facebook.com/..." />
+                                            <Input type="url" value={data.facebook} onChange={e => setData('facebook', e.target.value)} placeholder="https://facebook.com/..." />
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-semibold text-gray-500">Instagram URL</label>
-                                            <input type="url" value={data.instagram} onChange={e => setData('instagram', e.target.value)} className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700" placeholder="https://instagram.com/..." />
+                                            <Input type="url" value={data.instagram} onChange={e => setData('instagram', e.target.value)} placeholder="https://instagram.com/..." />
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-semibold text-gray-500">Twitter URL</label>
-                                            <input type="url" value={data.twitter} onChange={e => setData('twitter', e.target.value)} className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700" placeholder="https://twitter.com/..." />
+                                            <Input type="url" value={data.twitter} onChange={e => setData('twitter', e.target.value)} placeholder="https://twitter.com/..." />
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-semibold text-gray-500">YouTube URL</label>
-                                            <input type="url" value={data.youtube} onChange={e => setData('youtube', e.target.value)} className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700" placeholder="https://youtube.com/..." />
+                                            <Input type="url" value={data.youtube} onChange={e => setData('youtube', e.target.value)} placeholder="https://youtube.com/..." />
                                         </div>
                                         <div className="md:col-span-2 space-y-1">
                                             <label className="text-xs font-semibold text-gray-500">Official Website URL</label>
-                                            <input type="url" value={data.website} onChange={e => setData('website', e.target.value)} className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700" placeholder="https://..." />
+                                            <Input type="url" value={data.website} onChange={e => setData('website', e.target.value)} placeholder="https://..." />
                                         </div>
                                     </div>
                                 </section>
@@ -397,17 +391,17 @@ export default function UISettingsPage() {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div className="flex flex-col items-center gap-2">
                                             <label className="text-sm font-medium">Primary</label>
-                                            <input type="color" value={data.primary} onChange={e => setData('primary', e.target.value)} className="w-full h-12 rounded cursor-pointer border-none p-0" />
+                                            <input type="color" value={data.primary} onChange={e => setData('primary', e.target.value)} className="w-full h-12 rounded-md cursor-pointer border-none p-0" />
                                             <span className="text-xs font-mono">{data.primary}</span>
                                         </div>
                                         <div className="flex flex-col items-center gap-2">
                                             <label className="text-sm font-medium">Secondary</label>
-                                            <input type="color" value={data.secondary} onChange={e => setData('secondary', e.target.value)} className="w-full h-12 rounded cursor-pointer border-none p-0" />
+                                            <input type="color" value={data.secondary} onChange={e => setData('secondary', e.target.value)} className="w-full h-12 rounded-md cursor-pointer border-none p-0" />
                                             <span className="text-xs font-mono">{data.secondary}</span>
                                         </div>
                                         <div className="flex flex-col items-center gap-2">
                                             <label className="text-sm font-medium">Tertiary</label>
-                                            <input type="color" value={data.tertiary} onChange={e => setData('tertiary', e.target.value)} className="w-full h-12 rounded cursor-pointer border-none p-0" />
+                                            <input type="color" value={data.tertiary} onChange={e => setData('tertiary', e.target.value)} className="w-full h-12 rounded-md cursor-pointer border-none p-0" />
                                             <span className="text-xs font-mono">{data.tertiary}</span>
                                         </div>
                                     </div>
@@ -435,6 +429,6 @@ export default function UISettingsPage() {
                     </div>
                 </div>
             )}
-        </AppLayout>
+        </>
     );
 }

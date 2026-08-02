@@ -1,31 +1,18 @@
 <?php
 
-use App\Enum\RolesEnum;
 use App\Http\Controllers\AttendanceScanController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Report\ComputerUseController;
 use App\Http\Controllers\Report\UserLogsController;
 use App\Models\UISetting;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    if (Auth::check()) {
-        $user = Auth::user();
-        $userRoles = $user->getRoleNames()->map(fn ($role) => strtolower($role))->toArray();
-        $adminRoles = [strtolower(RolesEnum::SUPER_ADMIN->value), strtolower(RolesEnum::ADMIN->value)];
-
-        if (empty(array_intersect($userRoles, $adminRoles)) && in_array(strtolower(RolesEnum::ATTENDANCE_DISPLAY->value), $userRoles)) {
-            return redirect()->route('attendance.index');
-        }
-
-        return redirect()->route('dashboard');
-    }
-
     $settings = UISetting::latest()->first();
 
     return Inertia::render('welcome', ['ui' => $settings]);
-})->name('home');
+})->middleware('guest')->name('home');
 
 // Attendance Scanning Routes (Requires Auth & Attendance Display / Admin Role)
 Route::middleware(['auth', 'attendance_display'])->group(function () {
@@ -37,7 +24,7 @@ Route::middleware(['auth', 'attendance_display'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Reports (User logs + Computer use)
     Route::prefix('report')->group(function () {

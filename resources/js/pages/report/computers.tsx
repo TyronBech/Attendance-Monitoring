@@ -1,8 +1,7 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { Filter, Search, FileText, Download, Calendar, Monitor, Clock } from 'lucide-react';
 import { useState } from 'react';
-
-import AppLayout from '@/layouts/app-layout';
+import { Input } from '@/components/ui/input';
 import report from '@/routes/report';
 
 interface ComputerLogEntry {
@@ -105,11 +104,11 @@ export default function ComputersReport() {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="Online Research Report" />
 
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-white mt-8 mb-8">Online Research Report</h1>
+                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-white mb-8">Online Research Report</h1>
 
                 {/* Filters Section */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8 border border-gray-100 dark:border-gray-700">
@@ -119,18 +118,16 @@ export default function ComputersReport() {
                                 <Calendar size={14} className="mr-1" /> Date Range
                             </label>
                             <div className="flex items-center gap-2">
-                                <input 
+                                <Input 
                                     type="date" 
                                     value={startDate}
                                     onChange={e => setStartDate(e.target.value)}
-                                    className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm"
                                 />
                                 <span className="text-gray-400">to</span>
-                                <input 
+                                <Input 
                                     type="date" 
                                     value={endDate}
                                     onChange={e => setEndDate(e.target.value)}
-                                    className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm"
                                 />
                             </div>
                         </div>
@@ -139,12 +136,11 @@ export default function ComputersReport() {
                             <label className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1 flex items-center">
                                 <Search size={14} className="mr-1" /> Search
                             </label>
-                            <input 
+                            <Input 
                                 type="text" 
                                 placeholder="Name..."
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
-                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm"
                             />
                         </div>
 
@@ -155,7 +151,7 @@ export default function ComputersReport() {
                             <select 
                                 value={typeFilter}
                                 onChange={e => setTypeFilter(e.target.value)}
-                                className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm"
+                                className="w-full rounded-xl border border-gray-200 bg-gray-50/60 px-3.5 py-2 text-sm text-gray-900 shadow-xs transition-all duration-200 focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary-500/15 dark:border-gray-700/80 dark:bg-gray-900/40 dark:text-gray-100"
                             >
                                 <option value="students">Students</option>
                                 <option value="employees">Faculties & Staff</option>
@@ -283,6 +279,6 @@ export default function ComputersReport() {
                     )}
                 </div>
             </div>
-        </AppLayout>
+        </>
     );
 }

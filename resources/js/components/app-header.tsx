@@ -7,7 +7,6 @@ import {
     Menu,
     Monitor,
     Settings,
-    User,
     UserCircle,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -32,7 +31,6 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { dashboard, logout } from '@/routes';
-import profile from '@/routes/profile';
 import report from '@/routes/report';
 import settings from '@/routes/settings';
 
@@ -41,6 +39,13 @@ export function AppHeader() {
     const getInitials = useInitials();
     const { isCurrentUrl } = useCurrentUrl();
     const [isMobileReportOpen, setIsMobileReportOpen] = useState(false);
+
+    const logoRaw = ui?.org_logo_base64 || ui?.org_logo;
+    const logoSrc = logoRaw
+        ? (logoRaw.startsWith('data:') || logoRaw.startsWith('http') || logoRaw.startsWith('/')
+            ? logoRaw
+            : `data:image/png;base64,${logoRaw}`)
+        : null;
 
     const isReportActive =
         isCurrentUrl(report.userLogs.url(), undefined, true) ||
@@ -63,11 +68,11 @@ export function AppHeader() {
             <nav className="bg-primary-700 border-gray-200 dark:bg-primary-800">
                 <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link href={dashboard().url} className="flex items-center space-x-3 rtl:space-x-reverse">
-                        {ui?.org_logo_base64 && (
+                        {logoSrc && (
                             <img 
-                                className="rounded-full w-12 h-12 md:w-16 md:h-16 shadow-lg border-2 border-white/20" 
-                                src={ui.org_logo_base64} 
-                                alt="School Logo" 
+                                className="rounded-full w-12 h-12 md:w-16 md:h-16 shadow-lg object-cover" 
+                                src={logoSrc} 
+                                alt={ui?.org_name ? `${ui.org_name} Logo` : "School Logo"} 
                             />
                         )}
                         <div className="flex flex-col justify-center">
@@ -133,13 +138,9 @@ export function AppHeader() {
                                     </div>
 
                                     <div className="border-t pt-4 mt-4">
-                                        <Link href={profile.edit.url()} className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 hover:bg-gray-50">
-                                            <User className="h-5 w-5" />
-                                            <span>Profile</span>
-                                        </Link>
                                         <Link href={settings.uiSettings.url()} className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 hover:bg-gray-50">
                                             <Settings className="h-5 w-5" />
-                                            <span>System Settings</span>
+                                            <span>Settings</span>
                                         </Link>
                                         <button onClick={handleLogout} className="flex w-full items-center space-x-2 p-2 rounded-lg text-red-600 hover:bg-red-50">
                                             <LogOut className="h-5 w-5" />
@@ -155,13 +156,13 @@ export function AppHeader() {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <button className="flex items-center text-sm font-medium text-white hover:text-secondary-300 transition-colors focus:outline-none">
-                                        <Avatar className="h-8 w-8 mr-2 border border-white/20">
-                                            <AvatarImage src={auth.user?.avatar} alt={auth.user?.name} />
+                                        <Avatar className="h-8 w-8 mr-2 border border-white/20 overflow-hidden">
+                                            <AvatarImage src={auth.user?.avatar || auth.user?.profile_image} alt={auth.user?.name} className="object-cover" />
                                             <AvatarFallback className="bg-primary-600 text-white text-xs">
                                                 {getInitials(auth.user?.name || '')}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <span className="max-w-[100px] truncate">{auth.user?.name}</span>
+                                        <span className="max-w-25 truncate">{auth.user?.name}</span>
                                         <ChevronDown className="ml-1 h-4 w-4" />
                                     </button>
                                 </DropdownMenuTrigger>
@@ -170,11 +171,6 @@ export function AppHeader() {
                                         <p className="text-sm font-semibold text-gray-900 dark:text-white">{auth.user?.name}</p>
                                         <p className="text-xs text-gray-500 truncate dark:text-gray-400">{auth.user?.email}</p>
                                     </div>
-                                    <DropdownMenuItem asChild>
-                                        <Link href={profile.edit.url()} className={dropdownItemClasses}>
-                                            <User className="mr-2 h-4 w-4" /> Profile
-                                        </Link>
-                                    </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <Link href={settings.uiSettings.url()} className={dropdownItemClasses}>
                                             <Settings className="mr-2 h-4 w-4" /> System Settings
