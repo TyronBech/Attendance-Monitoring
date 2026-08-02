@@ -2,6 +2,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Camera, CheckCircle2, Edit3, Eye, EyeOff, Lock, ShieldCheck, ShieldAlert, X } from 'lucide-react';
 import { useState, useRef } from 'react';
 import type { FormEventHandler } from 'react';
+import { Input } from '@/components/ui/input';
 import SettingsLayout from '@/layouts/settings/layout';
 import profile from '@/routes/profile';
 
@@ -203,31 +204,29 @@ export default function Profile() {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     {/* First Name */}
-                                    <div className="relative z-0 w-full group">
-                                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">First Name</label>
+                                    <div className="w-full">
+                                        <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">First Name</label>
                                         {isEditMode ? (
-                                            <input 
+                                            <Input 
                                                 type="text" 
                                                 value={data.first_name}
                                                 onChange={e => setData('first_name', e.target.value)}
-                                                className="py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400"
                                                 required 
                                             />
                                         ) : (
                                             <p className="text-base font-medium text-gray-900 dark:text-white py-2 border-b border-transparent">{user.first_name}</p>
                                         )}
-                                        {errors.first_name && <p className="mt-2 text-sm text-red-600">{errors.first_name}</p>}
+                                        {errors.first_name && <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">{errors.first_name}</p>}
                                     </div>
 
                                     {/* Middle Name */}
-                                    <div className="relative z-0 w-full group">
-                                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Middle Name</label>
+                                    <div className="w-full">
+                                        <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Middle Name</label>
                                         {isEditMode ? (
-                                            <input 
+                                            <Input 
                                                 type="text" 
                                                 value={data.middle_name}
                                                 onChange={e => setData('middle_name', e.target.value)}
-                                                className="py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400"
                                             />
                                         ) : (
                                             <p className="text-base font-medium text-gray-900 dark:text-white py-2 border-b border-transparent">{user.middle_name || '-'}</p>
@@ -235,31 +234,29 @@ export default function Profile() {
                                     </div>
 
                                     {/* Last Name */}
-                                    <div className="relative z-0 w-full group">
-                                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Last Name</label>
+                                    <div className="w-full">
+                                        <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Last Name</label>
                                         {isEditMode ? (
-                                            <input 
+                                            <Input 
                                                 type="text" 
                                                 value={data.last_name}
                                                 onChange={e => setData('last_name', e.target.value)}
-                                                className="py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400"
                                                 required 
                                             />
                                         ) : (
                                             <p className="text-base font-medium text-gray-900 dark:text-white py-2 border-b border-transparent">{user.last_name}</p>
                                         )}
-                                        {errors.last_name && <p className="mt-2 text-sm text-red-600">{errors.last_name}</p>}
+                                        {errors.last_name && <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">{errors.last_name}</p>}
                                     </div>
 
                                     {/* Suffix */}
-                                    <div className="relative z-0 w-full group">
-                                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Suffix</label>
+                                    <div className="w-full">
+                                        <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Suffix</label>
                                         {isEditMode ? (
-                                            <input 
+                                            <Input 
                                                 type="text" 
                                                 value={data.suffix}
                                                 onChange={e => setData('suffix', e.target.value)}
-                                                className="py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400"
                                             />
                                         ) : (
                                             <p className="text-base font-medium text-gray-900 dark:text-white py-2 border-b border-transparent">{user.suffix || '-'}</p>
@@ -267,85 +264,90 @@ export default function Profile() {
                                     </div>
 
                                     {/* Email */}
-                                    <div className="relative z-0 w-full sm:col-span-2 group">
-                                        <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Email Address</label>
+                                    <div className="w-full sm:col-span-2">
+                                        <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Email Address</label>
                                         {isEditMode ? (
-                                            <input 
+                                            <Input 
                                                 type="email" 
                                                 value={data.email}
                                                 onChange={e => setData('email', e.target.value)}
-                                                className="py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400"
                                                 required 
                                             />
                                         ) : (
                                             <p className="text-base font-medium text-gray-900 dark:text-white py-2 border-b border-transparent">{user.email}</p>
                                         )}
-                                        {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                                        {errors.email && <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">{errors.email}</p>}
                                     </div>
 
                                     {/* Security Section */}
-                                    <div className="relative z-0 w-full sm:col-span-2 group pt-4 border-t border-gray-100 dark:border-gray-700">
+                                    <div className="w-full sm:col-span-2 pt-4 border-t border-gray-100 dark:border-gray-700">
                                         <h6 className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Security</h6>
 
                                         {isEditMode ? (
-                                            <div className="space-y-6">
+                                            <div className="space-y-4">
                                                 {/* Current Password */}
-                                                <div className="relative z-0 w-full group">
-                                                    <input 
-                                                        type={showCurrentPassword ? 'text' : 'password'}
-                                                        value={data.current_password}
-                                                        onChange={e => setData('current_password', e.target.value)}
-                                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400 peer pr-10"
-                                                        placeholder=" "
-                                                    />
-                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Current Password</label>
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                                        className="absolute right-0 top-2.5 text-gray-500 hover:text-gray-700"
-                                                    >
-                                                        {showCurrentPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                                    </button>
-                                                    {errors.current_password && <p className="mt-2 text-sm text-red-600">{errors.current_password}</p>}
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Current Password</label>
+                                                    <div className="relative">
+                                                        <Input 
+                                                            type={showCurrentPassword ? 'text' : 'password'}
+                                                            value={data.current_password}
+                                                            onChange={e => setData('current_password', e.target.value)}
+                                                            className="pr-10"
+                                                            placeholder="Leave blank to keep unchanged"
+                                                        />
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                                            className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                                        >
+                                                            {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                        </button>
+                                                    </div>
+                                                    {errors.current_password && <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">{errors.current_password}</p>}
                                                 </div>
 
                                                 {/* New Password */}
-                                                <div className="relative z-0 w-full group">
-                                                    <input 
-                                                        type={showNewPassword ? 'text' : 'password'}
-                                                        value={data.new_password}
-                                                        onChange={e => setData('new_password', e.target.value)}
-                                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400 peer pr-10"
-                                                        placeholder=" "
-                                                    />
-                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">New Password</label>
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => setShowNewPassword(!showNewPassword)}
-                                                        className="absolute right-0 top-2.5 text-gray-500 hover:text-gray-700"
-                                                    >
-                                                        {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                                    </button>
-                                                    {errors.new_password && <p className="mt-2 text-sm text-red-600">{errors.new_password}</p>}
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">New Password</label>
+                                                    <div className="relative">
+                                                        <Input 
+                                                            type={showNewPassword ? 'text' : 'password'}
+                                                            value={data.new_password}
+                                                            onChange={e => setData('new_password', e.target.value)}
+                                                            className="pr-10"
+                                                            placeholder="Leave blank to keep unchanged"
+                                                        />
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => setShowNewPassword(!showNewPassword)}
+                                                            className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                                        >
+                                                            {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                        </button>
+                                                    </div>
+                                                    {errors.new_password && <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">{errors.new_password}</p>}
                                                 </div>
 
                                                 {/* Confirm New Password */}
-                                                <div className="relative z-0 w-full group">
-                                                    <input 
-                                                        type={showConfirmPassword ? 'text' : 'password'}
-                                                        value={data.new_password_confirmation}
-                                                        onChange={e => setData('new_password_confirmation', e.target.value)}
-                                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-400 peer pr-10"
-                                                        placeholder=" "
-                                                    />
-                                                    <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-left peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm Password</label>
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                        className="absolute right-0 top-2.5 text-gray-500 hover:text-gray-700"
-                                                    >
-                                                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                                    </button>
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Confirm New Password</label>
+                                                    <div className="relative">
+                                                        <Input 
+                                                            type={showConfirmPassword ? 'text' : 'password'}
+                                                            value={data.new_password_confirmation}
+                                                            onChange={e => setData('new_password_confirmation', e.target.value)}
+                                                            className="pr-10"
+                                                            placeholder="Confirm new password"
+                                                        />
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                            className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                                        >
+                                                            {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ) : (
