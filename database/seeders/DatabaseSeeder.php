@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Enum\RolesEnum;
 use App\Models\UISetting;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,28 +12,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles from enum
-        foreach (RolesEnum::cases() as $role) {
-            Role::firstOrCreate(
-                ['name' => $role->value],
-                ['guard_name' => 'web']
-            );
-        }
-
-        // Create default attendance display user
-        $displayUser = User::firstOrCreate(
-            ['email' => 'attendance@ams.local'],
-            [
-                'first_name' => 'Attendance',
-                'last_name' => 'Display',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-            ]
-        );
-
-        if (! $displayUser->hasRole(RolesEnum::ATTENDANCE_DISPLAY->value)) {
-            $displayUser->assignRole(RolesEnum::ATTENDANCE_DISPLAY->value);
-        }
+        $this->call([
+            UserGroupSeeder::class,
+            UserSeeder::class,
+            LogSeeder::class,
+        ]);
 
         // Ensure UI settings exist with default values
         if (UISetting::count() === 0) {
@@ -45,6 +24,8 @@ class DatabaseSeeder extends Seeder
                 'org_name' => 'Attendance Monitoring System',
                 'org_initial' => 'AMS',
                 'org_address' => '123 Main Street, City, State 12345',
+                'org_logo' => null,
+                'org_logo_full' => null,
                 'email' => 'admin@ams.local',
                 'contact_number' => '+1 (555) 123-4567',
                 'theme_colors' => [
