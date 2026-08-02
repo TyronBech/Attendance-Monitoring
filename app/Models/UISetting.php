@@ -34,27 +34,50 @@ class UISetting extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'org_logo_base64',
+        'org_logo_full_base64',
+    ];
+
     /**
-     * Return org_logo as base64 data URL (if stored raw)
+     * Return org_logo as base64 data URL (handles data URI, base64 string, or raw binary)
      */
-    public function getOrgLogoBase64Attribute()
+    public function getOrgLogoBase64Attribute(): ?string
     {
         if (! $this->org_logo) {
             return null;
         }
 
-        return 'data:image/png;base64,'.$this->org_logo;
+        if (str_starts_with($this->org_logo, 'data:')) {
+            return $this->org_logo;
+        }
+
+        $decoded = base64_decode($this->org_logo, true);
+        if ($decoded !== false && base64_encode($decoded) === $this->org_logo) {
+            return 'data:image/png;base64,'.$this->org_logo;
+        }
+
+        return 'data:image/png;base64,'.base64_encode($this->org_logo);
     }
 
     /**
-     * Return org_logo_full as base64 data URL (if stored raw)
+     * Return org_logo_full as base64 data URL (handles data URI, base64 string, or raw binary)
      */
-    public function getOrgLogoFullBase64Attribute()
+    public function getOrgLogoFullBase64Attribute(): ?string
     {
         if (! $this->org_logo_full) {
             return null;
         }
 
-        return 'data:image/png;base64,'.$this->org_logo_full;
+        if (str_starts_with($this->org_logo_full, 'data:')) {
+            return $this->org_logo_full;
+        }
+
+        $decoded = base64_decode($this->org_logo_full, true);
+        if ($decoded !== false && base64_encode($decoded) === $this->org_logo_full) {
+            return 'data:image/png;base64,'.$this->org_logo_full;
+        }
+
+        return 'data:image/png;base64,'.base64_encode($this->org_logo_full);
     }
 }

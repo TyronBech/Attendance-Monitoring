@@ -38,14 +38,21 @@ class AppServiceProvider extends ServiceProvider
                 return null;
             }
 
+            $logo = $ui->org_logo_base64;
+            $logoFull = $ui->org_logo_full_base64;
+
             return [
+                'id' => $ui->id,
                 'org_name' => $ui->org_name,
                 'org_initial' => $ui->org_initial,
                 'org_address' => $ui->org_address,
-                'org_logo' => $ui->org_logo ? 'data:image/png;base64,'.$ui->org_logo : null,
-                'org_logo_full' => $ui->org_logo_full ? 'data:image/png;base64,'.$ui->org_logo_full : null,
+                'org_logo' => $logo,
+                'org_logo_full' => $logoFull,
+                'org_logo_base64' => $logo,
+                'org_logo_full_base64' => $logoFull,
                 'email' => $ui->email,
                 'contact_number' => $ui->contact_number,
+                'social_links' => $ui->social_links,
                 'theme_colors' => $ui->theme_colors,
             ];
         });

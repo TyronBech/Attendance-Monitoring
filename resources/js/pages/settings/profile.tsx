@@ -2,8 +2,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Camera, CheckCircle2, Edit3, Eye, EyeOff, Lock, ShieldCheck, ShieldAlert, X } from 'lucide-react';
 import { useState, useRef } from 'react';
 import type { FormEventHandler } from 'react';
-
-import AppLayout from '@/layouts/app-layout';
+import SettingsLayout from '@/layouts/settings/layout';
 import profile from '@/routes/profile';
 
 interface User {
@@ -36,7 +35,9 @@ interface SharedProps {
 }
 
 export default function Profile() {
-    const { user, settings } = usePage<SharedProps>().props;
+    const { user, settings, ui } = usePage<SharedProps>().props;
+    const primaryColor = settings?.theme_colors?.primary || ui?.theme_colors?.primary || '#3B82F6';
+    const secondaryColor = settings?.theme_colors?.secondary || ui?.theme_colors?.secondary || '#6366F1';
     const [isEditMode, setIsEditMode] = useState(false);
     const [showTwoFactorModal, setShowTwoFactorModal] = useState(false);
     const [twoFactorAction, setTwoFactorAction] = useState<'enable' | 'disable'>('enable');
@@ -44,7 +45,7 @@ export default function Profile() {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showModalPassword, setShowModalPassword] = useState(false);
-    const [previewImage, setPreviewImage] = useState<string | null>(user.profile_image);
+    const [previewImage, setPreviewImage] = useState<string | null>(user?.profile_image ?? null);
     
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -117,14 +118,12 @@ export default function Profile() {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="Account Settings" />
             
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-white mb-8">Account Settings</h1>
-
+            <SettingsLayout>
                 {/* Profile Information Card */}
-                <div className="max-w-5xl mx-auto p-4 sm:p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 mb-8 shadow-md">
+                <div className="w-full p-4 sm:p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 mb-8 shadow-md">
                     <form onSubmit={handleProfileUpdate} encType="multipart/form-data">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -150,7 +149,7 @@ export default function Profile() {
                                             htmlFor="profile_image" 
                                             className="absolute bottom-2 right-2 bg-primary-500 hover:bg-primary-400 text-white p-2.5 rounded-full cursor-pointer shadow-lg border-4 border-white dark:border-gray-800 dark:bg-primary-400 dark:hover:bg-primary-300 transition-transform hover:scale-110"
                                             title="Upload new photo"
-                                            style={{ backgroundColor: settings.theme_colors.primary }}
+                                            style={{ backgroundColor: primaryColor }}
                                         >
                                             <Camera size={20} />
                                             <input 
@@ -194,7 +193,7 @@ export default function Profile() {
                                             type="button" 
                                             onClick={() => toggleEditMode(true)}
                                             className="text-sm font-medium hover:underline flex items-center"
-                                            style={{ color: settings.theme_colors.primary }}
+                                            style={{ color: primaryColor }}
                                         >
                                             <Edit3 size={16} className="mr-1" />
                                             Edit Profile
@@ -371,7 +370,7 @@ export default function Profile() {
                                         type="submit" 
                                         disabled={processing}
                                         className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-md disabled:opacity-50"
-                                        style={{ backgroundColor: settings.theme_colors.primary }}
+                                        style={{ backgroundColor: primaryColor }}
                                     >
                                         Save Changes
                                     </button>
@@ -386,8 +385,8 @@ export default function Profile() {
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
-                                <div className="p-3 bg-primary-100 dark:bg-primary-900 rounded-lg" style={{ backgroundColor: `${settings.theme_colors.primary}20` }}>
-                                    <ShieldCheck className="w-6 h-6" style={{ color: settings.theme_colors.primary }} />
+                                <div className="p-3 bg-primary-100 dark:bg-primary-900 rounded-lg" style={{ backgroundColor: `${primaryColor}20` }}>
+                                    <ShieldCheck className="w-6 h-6" style={{ color: primaryColor }} />
                                 </div>
                                 <h6 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Two-Factor Authentication</h6>
                             </div>
@@ -438,7 +437,7 @@ export default function Profile() {
                                     type="button" 
                                     onClick={() => openTwoFactorModal('enable')}
                                     className="group relative inline-flex items-center justify-center px-6 py-3 text-white focus:ring-4 focus:outline-none font-semibold rounded-lg text-sm transition-all duration-300 shadow-md hover:shadow-lg"
-                                    style={{ backgroundColor: settings.theme_colors.primary }}
+                                    style={{ backgroundColor: primaryColor }}
                                 >
                                     <ShieldCheck size={18} className="mr-2 transition-transform group-hover:scale-110" />
                                     <span>Enable 2FA</span>
@@ -448,18 +447,18 @@ export default function Profile() {
                     </div>
 
                     {!user.two_factor_enabled && (
-                        <div className="mt-6 p-4 rounded-r-lg border-l-4" style={{ backgroundColor: `${settings.theme_colors.secondary}10`, borderColor: settings.theme_colors.primary }}>
+                        <div className="mt-6 p-4 rounded-r-lg border-l-4" style={{ backgroundColor: `${secondaryColor}10`, borderColor: primaryColor }}>
                             <div className="flex items-start">
-                                <ShieldCheck size={18} className="mt-0.5 shrink-0" style={{ color: settings.theme_colors.primary }} />
+                                <ShieldCheck size={18} className="mt-0.5 shrink-0" style={{ color: primaryColor }} />
                                 <div className="ml-3">
-                                    <p className="text-sm font-medium" style={{ color: settings.theme_colors.primary }}>Security Tip</p>
+                                    <p className="text-sm font-medium" style={{ color: primaryColor }}>Security Tip</p>
                                     <p className="text-xs mt-1 text-gray-600 dark:text-gray-400">Enable 2FA to add an extra layer of protection to your account. You'll need an authenticator app like Google Authenticator or Microsoft Authenticator.</p>
                                 </div>
                             </div>
                         </div>
                     )}
                 </div>
-            </div>
+            </SettingsLayout>
 
             {/* Two-Factor Authentication Modal */}
             {showTwoFactorModal && (
@@ -517,7 +516,7 @@ export default function Profile() {
                                     className={`flex-1 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-md disabled:opacity-50 ${
                                         twoFactorAction === 'disable' ? 'bg-red-600 hover:bg-red-700' : ''
                                     }`}
-                                    style={twoFactorAction === 'enable' ? { backgroundColor: settings.theme_colors.primary } : {}}
+                                    style={twoFactorAction === 'enable' ? { backgroundColor: primaryColor } : {}}
                                 >
                                     {twoFactorAction === 'enable' ? 'Enable 2FA' : 'Disable 2FA'}
                                 </button>
@@ -533,6 +532,6 @@ export default function Profile() {
                     </div>
                 </div>
             )}
-        </AppLayout>
+        </>
     );
 }

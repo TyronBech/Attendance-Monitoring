@@ -44,10 +44,35 @@ class HandleInertiaRequests extends Middleware
                     'id' => $request->user()->id,
                     'name' => $request->user()->name,
                     'email' => $request->user()->email,
+                    'avatar' => $request->user()->avatar,
+                    'profile_image' => $request->user()->avatar,
                     'roles' => $request->user()->getRoleNames()->map(fn ($role) => strtolower($role))->toArray(),
                 ] : null,
             ],
-            'ui' => UISetting::latest()->first(),
+            'ui' => function () {
+                $ui = UISetting::latest()->first();
+                if (! $ui) {
+                    return null;
+                }
+
+                $logo = $ui->org_logo_base64;
+                $logoFull = $ui->org_logo_full_base64;
+
+                return [
+                    'id' => $ui->id,
+                    'org_name' => $ui->org_name,
+                    'org_initial' => $ui->org_initial,
+                    'org_address' => $ui->org_address,
+                    'org_logo' => $logo,
+                    'org_logo_full' => $logoFull,
+                    'org_logo_base64' => $logo,
+                    'org_logo_full_base64' => $logoFull,
+                    'email' => $ui->email,
+                    'contact_number' => $ui->contact_number,
+                    'social_links' => $ui->social_links,
+                    'theme_colors' => $ui->theme_colors,
+                ];
+            },
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

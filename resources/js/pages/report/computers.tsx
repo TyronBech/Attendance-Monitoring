@@ -1,8 +1,6 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { Filter, Search, FileText, Download, Calendar, Monitor, Clock } from 'lucide-react';
 import { useState } from 'react';
-
-import AppLayout from '@/layouts/app-layout';
 import report from '@/routes/report';
 
 interface ComputerLogEntry {
@@ -105,7 +103,7 @@ export default function ComputersReport() {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="Online Research Report" />
 
             <div className="container mx-auto px-4 py-8">
@@ -283,6 +281,6 @@ export default function ComputersReport() {
                     )}
                 </div>
             </div>
-        </AppLayout>
+        </>
     );
 }

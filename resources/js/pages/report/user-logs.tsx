@@ -102,7 +102,7 @@ export default function UserLogsReport() {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="Attendance Monitoring Report" />
 
             <div className="container mx-auto px-4 py-8">
@@ -285,6 +285,6 @@ export default function UserLogsReport() {
                     )}
                 </div>
             </div>
-        </AppLayout>
+        </>
     );
 }

@@ -2,8 +2,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Edit3, Facebook, Globe, Instagram, Mail, MapPin, Phone, Twitter, Youtube, X, UploadCloud, Info } from 'lucide-react';
 import { useState  } from 'react';
 import type {FormEventHandler} from 'react';
-
-import AppLayout from '@/layouts/app-layout';
+import SettingsLayout from '@/layouts/settings/layout';
 import settingsRoutes from '@/routes/settings';
 
 interface UISettings {
@@ -85,13 +84,11 @@ export default function UISettingsPage() {
     };
 
     return (
-        <AppLayout>
+        <>
             <Head title="System Settings" />
 
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-white mt-8 mb-8">System Settings</h1>
-
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 relative shadow-md max-w-5xl mx-auto">
+            <SettingsLayout>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 relative shadow-md w-full">
                     {/* Edit Button */}
                     <button 
                         onClick={() => setShowEditModal(true)}
@@ -236,7 +233,7 @@ export default function UISettingsPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </SettingsLayout>
 
             {/* Edit Modal */}
             {showEditModal && (
@@ -435,6 +432,6 @@ export default function UISettingsPage() {
                     </div>
                 </div>
             )}
-        </AppLayout>
+        </>
     );
 }

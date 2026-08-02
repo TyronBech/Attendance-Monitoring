@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Models\UISetting;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
@@ -37,6 +38,8 @@ class ProfileController extends Controller
             $profileImage = 'data:image/jpeg;base64,'.$user->profile_image;
         }
 
+        $uiSettings = UISetting::latest()->first();
+
         return Inertia::render('settings/profile', [
             'user' => [
                 'id' => $user->id,
@@ -55,6 +58,13 @@ class ProfileController extends Controller
                 'employee_role' => $user->employees?->employee_role,
                 'two_factor_enabled' => (bool) ($user->two_factor_enabled ?? false),
                 'updated_at' => $user->updated_at?->format('M d, Y'),
+            ],
+            'settings' => [
+                'theme_colors' => $uiSettings?->theme_colors ?? [
+                    'primary' => '#3B82F6',
+                    'secondary' => '#6366F1',
+                    'tertiary' => '#F59E0B',
+                ],
             ],
         ]);
     }
