@@ -1,5 +1,5 @@
+import { Calendar } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Calendar, Clock } from 'lucide-react';
 
 export default function ClockDisplay() {
     const [now, setNow] = useState(() => new Date());

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { Monitor, ScanLine, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 import useScannerCapture from '@/hooks/use-scanner-capture';
 import TapIdPanel from './tap-id-panel';
 

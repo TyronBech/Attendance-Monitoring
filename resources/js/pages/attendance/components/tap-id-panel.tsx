@@ -1,5 +1,5 @@
+import { AlertCircle, Scan } from 'lucide-react';
 import React, { useState } from 'react';
-import { AlertCircle, CreditCard, Scan, Sparkles } from 'lucide-react';
 
 const AVATAR_RETRY_LIMIT = 2;
 

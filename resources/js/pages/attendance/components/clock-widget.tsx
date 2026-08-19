@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Calendar, Clock } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function ClockWidget() {
     const [time, setTime] = useState<Date>(() => new Date());
