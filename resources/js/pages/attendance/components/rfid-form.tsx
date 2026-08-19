@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight, LogIn, Monitor, ScanLine, UserCheck } from 'lucide-react';
 import useScannerCapture from '@/hooks/use-scanner-capture';
 import TapIdPanel from './tap-id-panel';
 
@@ -173,7 +174,7 @@ export default function RFIDForm({
 
     return (
         <div className="w-full">
-            <section className="w-full bg-white rounded-3xl p-6 sm:p-7 shadow-xl border border-slate-200/80 space-y-6">
+            <section className="w-full bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-7 shadow-xs border border-neutral-200/80 dark:border-neutral-800 space-y-6">
                 <div>
                     <TapIdPanel
                         title="Tap Your ID"
@@ -188,7 +189,8 @@ export default function RFIDForm({
 
                 <div className="space-y-4">
                     <div className="space-y-2">
-                        <label htmlFor="myInput" className="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                        <label htmlFor="myInput" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                            <ScanLine className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
                             Scan or Enter ID
                         </label>
 
@@ -204,44 +206,41 @@ export default function RFIDForm({
                                 onChange={(event) => setIdentifier(event.target.value)}
                                 disabled={isScanning}
                                 placeholder="Scan RFID or enter visitor email"
-                                className="w-full h-14 px-4 rounded-2xl border-2 border-slate-200 bg-slate-50 text-slate-900 font-semibold text-base focus:bg-white focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-slate-400"
+                                className="w-full h-12 px-4 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-semibold text-base focus:bg-white dark:focus:bg-neutral-800 focus:ring-4 focus:ring-primary-500/15 focus:border-primary-500 outline-none transition-all placeholder:text-neutral-400 dark:placeholder:text-neutral-500 shadow-xs"
                             />
 
                             <button
                                 type="submit"
-                                className="w-full h-13 rounded-2xl bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-extrabold text-base shadow-lg shadow-primary-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                                className="w-full h-12 rounded-xl bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold text-sm tracking-wide shadow-xs hover:shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                                 disabled={isScanning}
                             >
-                                {isScanning ? 'Scanning...' : 'Time In / Time Out'}
+                                <LogIn className="w-4 h-4" />
+                                <span>{isScanning ? 'Scanning...' : 'Time In / Time Out'}</span>
                             </button>
                         </form>
                     </div>
 
                     <button
                         type="button"
-                        className="w-full h-13 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm border border-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full h-12 rounded-xl bg-neutral-100 hover:bg-neutral-200/80 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-semibold text-sm border border-neutral-200/80 dark:border-neutral-700 transition-all flex items-center justify-center gap-2 cursor-pointer"
                         onClick={onOpenPcForm}
                     >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M4 6.75A1.75 1.75 0 0 1 5.75 5h12.5A1.75 1.75 0 0 1 20 6.75v8.5A1.75 1.75 0 0 1 18.25 17H5.75A1.75 1.75 0 0 1 4 15.25v-8.5Z" />
-                            <path d="M9 19h6" />
-                            <path d="M12 17v2" />
-                        </svg>
+                        <Monitor className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
                         <span>Online Research Use Form</span>
                     </button>
 
                     {isScanning ? (
-                        <div className="text-center text-xs font-bold text-slate-500 animate-pulse">
+                        <div className="text-center text-xs font-bold text-neutral-500 dark:text-neutral-400 animate-pulse">
                             <span>Scanning, please wait...</span>
                         </div>
                     ) : null}
 
-                    <p className="text-center text-sm font-semibold text-slate-600">
+                    <p className="text-center text-sm font-medium text-neutral-600 dark:text-neutral-400">
                         Just visiting?{' '}
                         <a
                             href="#"
                             id="visitorLink"
-                            className="font-bold text-primary-600 hover:underline"
+                            className="font-bold text-primary-600 dark:text-primary-400 hover:underline"
                             onClick={(event) => {
                                 event.preventDefault();
                                 onVisitorClick();
@@ -256,3 +255,4 @@ export default function RFIDForm({
         </div>
     );
 }
+
