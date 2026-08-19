@@ -1,3 +1,4 @@
+import { Monitor, ScanLine, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import useScannerCapture from '@/hooks/use-scanner-capture';
 import TapIdPanel from './tap-id-panel';
@@ -22,8 +23,8 @@ function getDetailText(userData: any) {
 
 function getCsrfToken(): string {
     if (typeof document === 'undefined') {
-return '';
-}
+        return '';
+    }
 
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
 
@@ -180,34 +181,34 @@ export default function PCInputForm({
     const detailText = userData ? getDetailText(userData) : null;
 
     if (!showForm) {
-return null;
-}
+        return null;
+    }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200" onClick={handleClose}>
-            <div className="w-full max-w-4xl my-auto bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-200 space-y-8 text-slate-900" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-start justify-between pb-5 border-b border-slate-200">
-                    <div>
-                        <p className="text-xs font-extrabold uppercase tracking-widest text-primary-600">Attendance Support</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-1">Online Research Use Form</h2>
-                        <p className="text-sm font-medium text-slate-600 mt-1">
-                            Scan the user's RFID or enter their ID Number to record online research use.
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-neutral-950/70 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200" onClick={handleClose}>
+            <div className="w-full max-w-3xl my-auto bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 shadow-2xl border border-neutral-200 dark:border-neutral-800 space-y-6 text-neutral-900 dark:text-neutral-100" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-start justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                            <Monitor className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Online Research Use Form</h2>
+                        </div>
+                        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-normal">
+                            Scan the user's RFID or enter their ID Number to record online research station use.
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
+                        className="p-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors cursor-pointer"
                         aria-label="Close Online Research Use Form"
                     >
-                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M6 6l12 12M18 6L6 18" />
-                        </svg>
+                        <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                <form method="POST" onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-8 items-center">
-                    <div className="sm:col-span-6 flex justify-center">
+                <form method="POST" onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div className="md:col-span-6 flex justify-center">
                         <TapIdPanel
                             subtitle="Tap to log online research use"
                             profileImage={userData && hasProfileImage ? resolvedProfileImage : null}
@@ -216,14 +217,15 @@ return null;
                             scanType={userData ? userData.scanType : null}
                             successMessage={successMessage}
                             errorMessage={errorMessage}
-                            className="w-full min-h-[240px]"
+                            className="w-full min-h-[220px]"
                         />
                     </div>
 
-                    <div className="sm:col-span-6 space-y-5">
+                    <div className="md:col-span-6 space-y-4">
                         <div className="space-y-2">
-                            <label htmlFor="pcInput" className="block text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                                ID Number
+                            <label htmlFor="pcInput" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                                <ScanLine className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
+                                ID Number / RFID
                             </label>
                             <input
                                 ref={inputRef}
@@ -235,16 +237,17 @@ return null;
                                 onChange={(event) => setIdentifier(event.target.value)}
                                 disabled={isSubmitting}
                                 placeholder="Scan RFID or enter ID Number"
-                                className="w-full h-15 px-5 rounded-2xl border-2 border-slate-200 bg-slate-50 text-slate-900 font-bold text-lg focus:bg-white focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-slate-400"
+                                className="w-full h-12 px-4 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-semibold text-base focus:bg-white dark:focus:bg-neutral-800 focus:ring-4 focus:ring-primary-500/15 focus:border-primary-500 outline-none transition-all placeholder:text-neutral-400 dark:placeholder:text-neutral-500 shadow-xs"
                             />
                         </div>
 
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full h-14 bg-primary-600 hover:bg-primary-700 text-white font-extrabold text-base rounded-2xl shadow-xl shadow-primary-600/25 transition-all cursor-pointer disabled:opacity-60"
+                            className="w-full h-12 bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold text-sm tracking-wide rounded-xl shadow-xs transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
                         >
-                            {isSubmitting ? 'Recording...' : 'Submit Computer Use'}
+                            <Monitor className="w-4 h-4" />
+                            <span>{isSubmitting ? 'Recording...' : 'Submit Computer Use'}</span>
                         </button>
                     </div>
                 </form>

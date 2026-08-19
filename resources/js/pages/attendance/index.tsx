@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ChevronDown, LayoutGrid, LogOut } from 'lucide-react';
+import { Activity, ChevronDown, LayoutGrid, LogIn, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -32,12 +32,12 @@ function getRecentScanGroupLabel(scan: RecentScan) {
     const normalizedGroup = String(scan?.groupName || '').trim().toLowerCase();
 
     if (normalizedGroup === 'visitor') {
-return 'Visitor';
-}
+        return 'Visitor';
+    }
 
     if (normalizedGroup === 'student') {
-return 'Student';
-}
+        return 'Student';
+    }
 
     return 'Employee';
 }
@@ -53,8 +53,8 @@ function getAvatarInitials(name = '') {
 
 function hasAvatarImage(imageSource = '') {
     if (typeof imageSource !== 'string') {
-return false;
-}
+        return false;
+    }
 
     const normalized = imageSource.trim().toLowerCase();
 
@@ -63,16 +63,16 @@ return false;
 
 function buildRetryableAvatarSource(imageSource: string | null | undefined, attempt: number) {
     if (typeof imageSource !== 'string' || imageSource.trim() === '') {
-return '';
-}
+        return '';
+    }
 
     if (imageSource.startsWith('data:image/')) {
-return imageSource;
-}
+        return imageSource;
+    }
 
     if (attempt <= 0) {
-return imageSource;
-}
+        return imageSource;
+    }
 
     const separator = imageSource.includes('?') ? '&' : '?';
 
@@ -143,8 +143,8 @@ export default function AttendanceIndex() {
 
     const handleScanSuccess = (scanEntry: RecentScan) => {
         if (!scanEntry) {
-return;
-}
+            return;
+        }
 
         setRecentActivity((currentEntries) => [
             scanEntry,
@@ -154,8 +154,8 @@ return;
 
     const syncRecentScans = () => {
         if (isRecentScansRequestInFlightRef.current) {
-return;
-}
+            return;
+        }
 
         isRecentScansRequestInFlightRef.current = true;
 
@@ -177,8 +177,8 @@ return;
 
     useEffect(() => {
         if (typeof window === 'undefined' || typeof document === 'undefined') {
-return undefined;
-}
+            return undefined;
+        }
 
         const pollIntervalId = window.setInterval(() => {
             syncRecentScans();
@@ -186,8 +186,8 @@ return undefined;
 
         const handleVisibilityChange = () => {
             if (!document.hidden) {
-syncRecentScans();
-}
+                syncRecentScans();
+            }
         };
 
         const handleWindowFocus = () => {
@@ -207,41 +207,41 @@ syncRecentScans();
 
     const getBadgeVariant = (type: string) => {
         if (type === 'Time Out') {
-return 'bg-rose-100 text-rose-700 border-rose-200';
-}
+            return 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/80';
+        }
 
         if (type === 'Online Research Use') {
-return 'bg-blue-100 text-blue-700 border-blue-200';
-}
+            return 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800/80';
+        }
 
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/80';
     };
 
     return (
-        <div className="w-full min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 font-sans flex flex-col justify-between transition-colors duration-300">
+        <div className="w-full min-h-screen bg-neutral-50/60 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans flex flex-col justify-between transition-colors duration-200">
             <Head title="Attendance Monitoring | Time In & Time Out" />
 
             {/* Header Navbar */}
-            <header className="sticky top-0 z-40 bg-primary-600 dark:bg-slate-900 shadow-lg border-b border-primary-500/30">
-                <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <header className="sticky top-0 z-40 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800 transition-colors shadow-2xs">
+                <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto px-4 py-3 sm:px-6 lg:px-8">
                     <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                         {ui?.org_logo ? (
                             <img
-                                className="rounded-full w-12 h-12 md:w-14 md:h-14 object-cover border-2 border-white/20"
+                                className="rounded-full w-11 h-11 md:w-12 md:h-12 object-cover border border-neutral-200 dark:border-neutral-700 shadow-2xs"
                                 src={ui.org_logo}
                                 alt="School Logo"
                             />
                         ) : (
-                            <div className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white">
+                            <div className="rounded-full w-11 h-11 md:w-12 md:h-12 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-800 flex items-center justify-center text-xs font-bold text-primary-600 dark:text-primary-400">
                                 Logo
                             </div>
                         )}
                         <div className="flex flex-col justify-center">
-                            <h1 className="text-xs md:text-sm lg:text-base text-white font-bold text-start">
+                            <h1 className="text-xs md:text-sm lg:text-base text-neutral-900 dark:text-neutral-100 font-bold tracking-tight text-start">
                                 {ui?.org_name || 'School Name'}
                             </h1>
-                            <hr className="h-px my-0.5 bg-white/20 border-0" />
-                            <h2 className="text-[10px] md:text-xs text-white/80 font-medium text-start">
+                            <hr className="h-px my-0.5 bg-neutral-200 dark:bg-neutral-800 border-0" />
+                            <h2 className="text-[10px] md:text-xs text-neutral-500 dark:text-neutral-400 font-medium text-start">
                                 Attendance Monitoring System
                             </h2>
                         </div>
@@ -251,36 +251,36 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                         {auth?.user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <button className="inline-flex items-center gap-2.5 py-1.5 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all cursor-pointer outline-none">
-                                        <Avatar className="h-7 w-7 rounded-full overflow-hidden border border-white/30 shrink-0">
+                                    <button className="inline-flex items-center gap-2.5 py-1.5 px-3 rounded-full bg-neutral-100/80 hover:bg-neutral-200/80 dark:bg-neutral-800/80 dark:hover:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 transition-all cursor-pointer outline-none shadow-2xs">
+                                        <Avatar className="h-7 w-7 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-700 shrink-0">
                                             <AvatarImage src={auth.user.avatar || auth.user.profile_image} alt={auth.user.name} />
-                                            <AvatarFallback className="bg-primary-700 text-white text-xs font-bold">
+                                            <AvatarFallback className="bg-primary-600 text-white text-xs font-bold">
                                                 {getAvatarInitials(auth.user.name)}
                                             </AvatarFallback>
                                         </Avatar>
                                         <span className="text-xs sm:text-sm font-semibold truncate max-w-[140px]">{auth.user.name}</span>
-                                        <ChevronDown className="w-4 h-4 text-white/80 shrink-0" />
+                                        <ChevronDown className="w-4 h-4 text-neutral-500 dark:text-neutral-400 shrink-0" />
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-56 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-xl">
+                                <DropdownMenuContent align="end" className="w-56 p-1.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl rounded-xl">
                                     <DropdownMenuLabel className="p-2 font-normal">
                                         <div className="flex flex-col space-y-1">
-                                            <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{auth.user.name}</p>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400 leading-none truncate mt-1">{auth.user.email}</p>
+                                            <p className="text-sm font-bold text-neutral-900 dark:text-neutral-100 leading-none">{auth.user.name}</p>
+                                            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-none truncate mt-0.5">{auth.user.email}</p>
                                         </div>
                                     </DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="my-1 bg-slate-200 dark:bg-slate-800" />
+                                    <DropdownMenuSeparator className="my-1 bg-neutral-100 dark:bg-neutral-800" />
                                     <DropdownMenuGroup>
                                         {isAdmin && (
                                             <DropdownMenuItem asChild>
-                                                <Link href="/dashboard" className="flex items-center gap-2 p-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer">
-                                                    <LayoutGrid className="w-4 h-4 text-primary-600" />
+                                                <Link href="/dashboard" className="flex items-center gap-2 p-2 text-xs font-semibold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg cursor-pointer">
+                                                    <LayoutGrid className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                                                     Admin Dashboard
                                                 </Link>
                                             </DropdownMenuItem>
                                         )}
                                         <DropdownMenuItem asChild>
-                                            <Link href="/logout" method="post" as="button" className="w-full flex items-center gap-2 p-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg cursor-pointer">
+                                            <Link href="/logout" method="post" as="button" className="w-full flex items-center gap-2 p-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg cursor-pointer">
                                                 <LogOut className="w-4 h-4" />
                                                 Logout
                                             </Link>
@@ -291,9 +291,10 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                         ) : (
                             <Link
                                 href="/login"
-                                className="inline-flex items-center gap-1.5 py-1.5 px-3.5 text-xs sm:text-sm font-bold text-white bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 transition-all cursor-pointer"
+                                className="inline-flex items-center gap-1.5 py-1.5 px-3.5 text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 rounded-xl border border-neutral-200 dark:border-neutral-700 transition-all cursor-pointer shadow-2xs"
                             >
-                                Login
+                                <LogIn className="w-3.5 h-3.5" />
+                                <span>Login</span>
                             </Link>
                         )}
                     </div>
@@ -337,38 +338,43 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                     <div className="xl:col-span-5 w-full space-y-6">
                         <ClockDisplay />
 
-                        <section className="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 space-y-4">
-                            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                                <h2 className="text-xs font-extrabold uppercase tracking-widest text-primary-600">Recent Scans</h2>
-                                <span className="text-xs font-semibold text-slate-500">Last {recentActivity.length || 0} entries</span>
+                        <section className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-xs border border-neutral-200/80 dark:border-neutral-800 space-y-4">
+                            <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+                                <div className="flex items-center gap-2">
+                                    <Activity className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                    <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">Recent Scans</h2>
+                                </div>
+                                <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400">
+                                    Last {recentActivity.length || 0} entries
+                                </span>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="space-y-2.5">
                                 {recentActivity.length ? (
                                     recentActivity.map((scan) => (
-                                        <article key={`${scan.id ?? scan.timeLabel}-${scan.type}`} className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-200/60">
+                                        <article key={`${scan.id ?? scan.timeLabel}-${scan.type}`} className="flex items-center justify-between p-3 rounded-xl bg-neutral-50/80 hover:bg-neutral-100/80 dark:bg-neutral-800/60 dark:hover:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700/60 transition-all duration-150">
                                             <div className="flex items-center gap-3 min-w-0">
-                                                <div className="w-10 h-10 rounded-full bg-slate-200 text-primary-600 font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
+                                                <div className="w-9 h-9 rounded-full bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
                                                     <RecentScanAvatar scan={scan} />
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <h3 className="text-sm font-bold text-slate-900 truncate">{scan.name}</h3>
-                                                    <p className="text-xs font-semibold text-slate-500">{getRecentScanGroupLabel(scan)}</p>
+                                                    <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 truncate">{scan.name}</h3>
+                                                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{getRecentScanGroupLabel(scan)}</p>
                                                 </div>
                                             </div>
 
                                             <div className="flex flex-col items-end gap-1 shrink-0">
-                                                <span className="text-xs font-bold text-slate-600">{scan.timeLabel}</span>
-                                                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${getBadgeVariant(scan.type)}`}>
+                                                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{scan.timeLabel}</span>
+                                                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${getBadgeVariant(scan.type)}`}>
                                                     {scan.type}
                                                 </span>
                                             </div>
                                         </article>
                                     ))
                                 ) : (
-                                    <div className="text-center py-6 text-slate-500 space-y-1">
-                                        <p className="font-bold text-sm text-slate-700">No recent scans yet.</p>
-                                        <p className="text-xs">The latest attendance activity will appear here.</p>
+                                    <div className="text-center py-8 text-neutral-500 dark:text-neutral-400 space-y-1">
+                                        <p className="font-semibold text-sm text-neutral-700 dark:text-neutral-300">No recent scans yet.</p>
+                                        <p className="text-xs text-neutral-400 dark:text-neutral-500">The latest attendance activity will appear here.</p>
                                     </div>
                                 )}
                             </div>
@@ -378,8 +384,8 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
             </main>
 
             {/* Footer */}
-            <footer className="bg-white dark:bg-slate-900 py-4 border-t border-slate-200 dark:border-slate-800 transition-colors duration-300">
-                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <footer className="bg-white dark:bg-neutral-900 py-4 border-t border-neutral-200/80 dark:border-neutral-800 transition-colors duration-200">
+                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-neutral-500 dark:text-neutral-400 font-medium">
                     &copy; {new Date().getFullYear()} {ui?.org_name || 'OwlQuery Group'}. All Rights Reserved.
                 </div>
             </footer>

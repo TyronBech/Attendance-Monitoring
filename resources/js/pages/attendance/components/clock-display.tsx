@@ -1,3 +1,4 @@
+import { Calendar } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function ClockDisplay() {
@@ -21,23 +22,38 @@ export default function ClockDisplay() {
     }).format(now);
 
     return (
-        <div className="w-full p-8 sm:p-10 rounded-3xl bg-white text-slate-900 shadow-xl border border-slate-200/80 flex flex-col items-center justify-center text-center space-y-4">
-            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-primary-600">Current Library Time</p>
-
-            <div className="flex items-baseline justify-center gap-3">
-                <div className="inline-flex items-baseline gap-1 text-6xl sm:text-7xl lg:text-8xl font-black font-mono tracking-tight text-slate-900 drop-shadow-sm" aria-label={`${hours}:${minutes}:${seconds} ${meridiem}`}>
-                    <span>{hours}</span>
-                    <span className="text-primary-500/50 font-sans text-5xl sm:text-6xl lg:text-7xl">:</span>
-                    <span>{minutes}</span>
-                    <span className="text-primary-500/50 font-sans text-5xl sm:text-6xl lg:text-7xl">:</span>
-                    <span>{seconds}</span>
-                </div>
-                <span className="text-2xl sm:text-3xl font-extrabold text-primary-600 uppercase tracking-wide">{meridiem}</span>
+        <div className="w-full p-6 sm:p-8 rounded-2xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 shadow-xs border border-neutral-200/80 dark:border-neutral-800 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+                </span>
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    Current Library Time
+                </span>
             </div>
 
-            <div className="w-24 h-1 bg-slate-200 rounded-full my-2" />
+            <div className="flex items-baseline justify-center gap-2 sm:gap-3">
+                <div
+                    className="inline-flex items-baseline gap-1 text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100 tabular-nums"
+                    aria-label={`${hours}:${minutes}:${seconds} ${meridiem}`}
+                >
+                    <span>{hours}</span>
+                    <span className="text-primary-500/50 dark:text-primary-400/50 font-light">:</span>
+                    <span>{minutes}</span>
+                    <span className="text-primary-500/50 dark:text-primary-400/50 font-light">:</span>
+                    <span>{seconds}</span>
+                </div>
+                <span className="text-xl sm:text-2xl font-extrabold text-primary-600 dark:text-primary-400 uppercase tracking-tight">
+                    {meridiem}
+                </span>
+            </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-700 tracking-wide">{formattedDate}</h2>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/60 dark:border-neutral-700/60 text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 shadow-2xs">
+                <Calendar className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />
+                <span>{formattedDate}</span>
+            </div>
         </div>
     );
 }
+

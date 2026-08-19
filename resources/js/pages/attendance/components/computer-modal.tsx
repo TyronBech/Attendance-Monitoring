@@ -1,3 +1,4 @@
+import { Monitor, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,14 +13,14 @@ type Props = {
 
 function getCsrfToken(): string {
     if (typeof document === 'undefined') {
-return '';
-}
+        return '';
+    }
 
     const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
 
     if (metaToken) {
-return metaToken;
-}
+        return metaToken;
+    }
 
     const match = document.cookie.match(new RegExp('(^|; )XSRF-TOKEN=([^;]+)'));
 
@@ -32,15 +33,15 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     if (!isOpen) {
-return null;
-}
+        return null;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!identifier.trim()) {
-return;
-}
+            return;
+        }
 
         setLoading(true);
         setErrorMsg(null);
@@ -87,36 +88,36 @@ return;
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/70 backdrop-blur-xs animate-in fade-in duration-200">
+            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-800 w-full max-w-md overflow-hidden">
                 {/* Header */}
-                <div className="bg-primary-500 p-5 text-white flex items-center justify-between">
+                <div className="p-5 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <span className="text-xl">💻</span>
-                        <h3 className="text-lg font-bold">Online Research Use Form</h3>
+                        <Monitor className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                        <h3 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">Online Research Use Form</h3>
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-white/80 hover:text-white text-2xl font-bold p-1 leading-none rounded-md hover:bg-white/10"
+                        className="p-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors cursor-pointer"
                     >
-                        &times;
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
 
                 {/* Form Body */}
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     {errorMsg && (
-                        <div className="p-3 text-xs rounded-lg bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 font-medium">
+                        <div className="p-3 text-xs rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 font-semibold border border-rose-200 dark:border-rose-800">
                             {errorMsg}
                         </div>
                     )}
 
-                    <p className="text-xs text-gray-600 dark:text-gray-300">
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400">
                         Scan your RFID card or enter your ID / Employee Number below to log computer station usage for research.
                     </p>
 
                     <div className="space-y-1">
-                        <Label htmlFor="pc_identifier" className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                        <Label htmlFor="pc_identifier" className="text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
                             Scan RFID or Enter ID Number *
                         </Label>
                         <Input
@@ -126,15 +127,15 @@ return;
                             placeholder="Scan RFID / Enter ID Number"
                             value={identifier}
                             onChange={(e) => setIdentifier(e.target.value)}
-                            className="dark:bg-gray-900 dark:border-gray-700 dark:text-white"
+                            className="bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:text-white"
                         />
                     </div>
 
-                    <div className="pt-3 flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-700">
-                        <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+                    <div className="pt-3 flex items-center justify-end gap-3 border-t border-neutral-100 dark:border-neutral-800">
+                        <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="rounded-xl">
                             Cancel
                         </Button>
-                        <Button type="submit" className="bg-primary-500 hover:bg-primary-600 text-white" disabled={loading}>
+                        <Button type="submit" className="bg-primary-600 hover:bg-primary-700 text-white rounded-xl shadow-xs" disabled={loading}>
                             {loading ? 'Submitting...' : 'Log Computer Use'}
                         </Button>
                     </div>
