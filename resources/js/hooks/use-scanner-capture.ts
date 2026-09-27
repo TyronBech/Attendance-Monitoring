@@ -38,10 +38,22 @@ function isEditableElement(element: EventTarget | null): boolean {
 
     const inputType = (element.getAttribute('type') || 'text').toLowerCase();
 
-    return !['button', 'checkbox', 'color', 'file', 'hidden', 'radio', 'range', 'submit'].includes(inputType);
+    return ![
+        'button',
+        'checkbox',
+        'color',
+        'file',
+        'hidden',
+        'radio',
+        'range',
+        'submit',
+    ].includes(inputType);
 }
 
-function shouldIgnoreTarget(target: EventTarget | null, targetElement: HTMLElement | null): boolean {
+function shouldIgnoreTarget(
+    target: EventTarget | null,
+    targetElement: HTMLElement | null,
+): boolean {
     if (!(target instanceof HTMLElement)) {
         return false;
     }
@@ -90,11 +102,14 @@ export default function useScannerCapture({
         mirrorValueRef.current = mirrorValue;
     }, [mirrorValue]);
 
-    useEffect(() => () => {
-        if (clearTimerRef.current) {
-            window.clearTimeout(clearTimerRef.current);
-        }
-    }, []);
+    useEffect(
+        () => () => {
+            if (clearTimerRef.current) {
+                window.clearTimeout(clearTimerRef.current);
+            }
+        },
+        [],
+    );
 
     useEffect(() => {
         if (!enabled) {
@@ -102,8 +117,8 @@ export default function useScannerCapture({
             lastKeyTimestampRef.current = 0;
 
             if (clearTimerRef.current) {
-window.clearTimeout(clearTimerRef.current);
-}
+                window.clearTimeout(clearTimerRef.current);
+            }
 
             return undefined;
         }
@@ -113,14 +128,14 @@ window.clearTimeout(clearTimerRef.current);
             lastKeyTimestampRef.current = 0;
 
             if (clearTimerRef.current) {
-window.clearTimeout(clearTimerRef.current);
-}
+                window.clearTimeout(clearTimerRef.current);
+            }
         };
 
         const scheduleBufferReset = () => {
             if (clearTimerRef.current) {
-window.clearTimeout(clearTimerRef.current);
-}
+                window.clearTimeout(clearTimerRef.current);
+            }
 
             clearTimerRef.current = window.setTimeout(() => {
                 bufferRef.current = '';
@@ -129,7 +144,12 @@ window.clearTimeout(clearTimerRef.current);
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) {
+            if (
+                event.defaultPrevented ||
+                event.metaKey ||
+                event.ctrlKey ||
+                event.altKey
+            ) {
                 return;
             }
 
@@ -167,8 +187,8 @@ window.clearTimeout(clearTimerRef.current);
             }
 
             if (
-                lastKeyTimestampRef.current > 0
-                && currentTimestamp - lastKeyTimestampRef.current > maxIntervalMs
+                lastKeyTimestampRef.current > 0 &&
+                currentTimestamp - lastKeyTimestampRef.current > maxIntervalMs
             ) {
                 bufferRef.current = '';
             }

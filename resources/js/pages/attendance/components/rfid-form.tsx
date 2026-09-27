@@ -7,7 +7,10 @@ function encodePayload(payload: any) {
 }
 
 function getDisplayName(userData: any) {
-    return [userData?.first_name, userData?.last_name].filter(Boolean).join(' ') || 'Library User';
+    return (
+        [userData?.first_name, userData?.last_name].filter(Boolean).join(' ') ||
+        'Library User'
+    );
 }
 
 function getScanType(remarks: string) {
@@ -23,7 +26,9 @@ function getCsrfToken(): string {
         return '';
     }
 
-    const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
+    const metaToken = (
+        document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement
+    )?.content;
 
     if (metaToken) {
         return metaToken;
@@ -69,9 +74,12 @@ export default function RFIDForm({
         }
     }, [scannerCaptureEnabled, userData]);
 
-    useEffect(() => () => {
-        clearTimeout(clearUserTimeoutRef.current);
-    }, []);
+    useEffect(
+        () => () => {
+            clearTimeout(clearUserTimeoutRef.current);
+        },
+        [],
+    );
 
     const submitIdentifier = async (rawIdentifier: string) => {
         const trimmedIdentifier = rawIdentifier.trim();
@@ -110,7 +118,9 @@ export default function RFIDForm({
             const data = await response.json().catch(() => ({}));
 
             if (!response.ok || data.status !== 'success') {
-                setErrorMessage(data.message || 'ID not found. Please try again.');
+                setErrorMessage(
+                    data.message || 'ID not found. Please try again.',
+                );
                 clearTimeout(clearUserTimeoutRef.current);
                 clearUserTimeoutRef.current = setTimeout(() => {
                     setErrorMessage(null);
@@ -135,10 +145,16 @@ export default function RFIDForm({
             onRecentScansSync?.();
 
             clearTimeout(clearUserTimeoutRef.current);
-            clearUserTimeoutRef.current = setTimeout(() => {
-                setUserData(null);
-                setErrorMessage(null);
-            }, STANDARD_SCAN_DISPLAY_DURATION_MS + (scanPayload.hasLibraryFine ? LIBRARY_FINE_EXTRA_DISPLAY_DURATION_MS : 0));
+            clearUserTimeoutRef.current = setTimeout(
+                () => {
+                    setUserData(null);
+                    setErrorMessage(null);
+                },
+                STANDARD_SCAN_DISPLAY_DURATION_MS +
+                    (scanPayload.hasLibraryFine
+                        ? LIBRARY_FINE_EXTRA_DISPLAY_DURATION_MS
+                        : 0),
+            );
         } catch {
             setErrorMessage('An error occurred while scanning the ID.');
             clearTimeout(clearUserTimeoutRef.current);
@@ -166,19 +182,25 @@ export default function RFIDForm({
 
     const isStudent = userData?.group_name?.toLowerCase() === 'student';
     const resolvedProfileImage = userData?.image ?? '';
-    const hasProfileImage = Boolean(resolvedProfileImage) && !resolvedProfileImage.includes('id_default.png');
+    const hasProfileImage =
+        Boolean(resolvedProfileImage) &&
+        !resolvedProfileImage.includes('id_default.png');
     const detailLine = isStudent
         ? [userData?.level, userData?.section].filter(Boolean).join(' - ')
-        : (userData?.role || userData?.group_name || 'Library access');
+        : userData?.role || userData?.group_name || 'Library access';
 
     return (
         <div className="w-full">
-            <section className="w-full bg-white rounded-3xl p-6 sm:p-7 shadow-xl border border-slate-200/80 space-y-6">
+            <section className="w-full space-y-6 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xl sm:p-7">
                 <div>
                     <TapIdPanel
                         title="Tap Your ID"
                         subtitle="RFID - ID Number - Employee ID"
-                        profileImage={userData && hasProfileImage ? resolvedProfileImage : null}
+                        profileImage={
+                            userData && hasProfileImage
+                                ? resolvedProfileImage
+                                : null
+                        }
                         displayName={userData ? getDisplayName(userData) : null}
                         detailText={userData ? detailLine : null}
                         scanType={userData ? userData.scanType : null}
@@ -188,11 +210,19 @@ export default function RFIDForm({
 
                 <div className="space-y-4">
                     <div className="space-y-2">
-                        <label htmlFor="myInput" className="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                        <label
+                            htmlFor="myInput"
+                            className="block text-xs font-extrabold tracking-wider text-slate-500 uppercase"
+                        >
                             Scan or Enter ID
                         </label>
 
-                        <form method="POST" id="rfidForm" className="space-y-3" onSubmit={handleSubmit}>
+                        <form
+                            method="POST"
+                            id="rfidForm"
+                            className="space-y-3"
+                            onSubmit={handleSubmit}
+                        >
                             <input
                                 ref={inputRef}
                                 autoFocus
@@ -201,28 +231,38 @@ export default function RFIDForm({
                                 name="rfidInput"
                                 autoComplete="off"
                                 value={identifier}
-                                onChange={(event) => setIdentifier(event.target.value)}
+                                onChange={(event) =>
+                                    setIdentifier(event.target.value)
+                                }
                                 disabled={isScanning}
                                 placeholder="Scan RFID or enter visitor email"
-                                className="w-full h-14 px-4 rounded-2xl border-2 border-slate-200 bg-slate-50 text-slate-900 font-semibold text-base focus:bg-white focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-slate-400"
+                                className="h-14 w-full rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 text-base font-semibold text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20"
                             />
 
                             <button
                                 type="submit"
-                                className="w-full h-13 rounded-2xl bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-extrabold text-base shadow-lg shadow-primary-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                                className="flex h-13 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-primary-600 text-base font-extrabold text-white shadow-lg shadow-primary-600/20 transition-all hover:bg-primary-700 active:scale-[0.99] disabled:opacity-60"
                                 disabled={isScanning}
                             >
-                                {isScanning ? 'Scanning...' : 'Time In / Time Out'}
+                                {isScanning
+                                    ? 'Scanning...'
+                                    : 'Time In / Time Out'}
                             </button>
                         </form>
                     </div>
 
                     <button
                         type="button"
-                        className="w-full h-13 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm border border-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        className="flex h-13 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-100 text-sm font-bold text-slate-800 transition-all hover:bg-slate-200"
                         onClick={onOpenPcForm}
                     >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                            className="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
                             <path d="M4 6.75A1.75 1.75 0 0 1 5.75 5h12.5A1.75 1.75 0 0 1 20 6.75v8.5A1.75 1.75 0 0 1 18.25 17H5.75A1.75 1.75 0 0 1 4 15.25v-8.5Z" />
                             <path d="M9 19h6" />
                             <path d="M12 17v2" />
@@ -231,7 +271,7 @@ export default function RFIDForm({
                     </button>
 
                     {isScanning ? (
-                        <div className="text-center text-xs font-bold text-slate-500 animate-pulse">
+                        <div className="animate-pulse text-center text-xs font-bold text-slate-500">
                             <span>Scanning, please wait...</span>
                         </div>
                     ) : null}
