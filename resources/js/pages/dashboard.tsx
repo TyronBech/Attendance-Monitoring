@@ -121,7 +121,9 @@ function AreaChart({
 
     // Calculate X-axis ticks (e.g. 5 dates across month)
     const step = Math.max(1, Math.floor(data.length / 6));
-    const xTicks = data.filter((_, i) => i % step === 0 || i === data.length - 1);
+    const xTicks = data.filter(
+        (_, i) => i % step === 0 || i === data.length - 1,
+    );
 
     return (
         <div className="relative w-full">
@@ -131,9 +133,23 @@ function AreaChart({
                 onMouseLeave={() => setHoveredIndex(null)}
             >
                 <defs>
-                    <linearGradient id={colorGradientId} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={fillColorStart} stopOpacity="0.4" />
-                        <stop offset="100%" stopColor={fillColorEnd} stopOpacity="0.0" />
+                    <linearGradient
+                        id={colorGradientId}
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                    >
+                        <stop
+                            offset="0%"
+                            stopColor={fillColorStart}
+                            stopOpacity="0.4"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor={fillColorEnd}
+                            stopOpacity="0.0"
+                        />
                     </linearGradient>
                 </defs>
 
@@ -166,7 +182,9 @@ function AreaChart({
 
                 {/* X-axis labels */}
                 {xTicks.map((d, i) => {
-                    const originalIdx = data.findIndex((item) => item.date === d.date);
+                    const originalIdx = data.findIndex(
+                        (item) => item.date === d.date,
+                    );
                     const x = getX(originalIdx >= 0 ? originalIdx : 0);
 
                     return (
@@ -287,11 +305,12 @@ export default function Dashboard() {
             <div className="min-h-[calc(100vh-4rem)] space-y-8 p-4 sm:p-6 lg:p-8">
                 {/* Header */}
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl">
+                    <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl dark:text-neutral-100">
                         Library & Computer Dashboard
                     </h1>
                     <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                        Real-time monitoring of active attendance, computer lab usage, and monthly trends.
+                        Real-time monitoring of active attendance, computer lab
+                        usage, and monthly trends.
                     </p>
                 </div>
 
@@ -320,25 +339,29 @@ export default function Dashboard() {
                         </div>
 
                         <div className="my-8 flex flex-col items-center justify-center text-center">
-                            <div className="text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-6xl">
+                            <div className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-100">
                                 {metrics.currentlyActiveLibrary}
                             </div>
                             <p className="mt-2 max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
-                                Active visitors currently inside the library premises.
+                                Active visitors currently inside the library
+                                premises.
                             </p>
                         </div>
 
                         <div className="flex items-center justify-between border-t border-neutral-100 pt-4 dark:border-neutral-800">
-                            <span className="text-xs font-medium text-neutral-400">Status</span>
+                            <span className="text-xs font-medium text-neutral-400">
+                                Status
+                            </span>
                             <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                                <Activity className="h-3.5 w-3.5" /> Active Session
+                                <Activity className="h-3.5 w-3.5" /> Active
+                                Session
                             </span>
                         </div>
                     </div>
 
                     {/* Card 2: 2 Col-Span - Graph of Total Monthly Time-In Users (Last 12 Months) */}
-                    <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all duration-200 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 lg:col-span-2">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-100 pb-4 dark:border-neutral-800">
+                    <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all duration-200 hover:shadow-md lg:col-span-2 dark:border-neutral-800 dark:bg-neutral-900">
+                        <div className="flex flex-col justify-between gap-4 border-b border-neutral-100 pb-4 sm:flex-row sm:items-center dark:border-neutral-800">
                             <div>
                                 <div className="flex items-center gap-2">
                                     <BookOpen className="h-4 w-4 text-indigo-500" />
@@ -347,14 +370,18 @@ export default function Dashboard() {
                                     </h3>
                                 </div>
                                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                    Monthly attendance distribution ({metrics.periodLabel || 'Last 12 Months'})
+                                    Monthly attendance distribution (
+                                    {metrics.periodLabel || 'Last 12 Months'})
                                 </p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <div className="text-right">
-                                    <div className="text-xs font-medium text-neutral-400">12-Month Total</div>
+                                    <div className="text-xs font-medium text-neutral-400">
+                                        12-Month Total
+                                    </div>
                                     <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
-                                        {metrics.monthlyLibraryTotal.toLocaleString()} Time-Ins
+                                        {metrics.monthlyLibraryTotal.toLocaleString()}{' '}
+                                        Time-Ins
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +424,7 @@ export default function Dashboard() {
                         </div>
 
                         <div className="my-8 flex flex-col items-center justify-center text-center">
-                            <div className="text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-6xl">
+                            <div className="text-5xl font-extrabold tracking-tight text-neutral-900 sm:text-6xl dark:text-neutral-100">
                                 {metrics.currentlyActiveComputer}
                             </div>
                             <p className="mt-2 max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
@@ -406,16 +433,19 @@ export default function Dashboard() {
                         </div>
 
                         <div className="flex items-center justify-between border-t border-neutral-100 pt-4 dark:border-neutral-800">
-                            <span className="text-xs font-medium text-neutral-400">Workstation Status</span>
+                            <span className="text-xs font-medium text-neutral-400">
+                                Workstation Status
+                            </span>
                             <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400">
-                                <TrendingUp className="h-3.5 w-3.5" /> In Session
+                                <TrendingUp className="h-3.5 w-3.5" /> In
+                                Session
                             </span>
                         </div>
                     </div>
 
                     {/* Card 4: 2 Col-Span - Monthly Total Computer Logs Graph (Last 12 Months) */}
-                    <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all duration-200 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 lg:col-span-2">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-100 pb-4 dark:border-neutral-800">
+                    <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all duration-200 hover:shadow-md lg:col-span-2 dark:border-neutral-800 dark:bg-neutral-900">
+                        <div className="flex flex-col justify-between gap-4 border-b border-neutral-100 pb-4 sm:flex-row sm:items-center dark:border-neutral-800">
                             <div>
                                 <div className="flex items-center gap-2">
                                     <Monitor className="h-4 w-4 text-purple-500" />
@@ -424,14 +454,18 @@ export default function Dashboard() {
                                     </h3>
                                 </div>
                                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                    Online research & workstation activity ({metrics.periodLabel || 'Last 12 Months'})
+                                    Online research & workstation activity (
+                                    {metrics.periodLabel || 'Last 12 Months'})
                                 </p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <div className="text-right">
-                                    <div className="text-xs font-medium text-neutral-400">12-Month Total</div>
+                                    <div className="text-xs font-medium text-neutral-400">
+                                        12-Month Total
+                                    </div>
                                     <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
-                                        {metrics.monthlyComputerTotal.toLocaleString()} Sessions
+                                        {metrics.monthlyComputerTotal.toLocaleString()}{' '}
+                                        Sessions
                                     </div>
                                 </div>
                             </div>
@@ -474,19 +508,31 @@ export default function Dashboard() {
 
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-xs">
-                                <thead className="bg-neutral-50/80 uppercase text-neutral-400 dark:bg-neutral-800/40">
+                                <thead className="bg-neutral-50/80 text-neutral-400 uppercase dark:bg-neutral-800/40">
                                     <tr>
-                                        <th className="px-4 py-3 font-semibold">#</th>
-                                        <th className="px-4 py-3 font-semibold">User</th>
-                                        <th className="px-4 py-3 font-semibold">Grade & Section</th>
-                                        <th className="px-4 py-3 font-semibold">Date & Time of Entry</th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            #
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            User
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            Grade & Section
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            Date & Time of Entry
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
                                     {recentLibraryUsers.length === 0 ? (
                                         <tr>
-                                            <td colSpan={4} className="px-4 py-8 text-center text-neutral-400">
-                                                No recent library time-ins recorded yet.
+                                            <td
+                                                colSpan={4}
+                                                className="px-4 py-8 text-center text-neutral-400"
+                                            >
+                                                No recent library time-ins
+                                                recorded yet.
                                             </td>
                                         </tr>
                                     ) : (
@@ -503,12 +549,18 @@ export default function Dashboard() {
                                                         <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-indigo-100 font-semibold text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300">
                                                             {user.avatar ? (
                                                                 <img
-                                                                    src={user.avatar}
-                                                                    alt={user.name}
+                                                                    src={
+                                                                        user.avatar
+                                                                    }
+                                                                    alt={
+                                                                        user.name
+                                                                    }
                                                                     className="h-full w-full object-cover"
                                                                 />
                                                             ) : (
-                                                                user.name.charAt(0).toUpperCase()
+                                                                user.name
+                                                                    .charAt(0)
+                                                                    .toUpperCase()
                                                             )}
                                                         </div>
                                                         <div>
@@ -529,7 +581,9 @@ export default function Dashboard() {
                                                 <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
                                                     <div className="flex items-center gap-1.5">
                                                         <Clock className="h-3.5 w-3.5 text-neutral-400" />
-                                                        <span>{user.time_in}</span>
+                                                        <span>
+                                                            {user.time_in}
+                                                        </span>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -552,7 +606,8 @@ export default function Dashboard() {
                                         10 Recent Computer Use Logs
                                     </h3>
                                     <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                        Most recent research sessions (#1 as latest)
+                                        Most recent research sessions (#1 as
+                                        latest)
                                     </p>
                                 </div>
                             </div>
@@ -563,19 +618,31 @@ export default function Dashboard() {
 
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-xs">
-                                <thead className="bg-neutral-50/80 uppercase text-neutral-400 dark:bg-neutral-800/40">
+                                <thead className="bg-neutral-50/80 text-neutral-400 uppercase dark:bg-neutral-800/40">
                                     <tr>
-                                        <th className="px-4 py-3 font-semibold">#</th>
-                                        <th className="px-4 py-3 font-semibold">User</th>
-                                        <th className="px-4 py-3 font-semibold">Grade & Section</th>
-                                        <th className="px-4 py-3 font-semibold">Date & Time of Entry</th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            #
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            User
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            Grade & Section
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            Date & Time of Entry
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
                                     {recentComputerUsers.length === 0 ? (
                                         <tr>
-                                            <td colSpan={4} className="px-4 py-8 text-center text-neutral-400">
-                                                No recent computer use recorded yet.
+                                            <td
+                                                colSpan={4}
+                                                className="px-4 py-8 text-center text-neutral-400"
+                                            >
+                                                No recent computer use recorded
+                                                yet.
                                             </td>
                                         </tr>
                                     ) : (
@@ -592,12 +659,18 @@ export default function Dashboard() {
                                                         <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-purple-100 font-semibold text-purple-700 dark:bg-purple-900/60 dark:text-purple-300">
                                                             {user.avatar ? (
                                                                 <img
-                                                                    src={user.avatar}
-                                                                    alt={user.name}
+                                                                    src={
+                                                                        user.avatar
+                                                                    }
+                                                                    alt={
+                                                                        user.name
+                                                                    }
                                                                     className="h-full w-full object-cover"
                                                                 />
                                                             ) : (
-                                                                user.name.charAt(0).toUpperCase()
+                                                                user.name
+                                                                    .charAt(0)
+                                                                    .toUpperCase()
                                                             )}
                                                         </div>
                                                         <div>
@@ -605,7 +678,8 @@ export default function Dashboard() {
                                                                 {user.name}
                                                             </div>
                                                             <div className="text-[10px] text-neutral-400">
-                                                                {user.remarks || user.user_type}
+                                                                {user.remarks ||
+                                                                    user.user_type}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -618,7 +692,9 @@ export default function Dashboard() {
                                                 <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
                                                     <div className="flex items-center gap-1.5">
                                                         <Clock className="h-3.5 w-3.5 text-neutral-400" />
-                                                        <span>{user.time_in}</span>
+                                                        <span>
+                                                            {user.time_in}
+                                                        </span>
                                                     </div>
                                                 </td>
                                             </tr>

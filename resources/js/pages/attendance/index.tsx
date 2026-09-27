@@ -29,50 +29,61 @@ type RecentScan = {
 };
 
 function getRecentScanGroupLabel(scan: RecentScan) {
-    const normalizedGroup = String(scan?.groupName || '').trim().toLowerCase();
+    const normalizedGroup = String(scan?.groupName || '')
+        .trim()
+        .toLowerCase();
 
     if (normalizedGroup === 'visitor') {
-return 'Visitor';
-}
+        return 'Visitor';
+    }
 
     if (normalizedGroup === 'student') {
-return 'Student';
-}
+        return 'Student';
+    }
 
     return 'Employee';
 }
 
 function getAvatarInitials(name = '') {
-    return String(name || 'L')
-        .split(' ')
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((part) => part[0]?.toUpperCase() ?? '')
-        .join('') || 'LU';
+    return (
+        String(name || 'L')
+            .split(' ')
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0]?.toUpperCase() ?? '')
+            .join('') || 'LU'
+    );
 }
 
 function hasAvatarImage(imageSource = '') {
     if (typeof imageSource !== 'string') {
-return false;
-}
+        return false;
+    }
 
     const normalized = imageSource.trim().toLowerCase();
 
-    return normalized !== '' && !normalized.includes('id_default.png') && !normalized.includes('sncs-logo');
+    return (
+        normalized !== '' &&
+        !normalized.includes('id_default.png') &&
+        !normalized.includes('sncs-logo')
+    );
 }
 
-function buildRetryableAvatarSource(imageSource: string | null | undefined, attempt: number) {
+function buildRetryableAvatarSource(
+    imageSource: string | null | undefined,
+    attempt: number,
+) {
     if (typeof imageSource !== 'string' || imageSource.trim() === '') {
-return '';
-}
+        return '';
+    }
 
     if (imageSource.startsWith('data:image/')) {
-return imageSource;
-}
+        return imageSource;
+    }
 
     if (attempt <= 0) {
-return imageSource;
-}
+        return imageSource;
+    }
 
     const separator = imageSource.includes('?') ? '&' : '?';
 
@@ -80,7 +91,8 @@ return imageSource;
 }
 
 function RecentScanAvatar({ scan }: { scan: RecentScan }) {
-    const imageSource = typeof scan?.image === 'string' ? scan.image.trim() : '';
+    const imageSource =
+        typeof scan?.image === 'string' ? scan.image.trim() : '';
     const [prevImageSource, setPrevImageSource] = useState(imageSource);
     const [retryCount, setRetryCount] = useState(0);
     const [imageFailed, setImageFailed] = useState(false);
@@ -91,7 +103,10 @@ function RecentScanAvatar({ scan }: { scan: RecentScan }) {
         setImageFailed(false);
     }
 
-    const resolvedImageSource = buildRetryableAvatarSource(imageSource, retryCount);
+    const resolvedImageSource = buildRetryableAvatarSource(
+        imageSource,
+        retryCount,
+    );
     const canShowImage = hasAvatarImage(imageSource) && !imageFailed;
 
     function handleImageError() {
@@ -112,27 +127,26 @@ function RecentScanAvatar({ scan }: { scan: RecentScan }) {
         <img
             src={resolvedImageSource}
             alt=""
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
             onError={handleImageError}
         />
     );
 }
 
 export default function AttendanceIndex() {
-    const {
-        auth = {},
-        ui = {},
-        recentScans = [],
-    } = usePage().props as any;
+    const { auth = {}, ui = {}, recentScans = [] } = usePage().props as any;
 
     const userRoles = Array.isArray(auth?.user?.roles) ? auth.user.roles : [];
-    const isAdmin = userRoles.includes('admin') || userRoles.includes('super admin');
+    const isAdmin =
+        userRoles.includes('admin') || userRoles.includes('super admin');
 
     const [showVisitorForm, setShowVisitorForm] = useState(false);
     const [showPcForm, setShowPcForm] = useState(false);
     const [, setIsGlobalLoading] = useState(false);
     const [prevRecentScans, setPrevRecentScans] = useState(recentScans);
-    const [recentActivity, setRecentActivity] = useState<RecentScan[]>(Array.isArray(recentScans) ? recentScans : []);
+    const [recentActivity, setRecentActivity] = useState<RecentScan[]>(
+        Array.isArray(recentScans) ? recentScans : [],
+    );
 
     if (prevRecentScans !== recentScans) {
         setPrevRecentScans(recentScans);
@@ -143,19 +157,21 @@ export default function AttendanceIndex() {
 
     const handleScanSuccess = (scanEntry: RecentScan) => {
         if (!scanEntry) {
-return;
-}
+            return;
+        }
 
-        setRecentActivity((currentEntries) => [
-            scanEntry,
-            ...currentEntries.filter((entry) => entry.id !== scanEntry.id),
-        ].slice(0, 5));
+        setRecentActivity((currentEntries) =>
+            [
+                scanEntry,
+                ...currentEntries.filter((entry) => entry.id !== scanEntry.id),
+            ].slice(0, 5),
+        );
     };
 
     const syncRecentScans = () => {
         if (isRecentScansRequestInFlightRef.current) {
-return;
-}
+            return;
+        }
 
         isRecentScansRequestInFlightRef.current = true;
 
@@ -165,7 +181,10 @@ return;
         })
             .then((res) => res.json().catch(() => ({})))
             .then((data) => {
-                if (data.status === 'success' && Array.isArray(data.recentScans)) {
+                if (
+                    data.status === 'success' &&
+                    Array.isArray(data.recentScans)
+                ) {
                     setRecentActivity(data.recentScans);
                 }
             })
@@ -177,8 +196,8 @@ return;
 
     useEffect(() => {
         if (typeof window === 'undefined' || typeof document === 'undefined') {
-return undefined;
-}
+            return undefined;
+        }
 
         const pollIntervalId = window.setInterval(() => {
             syncRecentScans();
@@ -186,8 +205,8 @@ return undefined;
 
         const handleVisibilityChange = () => {
             if (!document.hidden) {
-syncRecentScans();
-}
+                syncRecentScans();
+            }
         };
 
         const handleWindowFocus = () => {
@@ -200,48 +219,54 @@ syncRecentScans();
 
         return () => {
             window.clearInterval(pollIntervalId);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange,
+            );
             window.removeEventListener('focus', handleWindowFocus);
         };
     }, []);
 
     const getBadgeVariant = (type: string) => {
         if (type === 'Time Out') {
-return 'bg-rose-100 text-rose-700 border-rose-200';
-}
+            return 'bg-rose-100 text-rose-700 border-rose-200';
+        }
 
         if (type === 'Online Research Use') {
-return 'bg-blue-100 text-blue-700 border-blue-200';
-}
+            return 'bg-blue-100 text-blue-700 border-blue-200';
+        }
 
         return 'bg-emerald-100 text-emerald-700 border-emerald-200';
     };
 
     return (
-        <div className="w-full min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 font-sans flex flex-col justify-between transition-colors duration-300">
+        <div className="flex min-h-screen w-full flex-col justify-between bg-slate-100 font-sans text-slate-900 transition-colors duration-300 dark:bg-slate-950">
             <Head title="Attendance Monitoring | Time In & Time Out" />
 
             {/* Header Navbar */}
-            <header className="sticky top-0 z-40 bg-primary-600 dark:bg-slate-900 shadow-lg border-b border-primary-500/30">
-                <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+            <header className="sticky top-0 z-40 border-b border-primary-500/30 bg-primary-600 shadow-lg dark:bg-slate-900">
+                <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between p-4">
+                    <Link
+                        href="/"
+                        className="flex items-center space-x-3 rtl:space-x-reverse"
+                    >
                         {ui?.org_logo ? (
                             <img
-                                className="rounded-full w-12 h-12 md:w-14 md:h-14 object-cover border-2 border-white/20"
+                                className="h-12 w-12 rounded-full border-2 border-white/20 object-cover md:h-14 md:w-14"
                                 src={ui.org_logo}
                                 alt="School Logo"
                             />
                         ) : (
-                            <div className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-xs font-bold text-white md:h-14 md:w-14">
                                 Logo
                             </div>
                         )}
                         <div className="flex flex-col justify-center">
-                            <h1 className="text-xs md:text-sm lg:text-base text-white font-bold text-start">
+                            <h1 className="text-start text-xs font-bold text-white md:text-sm lg:text-base">
                                 {ui?.org_name || 'School Name'}
                             </h1>
-                            <hr className="h-px my-0.5 bg-white/20 border-0" />
-                            <h2 className="text-[10px] md:text-xs text-white/80 font-medium text-start">
+                            <hr className="my-0.5 h-px border-0 bg-white/20" />
+                            <h2 className="text-start text-[10px] font-medium text-white/80 md:text-xs">
                                 Attendance Monitoring System
                             </h2>
                         </div>
@@ -251,37 +276,62 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                         {auth?.user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <button className="inline-flex items-center gap-2.5 py-1.5 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all cursor-pointer outline-none">
-                                        <Avatar className="h-7 w-7 rounded-full overflow-hidden border border-white/30 shrink-0">
-                                            <AvatarImage src={auth.user.avatar || auth.user.profile_image} alt={auth.user.name} />
-                                            <AvatarFallback className="bg-primary-700 text-white text-xs font-bold">
-                                                {getAvatarInitials(auth.user.name)}
+                                    <button className="inline-flex cursor-pointer items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-white transition-all outline-none hover:bg-white/20">
+                                        <Avatar className="h-7 w-7 shrink-0 overflow-hidden rounded-full border border-white/30">
+                                            <AvatarImage
+                                                src={
+                                                    auth.user.avatar ||
+                                                    auth.user.profile_image
+                                                }
+                                                alt={auth.user.name}
+                                            />
+                                            <AvatarFallback className="bg-primary-700 text-xs font-bold text-white">
+                                                {getAvatarInitials(
+                                                    auth.user.name,
+                                                )}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <span className="text-xs sm:text-sm font-semibold truncate max-w-[140px]">{auth.user.name}</span>
-                                        <ChevronDown className="w-4 h-4 text-white/80 shrink-0" />
+                                        <span className="max-w-[140px] truncate text-xs font-semibold sm:text-sm">
+                                            {auth.user.name}
+                                        </span>
+                                        <ChevronDown className="h-4 w-4 shrink-0 text-white/80" />
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-56 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-xl">
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-56 rounded-xl border border-slate-200 bg-white p-2 shadow-xl dark:border-slate-800 dark:bg-slate-900"
+                                >
                                     <DropdownMenuLabel className="p-2 font-normal">
                                         <div className="flex flex-col space-y-1">
-                                            <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{auth.user.name}</p>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400 leading-none truncate mt-1">{auth.user.email}</p>
+                                            <p className="text-sm leading-none font-bold text-slate-900 dark:text-white">
+                                                {auth.user.name}
+                                            </p>
+                                            <p className="mt-1 truncate text-xs leading-none text-slate-500 dark:text-slate-400">
+                                                {auth.user.email}
+                                            </p>
                                         </div>
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator className="my-1 bg-slate-200 dark:bg-slate-800" />
                                     <DropdownMenuGroup>
                                         {isAdmin && (
                                             <DropdownMenuItem asChild>
-                                                <Link href="/dashboard" className="flex items-center gap-2 p-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer">
-                                                    <LayoutGrid className="w-4 h-4 text-primary-600" />
+                                                <Link
+                                                    href="/dashboard"
+                                                    className="flex cursor-pointer items-center gap-2 rounded-lg p-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                                                >
+                                                    <LayoutGrid className="h-4 w-4 text-primary-600" />
                                                     Admin Dashboard
                                                 </Link>
                                             </DropdownMenuItem>
                                         )}
                                         <DropdownMenuItem asChild>
-                                            <Link href="/logout" method="post" as="button" className="w-full flex items-center gap-2 p-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg cursor-pointer">
-                                                <LogOut className="w-4 h-4" />
+                                            <Link
+                                                href="/logout"
+                                                method="post"
+                                                as="button"
+                                                className="flex w-full cursor-pointer items-center gap-2 rounded-lg p-2 text-xs font-bold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/50"
+                                            >
+                                                <LogOut className="h-4 w-4" />
                                                 Logout
                                             </Link>
                                         </DropdownMenuItem>
@@ -291,7 +341,7 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                         ) : (
                             <Link
                                 href="/login"
-                                className="inline-flex items-center gap-1.5 py-1.5 px-3.5 text-xs sm:text-sm font-bold text-white bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 transition-all cursor-pointer"
+                                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold text-white transition-all hover:bg-white/20 sm:text-sm"
                             >
                                 Login
                             </Link>
@@ -320,8 +370,8 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
             />
 
             <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-start">
-                    <div className="xl:col-span-7 w-full flex justify-center">
+                <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-12 xl:gap-8">
+                    <div className="flex w-full justify-center xl:col-span-7">
                         <div className="w-full max-w-2xl">
                             <RFIDForm
                                 onVisitorClick={() => setShowVisitorForm(true)}
@@ -329,46 +379,72 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
                                 onLoadingChange={setIsGlobalLoading}
                                 onScanSuccess={handleScanSuccess}
                                 onRecentScansSync={syncRecentScans}
-                                scannerCaptureEnabled={!showVisitorForm && !showPcForm}
+                                scannerCaptureEnabled={
+                                    !showVisitorForm && !showPcForm
+                                }
                             />
                         </div>
                     </div>
 
-                    <div className="xl:col-span-5 w-full space-y-6">
+                    <div className="w-full space-y-6 xl:col-span-5">
                         <ClockDisplay />
 
-                        <section className="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 space-y-4">
-                            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                                <h2 className="text-xs font-extrabold uppercase tracking-widest text-primary-600">Recent Scans</h2>
-                                <span className="text-xs font-semibold text-slate-500">Last {recentActivity.length || 0} entries</span>
+                        <section className="space-y-4 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xl">
+                            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                                <h2 className="text-xs font-extrabold tracking-widest text-primary-600 uppercase">
+                                    Recent Scans
+                                </h2>
+                                <span className="text-xs font-semibold text-slate-500">
+                                    Last {recentActivity.length || 0} entries
+                                </span>
                             </div>
 
                             <div className="space-y-3">
                                 {recentActivity.length ? (
                                     recentActivity.map((scan) => (
-                                        <article key={`${scan.id ?? scan.timeLabel}-${scan.type}`} className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-200/60">
-                                            <div className="flex items-center gap-3 min-w-0">
-                                                <div className="w-10 h-10 rounded-full bg-slate-200 text-primary-600 font-bold text-xs flex items-center justify-center shrink-0 overflow-hidden">
-                                                    <RecentScanAvatar scan={scan} />
+                                        <article
+                                            key={`${scan.id ?? scan.timeLabel}-${scan.type}`}
+                                            className="flex items-center justify-between rounded-2xl border border-slate-200/60 bg-slate-50 p-3.5"
+                                        >
+                                            <div className="flex min-w-0 items-center gap-3">
+                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-xs font-bold text-primary-600">
+                                                    <RecentScanAvatar
+                                                        scan={scan}
+                                                    />
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <h3 className="text-sm font-bold text-slate-900 truncate">{scan.name}</h3>
-                                                    <p className="text-xs font-semibold text-slate-500">{getRecentScanGroupLabel(scan)}</p>
+                                                    <h3 className="truncate text-sm font-bold text-slate-900">
+                                                        {scan.name}
+                                                    </h3>
+                                                    <p className="text-xs font-semibold text-slate-500">
+                                                        {getRecentScanGroupLabel(
+                                                            scan,
+                                                        )}
+                                                    </p>
                                                 </div>
                                             </div>
 
-                                            <div className="flex flex-col items-end gap-1 shrink-0">
-                                                <span className="text-xs font-bold text-slate-600">{scan.timeLabel}</span>
-                                                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${getBadgeVariant(scan.type)}`}>
+                                            <div className="flex shrink-0 flex-col items-end gap-1">
+                                                <span className="text-xs font-bold text-slate-600">
+                                                    {scan.timeLabel}
+                                                </span>
+                                                <span
+                                                    className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${getBadgeVariant(scan.type)}`}
+                                                >
                                                     {scan.type}
                                                 </span>
                                             </div>
                                         </article>
                                     ))
                                 ) : (
-                                    <div className="text-center py-6 text-slate-500 space-y-1">
-                                        <p className="font-bold text-sm text-slate-700">No recent scans yet.</p>
-                                        <p className="text-xs">The latest attendance activity will appear here.</p>
+                                    <div className="space-y-1 py-6 text-center text-slate-500">
+                                        <p className="text-sm font-bold text-slate-700">
+                                            No recent scans yet.
+                                        </p>
+                                        <p className="text-xs">
+                                            The latest attendance activity will
+                                            appear here.
+                                        </p>
                                     </div>
                                 )}
                             </div>
@@ -378,9 +454,10 @@ return 'bg-blue-100 text-blue-700 border-blue-200';
             </main>
 
             {/* Footer */}
-            <footer className="bg-white dark:bg-slate-900 py-4 border-t border-slate-200 dark:border-slate-800 transition-colors duration-300">
-                <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-600 dark:text-slate-400 font-medium">
-                    &copy; {new Date().getFullYear()} {ui?.org_name || 'OwlQuery Group'}. All Rights Reserved.
+            <footer className="border-t border-slate-200 bg-white py-4 transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900">
+                <div className="mx-auto max-w-7xl px-4 text-center text-xs font-medium text-slate-600 dark:text-slate-400">
+                    &copy; {new Date().getFullYear()}{' '}
+                    {ui?.org_name || 'OwlQuery Group'}. All Rights Reserved.
                 </div>
             </footer>
         </div>

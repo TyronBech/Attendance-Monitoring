@@ -21,23 +21,36 @@ export default function ClockDisplay() {
     }).format(now);
 
     return (
-        <div className="w-full p-8 sm:p-10 rounded-3xl bg-white text-slate-900 shadow-xl border border-slate-200/80 flex flex-col items-center justify-center text-center space-y-4">
-            <p className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-primary-600">Current Library Time</p>
+        <div className="flex w-full flex-col items-center justify-center space-y-4 rounded-3xl border border-slate-200/80 bg-white p-8 text-center text-slate-900 shadow-xl sm:p-10">
+            <p className="text-xs font-extrabold tracking-widest text-primary-600 uppercase sm:text-sm">
+                Current Library Time
+            </p>
 
             <div className="flex items-baseline justify-center gap-3">
-                <div className="inline-flex items-baseline gap-1 text-6xl sm:text-7xl lg:text-8xl font-black font-mono tracking-tight text-slate-900 drop-shadow-sm" aria-label={`${hours}:${minutes}:${seconds} ${meridiem}`}>
+                <div
+                    className="inline-flex items-baseline gap-1 font-mono text-6xl font-black tracking-tight text-slate-900 drop-shadow-sm sm:text-7xl lg:text-8xl"
+                    aria-label={`${hours}:${minutes}:${seconds} ${meridiem}`}
+                >
                     <span>{hours}</span>
-                    <span className="text-primary-500/50 font-sans text-5xl sm:text-6xl lg:text-7xl">:</span>
+                    <span className="font-sans text-5xl text-primary-500/50 sm:text-6xl lg:text-7xl">
+                        :
+                    </span>
                     <span>{minutes}</span>
-                    <span className="text-primary-500/50 font-sans text-5xl sm:text-6xl lg:text-7xl">:</span>
+                    <span className="font-sans text-5xl text-primary-500/50 sm:text-6xl lg:text-7xl">
+                        :
+                    </span>
                     <span>{seconds}</span>
                 </div>
-                <span className="text-2xl sm:text-3xl font-extrabold text-primary-600 uppercase tracking-wide">{meridiem}</span>
+                <span className="text-2xl font-extrabold tracking-wide text-primary-600 uppercase sm:text-3xl">
+                    {meridiem}
+                </span>
             </div>
 
-            <div className="w-24 h-1 bg-slate-200 rounded-full my-2" />
+            <div className="my-2 h-1 w-24 rounded-full bg-slate-200" />
 
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-700 tracking-wide">{formattedDate}</h2>
+            <h2 className="text-xl font-bold tracking-wide text-slate-700 sm:text-2xl">
+                {formattedDate}
+            </h2>
         </div>
     );
 }

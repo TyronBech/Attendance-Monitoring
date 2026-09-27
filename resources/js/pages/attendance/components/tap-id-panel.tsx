@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 
 const AVATAR_RETRY_LIMIT = 2;
 
-function buildRetryableAvatarSource(imageSource: string | null, attempt: number) {
+function buildRetryableAvatarSource(
+    imageSource: string | null,
+    attempt: number,
+) {
     if (typeof imageSource !== 'string' || imageSource.trim() === '') {
-return '';
-}
+        return '';
+    }
 
     if (imageSource.startsWith('data:image/')) {
-return imageSource;
-}
+        return imageSource;
+    }
 
     if (attempt <= 0) {
-return imageSource;
-}
+        return imageSource;
+    }
 
     const separator = imageSource.includes('?') ? '&' : '?';
 
@@ -55,7 +58,10 @@ export default function TapIdPanel({
         setImageFailed(false);
     }
 
-    const resolvedProfileImage = buildRetryableAvatarSource(profileImage, retryCount);
+    const resolvedProfileImage = buildRetryableAvatarSource(
+        profileImage,
+        retryCount,
+    );
 
     function handleImageError() {
         if (retryCount < AVATAR_RETRY_LIMIT) {
@@ -69,12 +75,12 @@ export default function TapIdPanel({
 
     const getBadgeStyle = (value: string | null) => {
         if (value === 'Time Out') {
-return 'bg-rose-600 text-white';
-}
+            return 'bg-rose-600 text-white';
+        }
 
         if (value === 'Online Research Use') {
-return 'bg-blue-600 text-white';
-}
+            return 'bg-blue-600 text-white';
+        }
 
         return 'bg-emerald-600 text-white';
     };
@@ -84,58 +90,84 @@ return 'bg-blue-600 text-white';
 
     const getInitials = (name: string | null) => {
         if (!name) {
-return 'U';
-}
+            return 'U';
+        }
 
-        return name
-            .split(' ')
-            .filter(Boolean)
-            .slice(0, 2)
-            .map((part) => part[0]?.toUpperCase() ?? '')
-            .join('') || 'U';
+        return (
+            name
+                .split(' ')
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((part) => part[0]?.toUpperCase() ?? '')
+                .join('') || 'U'
+        );
     };
 
     if (showError) {
         return (
-            <div className={`w-full min-h-[180px] p-6 rounded-2xl bg-white border border-red-200 shadow-md flex flex-col items-center justify-center text-center space-y-3 ${className}`}>
-                <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
-                    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div
+                className={`flex min-h-[180px] w-full flex-col items-center justify-center space-y-3 rounded-2xl border border-red-200 bg-white p-6 text-center shadow-md ${className}`}
+            >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <svg
+                        className="h-8 w-8"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                    >
                         <circle cx="12" cy="12" r="10" />
                         <path d="M12 8v4" />
                         <path d="M12 16h.01" />
                     </svg>
                 </div>
-                <p className="text-red-600 font-bold text-base max-w-xs">{errorMessage}</p>
+                <p className="max-w-xs text-base font-bold text-red-600">
+                    {errorMessage}
+                </p>
             </div>
         );
     }
 
     if (showProfile) {
         return (
-            <div className={`w-full min-h-[200px] p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-md flex flex-col items-center justify-center text-center space-y-4 ${className}`}>
-                <div className="w-24 h-24 rounded-full border-4 border-primary-500 overflow-hidden bg-white shadow-md flex items-center justify-center shrink-0">
+            <div
+                className={`flex min-h-[200px] w-full flex-col items-center justify-center space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center shadow-md ${className}`}
+            >
+                <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-primary-500 bg-white shadow-md">
                     {profileImage && !imageFailed ? (
                         <img
                             src={resolvedProfileImage}
                             alt={displayName || 'Profile'}
-                            className="w-full h-full object-cover"
+                            className="h-full w-full object-cover"
                             onError={handleImageError}
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-primary-50 text-primary-600 font-black text-3xl">
+                        <div className="flex h-full w-full items-center justify-center bg-primary-50 text-3xl font-black text-primary-600">
                             {getInitials(displayName)}
                         </div>
                     )}
                 </div>
 
                 <div className="space-y-1">
-                    <h3 className="text-xl font-extrabold text-slate-900 leading-tight">{displayName}</h3>
-                    {detailText && <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{detailText}</p>}
-                    {successMessage && <p className="text-xs font-semibold text-emerald-600">{successMessage}</p>}
+                    <h3 className="text-xl leading-tight font-extrabold text-slate-900">
+                        {displayName}
+                    </h3>
+                    {detailText && (
+                        <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+                            {detailText}
+                        </p>
+                    )}
+                    {successMessage && (
+                        <p className="text-xs font-semibold text-emerald-600">
+                            {successMessage}
+                        </p>
+                    )}
                 </div>
 
                 {shouldShowScanBadge ? (
-                    <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-extrabold tracking-wide uppercase shadow-sm ${getBadgeStyle(scanLabel)}`}>
+                    <span
+                        className={`inline-flex items-center rounded-full px-4 py-1.5 text-xs font-extrabold tracking-wide uppercase shadow-sm ${getBadgeStyle(scanLabel)}`}
+                    >
                         {scanLabel}
                     </span>
                 ) : null}
@@ -144,17 +176,31 @@ return 'U';
     }
 
     return (
-        <div className={`w-full min-h-[180px] p-6 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-900 text-white shadow-xl flex flex-col items-center justify-center text-center space-y-3 relative border border-white/10 ${className}`}>
-            <div className="w-14 h-14 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-white">
-                <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div
+            className={`relative flex min-h-[180px] w-full flex-col items-center justify-center space-y-3 rounded-2xl border border-white/10 bg-gradient-to-br from-primary-600 to-primary-900 p-6 text-center text-white shadow-xl ${className}`}
+        >
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/15 text-white">
+                <svg
+                    className="h-7 w-7"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                >
                     <rect x="7" y="3" width="10" height="18" rx="2" />
                     <path d="M11 7h2" />
                     <path d="M11 11h2" />
                     <path d="M12 16.5h.01" />
                 </svg>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-wide text-white leading-none font-serif">{title}</h2>
-            {subtitle ? <p className="text-xs font-bold uppercase tracking-wider text-white/80 max-w-xs">{subtitle}</p> : null}
+            <h2 className="font-serif text-2xl leading-none font-extrabold tracking-wide text-white uppercase sm:text-3xl">
+                {title}
+            </h2>
+            {subtitle ? (
+                <p className="max-w-xs text-xs font-bold tracking-wider text-white/80 uppercase">
+                    {subtitle}
+                </p>
+            ) : null}
         </div>
     );
 }

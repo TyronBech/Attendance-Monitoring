@@ -7,7 +7,10 @@ function encodePayload(payload: any) {
 }
 
 function getDisplayName(userData: any) {
-    return [userData?.first_name, userData?.last_name].filter(Boolean).join(' ') || 'Library User';
+    return (
+        [userData?.first_name, userData?.last_name].filter(Boolean).join(' ') ||
+        'Library User'
+    );
 }
 
 function getDetailText(userData: any) {
@@ -22,10 +25,12 @@ function getDetailText(userData: any) {
 
 function getCsrfToken(): string {
     if (typeof document === 'undefined') {
-return '';
-}
+        return '';
+    }
 
-    const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
+    const metaToken = (
+        document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement
+    )?.content;
 
     if (metaToken) {
         return metaToken;
@@ -78,9 +83,12 @@ export default function PCInputForm({
         }
     }, [showForm]);
 
-    useEffect(() => () => {
-        clearTimeout(clearUserTimeoutRef.current);
-    }, []);
+    useEffect(
+        () => () => {
+            clearTimeout(clearUserTimeoutRef.current);
+        },
+        [],
+    );
 
     const submitIdentifier = async (scannedValue: string) => {
         const trimmedIdentifier = scannedValue.trim();
@@ -122,10 +130,15 @@ export default function PCInputForm({
             if (!response.ok || data.status !== 'success') {
                 setUserData(null);
                 setSuccessMessage(null);
-                setErrorMessage(data.message || 'There was an error. Please try again.');
-                onNotify?.(data.message || 'There was an error. Please try again.', {
-                    type: 'error',
-                });
+                setErrorMessage(
+                    data.message || 'There was an error. Please try again.',
+                );
+                onNotify?.(
+                    data.message || 'There was an error. Please try again.',
+                    {
+                        type: 'error',
+                    },
+                );
 
                 return;
             }
@@ -137,10 +150,15 @@ export default function PCInputForm({
             };
             setUserData(scanPayload);
             setErrorMessage(null);
-            setSuccessMessage(data.message || 'Online research use recorded successfully.');
-            onNotify?.(data.message || 'Online research use recorded successfully.', {
-                type: 'success',
-            });
+            setSuccessMessage(
+                data.message || 'Online research use recorded successfully.',
+            );
+            onNotify?.(
+                data.message || 'Online research use recorded successfully.',
+                {
+                    type: 'success',
+                },
+            );
             onScanSuccess?.(data.recentScan ?? null);
             onRecentScansSync?.();
             inputRef.current?.focus();
@@ -176,53 +194,85 @@ export default function PCInputForm({
     });
 
     const resolvedProfileImage = userData?.image ?? '';
-    const hasProfileImage = Boolean(resolvedProfileImage) && !resolvedProfileImage.includes('id_default.png');
+    const hasProfileImage =
+        Boolean(resolvedProfileImage) &&
+        !resolvedProfileImage.includes('id_default.png');
     const detailText = userData ? getDetailText(userData) : null;
 
     if (!showForm) {
-return null;
-}
+        return null;
+    }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200" onClick={handleClose}>
-            <div className="w-full max-w-4xl my-auto bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-200 space-y-8 text-slate-900" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-start justify-between pb-5 border-b border-slate-200">
+        <div
+            className="fixed inset-0 z-50 flex animate-in items-center justify-center overflow-y-auto bg-slate-950/80 p-4 backdrop-blur-md duration-200 fade-in sm:p-8"
+            onClick={handleClose}
+        >
+            <div
+                className="my-auto w-full max-w-4xl space-y-8 rounded-3xl border border-slate-200 bg-white p-8 text-slate-900 shadow-2xl sm:p-10"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-start justify-between border-b border-slate-200 pb-5">
                     <div>
-                        <p className="text-xs font-extrabold uppercase tracking-widest text-primary-600">Attendance Support</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-1">Online Research Use Form</h2>
-                        <p className="text-sm font-medium text-slate-600 mt-1">
-                            Scan the user's RFID or enter their ID Number to record online research use.
+                        <p className="text-xs font-extrabold tracking-widest text-primary-600 uppercase">
+                            Attendance Support
+                        </p>
+                        <h2 className="mt-1 text-3xl font-extrabold text-slate-900">
+                            Online Research Use Form
+                        </h2>
+                        <p className="mt-1 text-sm font-medium text-slate-600">
+                            Scan the user's RFID or enter their ID Number to
+                            record online research use.
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
+                        className="cursor-pointer rounded-full bg-slate-100 p-2.5 text-slate-600 transition-all hover:bg-slate-200"
                         aria-label="Close Online Research Use Form"
                     >
-                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <svg
+                            className="h-6 w-6"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                        >
                             <path d="M6 6l12 12M18 6L6 18" />
                         </svg>
                     </button>
                 </div>
 
-                <form method="POST" onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-8 items-center">
-                    <div className="sm:col-span-6 flex justify-center">
+                <form
+                    method="POST"
+                    onSubmit={handleSubmit}
+                    className="grid grid-cols-1 items-center gap-8 sm:grid-cols-12"
+                >
+                    <div className="flex justify-center sm:col-span-6">
                         <TapIdPanel
                             subtitle="Tap to log online research use"
-                            profileImage={userData && hasProfileImage ? resolvedProfileImage : null}
-                            displayName={userData ? getDisplayName(userData) : null}
+                            profileImage={
+                                userData && hasProfileImage
+                                    ? resolvedProfileImage
+                                    : null
+                            }
+                            displayName={
+                                userData ? getDisplayName(userData) : null
+                            }
                             detailText={detailText}
                             scanType={userData ? userData.scanType : null}
                             successMessage={successMessage}
                             errorMessage={errorMessage}
-                            className="w-full min-h-[240px]"
+                            className="min-h-[240px] w-full"
                         />
                     </div>
 
-                    <div className="sm:col-span-6 space-y-5">
+                    <div className="space-y-5 sm:col-span-6">
                         <div className="space-y-2">
-                            <label htmlFor="pcInput" className="block text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                            <label
+                                htmlFor="pcInput"
+                                className="block text-xs font-extrabold tracking-wider text-slate-700 uppercase"
+                            >
                                 ID Number
                             </label>
                             <input
@@ -232,19 +282,23 @@ return null;
                                 name="pcInput"
                                 autoComplete="off"
                                 value={identifier}
-                                onChange={(event) => setIdentifier(event.target.value)}
+                                onChange={(event) =>
+                                    setIdentifier(event.target.value)
+                                }
                                 disabled={isSubmitting}
                                 placeholder="Scan RFID or enter ID Number"
-                                className="w-full h-15 px-5 rounded-2xl border-2 border-slate-200 bg-slate-50 text-slate-900 font-bold text-lg focus:bg-white focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-slate-400"
+                                className="h-15 w-full rounded-2xl border-2 border-slate-200 bg-slate-50 px-5 text-lg font-bold text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20"
                             />
                         </div>
 
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full h-14 bg-primary-600 hover:bg-primary-700 text-white font-extrabold text-base rounded-2xl shadow-xl shadow-primary-600/25 transition-all cursor-pointer disabled:opacity-60"
+                            className="h-14 w-full cursor-pointer rounded-2xl bg-primary-600 text-base font-extrabold text-white shadow-xl shadow-primary-600/25 transition-all hover:bg-primary-700 disabled:opacity-60"
                         >
-                            {isSubmitting ? 'Recording...' : 'Submit Computer Use'}
+                            {isSubmitting
+                                ? 'Recording...'
+                                : 'Submit Computer Use'}
                         </button>
                     </div>
                 </form>
