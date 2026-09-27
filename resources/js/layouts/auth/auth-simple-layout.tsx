@@ -14,7 +14,7 @@ export default function AuthSimpleLayout({
         <div className="min-h-screen bg-secondary-500 font-sans dark:bg-gray-900 flex flex-col justify-between">
             {/* Header Navbar */}
             <header className="sticky top-0 z-50">
-                <nav className="bg-primary-500 border-gray-200 dark:bg-primary-500">
+                <nav className="bg-primary-700 border-gray-200 dark:bg-primary-800">
                     <div className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
                         <Link href={home().url} className="flex items-center space-x-3 rtl:space-x-reverse">
                             {ui?.org_logo ? (
@@ -40,19 +40,19 @@ export default function AuthSimpleLayout({
                         </Link>
                         
                         <div className="hidden w-full lg:block lg:w-auto">
-                            <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg bg-primary-500 lg:flex-row lg:space-x-8 rtl:space-x-reverse lg:mt-0 lg:border-0 lg:bg-primary-500 dark:bg-primary-500 lg:dark:bg-primary-500 dark:border-gray-700">
+                            <ul className="flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg lg:flex-row lg:space-x-8 rtl:space-x-reverse lg:mt-0 lg:border-0 lg:bg-primary-700 dark:bg-primary-700 lg:dark:bg-primary-800 dark:border-gray-700">
                                 <li>
-                                    <Link href={home().url} className="block py-2 px-3 text-white rounded hover:bg-tertiary-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white lg:dark:hover:text-tertiary-500 dark:hover:bg-tertiary-500 dark:hover:text-white lg:dark:hover:bg-transparent">
+                                    <Link href={home().url} className="block py-3 px-3 text-white rounded bg-primary-700 lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white dark:bg-primary-800 lg:dark:hover:text-tertiary-500 dark:hover:text-white">
                                         Home
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="/#services" className="block py-2 px-3 text-white rounded hover:bg-tertiary-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white lg:dark:hover:text-tertiary-500 dark:hover:bg-tertiary-500 dark:hover:text-white lg:dark:hover:bg-transparent">
+                                    <a href="/#services" className="block py-3 px-3 text-white rounded bg-primary-700 lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white dark:bg-primary-800 lg:dark:hover:text-tertiary-500 dark:hover:text-white">  
                                         Services
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/#about" className="block py-2 px-3 text-white rounded hover:bg-tertiary-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white lg:dark:hover:text-tertiary-500 dark:hover:bg-tertiary-500 dark:hover:text-white lg:dark:hover:bg-transparent">
+                                    <a href="/#about" className="block py-3 px-3 text-white rounded bg-primary-700 lg:border-0 lg:hover:text-tertiary-500 lg:p-0 dark:text-white dark:bg-primary-800 lg:dark:hover:text-tertiary-500 dark:hover:text-white">
                                         About
                                     </a>
                                 </li>

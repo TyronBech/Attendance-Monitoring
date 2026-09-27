@@ -9,13 +9,13 @@ export default function Welcome() {
             <Head title={ui?.org_initial ? `${ui.org_initial} Attendance Monitoring` : 'Attendance Monitoring'} />
 
             {/* Header */}
-            <header className="sticky top-0 z-50 bg-primary-600 dark:bg-slate-900 shadow-lg border-b border-primary-500/30">
+            <header className="sticky top-0 z-50 bg-primary-700 dark:bg-primary-800 shadow-lg border-b border-primary-500/30">
                 <nav className="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link href={home().url} className="flex items-center space-x-3 rtl:space-x-reverse">
-                        {ui?.org_logo ? (
+                        {ui?.org_logo_base64 ? (
                             <img
-                                className="rounded-full w-12 h-12 md:w-16 md:h-16 object-cover border-2 border-white/20"
-                                src={ui.org_logo}
+                                className="rounded-full w-12 h-12 md:w-16 md:h-16 object-cover"
+                                src={ui.org_logo_base64}
                                 alt="School Logo"
                             />
                         ) : (
@@ -63,10 +63,10 @@ export default function Welcome() {
                 {/* Hero Section */}
                 <div id="main-welcome" className="flex items-center justify-center max-w-7xl my-16 md:my-24 lg:my-36 mx-auto px-4 sm:px-6 md:px-10">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10 lg:gap-12 w-full">
-                        {ui?.org_logo ? (
+                        {ui?.org_logo_base64 ? (
                             <img
-                                className="order-1 rounded-full w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 object-cover shadow-xl transition-transform duration-300 ease-in-out hover:scale-105"
-                                src={ui.org_logo}
+                                className="order-1 rounded-full w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                                src={ui.org_logo_base64}
                                 alt="Organization Logo"
                             />
                         ) : (
@@ -168,8 +168,8 @@ export default function Welcome() {
                     <div className="md:flex md:justify-between md:gap-6 lg:gap-8">
                         <div className="mb-6 md:mb-0 md:max-w-xs lg:max-w-md">
                             <a href={ui?.social_links?.website || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                                {ui?.org_logo && (
-                                    <img src={ui.org_logo} className="h-12 w-12 md:h-16 md:w-16 me-3 rounded-full shrink-0 object-cover" alt="Logo" />
+                                {ui?.org_logo_base64 && (
+                                    <img src={ui.org_logo_base64} className="h-12 w-12 md:h-16 md:w-16 me-3 rounded-full shrink-0 object-cover" alt="Logo" />
                                 )}
                                 <div className="min-w-0">
                                     <span className="self-center text-sm md:text-lg font-semibold dark:text-white wrap-break-word">
