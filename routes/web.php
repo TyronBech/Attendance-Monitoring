@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Import\ImportController;
 use App\Http\Controllers\Report\ComputerUseController;
 use App\Http\Controllers\Report\UserLogsController;
+use App\Http\Controllers\UserMaintenanceController;
 use App\Models\UISetting;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,8 +25,11 @@ Route::middleware(['auth', 'attendance_display'])->group(function () {
     Route::post('/attendance/computer-use', [AttendanceScanController::class, 'storeComputerUse'])->name('attendance.computer-use');
 });
 
-Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::prefix('maintenance')->name('maintenance.')->group(function () {
+        Route::resource('users', UserMaintenanceController::class)->names(['index' => 'users']);
+    });
 
     // Reports (User logs + Computer use)
     Route::prefix('report')->group(function () {
