@@ -1,31 +1,20 @@
 import { Head, usePage } from '@inertiajs/react';
 import {
-    Users,
     Monitor,
     TrendingUp,
-    Clock,
     UserCheck,
     Activity,
     BookOpen,
 } from 'lucide-react';
 import { useState } from 'react';
+import DashboardRankingCard from '@/components/dashboard-ranking-card';
+import type { RankedUser } from '@/components/dashboard-ranking-card';
 
 interface GraphPoint {
     date: string;
     label: string;
     shortLabel?: string;
     count: number;
-}
-
-interface UserLogItem {
-    rank: number;
-    id: number;
-    name: string;
-    user_type: string;
-    grade_section: string;
-    time_in: string;
-    remarks?: string;
-    avatar: string | null;
 }
 
 interface DashboardProps {
@@ -38,8 +27,8 @@ interface DashboardProps {
         monthlyComputerGraph: GraphPoint[];
         periodLabel?: string;
     };
-    recentLibraryUsers: UserLogItem[];
-    recentComputerUsers: UserLogItem[];
+    topLibraryUsers: RankedUser[];
+    topResearchUsers: RankedUser[];
     currentMonthName: string;
     ui?: {
         theme_colors?: {
@@ -294,8 +283,8 @@ export default function Dashboard() {
             monthlyComputerTotal: 0,
             monthlyComputerGraph: [],
         },
-        recentLibraryUsers = [],
-        recentComputerUsers = [],
+        topLibraryUsers = [],
+        topResearchUsers = [],
     } = usePage<DashboardProps>().props;
 
     return (
@@ -483,227 +472,15 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* ROW 3: 10 Recent Time-In Users in Library & 10 Recent Computer Use Logs */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    {/* Card 5: 10 Recent Time-In Users in Library */}
-                    <div className="overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
-                        <div className="flex items-center justify-between border-b border-neutral-100 p-6 dark:border-neutral-800">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-                                    <Users className="h-5 w-5" />
-                                </div>
-                                <div>
-                                    <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                                        10 Recent Library Time-In Users
-                                    </h3>
-                                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                        Most recent entry logs (#1 as latest)
-                                    </p>
-                                </div>
-                            </div>
-                            <span className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-                                Top 10
-                            </span>
-                        </div>
-
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-xs">
-                                <thead className="bg-neutral-50/80 text-neutral-400 uppercase dark:bg-neutral-800/40">
-                                    <tr>
-                                        <th className="px-4 py-3 font-semibold">
-                                            #
-                                        </th>
-                                        <th className="px-4 py-3 font-semibold">
-                                            User
-                                        </th>
-                                        <th className="px-4 py-3 font-semibold">
-                                            Grade & Section
-                                        </th>
-                                        <th className="px-4 py-3 font-semibold">
-                                            Date & Time of Entry
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
-                                    {recentLibraryUsers.length === 0 ? (
-                                        <tr>
-                                            <td
-                                                colSpan={4}
-                                                className="px-4 py-8 text-center text-neutral-400"
-                                            >
-                                                No recent library time-ins
-                                                recorded yet.
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        recentLibraryUsers.map((user) => (
-                                            <tr
-                                                key={user.id}
-                                                className="transition-colors hover:bg-neutral-50/60 dark:hover:bg-neutral-800/40"
-                                            >
-                                                <td className="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">
-                                                    {user.rank}
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <div className="flex items-center gap-2.5">
-                                                        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-indigo-100 font-semibold text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300">
-                                                            {user.avatar ? (
-                                                                <img
-                                                                    src={
-                                                                        user.avatar
-                                                                    }
-                                                                    alt={
-                                                                        user.name
-                                                                    }
-                                                                    className="h-full w-full object-cover"
-                                                                />
-                                                            ) : (
-                                                                user.name
-                                                                    .charAt(0)
-                                                                    .toUpperCase()
-                                                            )}
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-semibold text-neutral-900 dark:text-neutral-100">
-                                                                {user.name}
-                                                            </div>
-                                                            <div className="text-[10px] text-neutral-400">
-                                                                {user.user_type}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <span className="inline-flex items-center rounded-lg bg-neutral-100 px-2 py-1 font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
-                                                        {user.grade_section}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <Clock className="h-3.5 w-3.5 text-neutral-400" />
-                                                        <span>
-                                                            {user.time_in}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {/* Card 6: 10 Recent Computer Use Logs */}
-                    <div className="overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-xs dark:border-neutral-800 dark:bg-neutral-900">
-                        <div className="flex items-center justify-between border-b border-neutral-100 p-6 dark:border-neutral-800">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400">
-                                    <Monitor className="h-5 w-5" />
-                                </div>
-                                <div>
-                                    <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                                        10 Recent Computer Use Logs
-                                    </h3>
-                                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                        Most recent research sessions (#1 as
-                                        latest)
-                                    </p>
-                                </div>
-                            </div>
-                            <span className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-                                Top 10
-                            </span>
-                        </div>
-
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-xs">
-                                <thead className="bg-neutral-50/80 text-neutral-400 uppercase dark:bg-neutral-800/40">
-                                    <tr>
-                                        <th className="px-4 py-3 font-semibold">
-                                            #
-                                        </th>
-                                        <th className="px-4 py-3 font-semibold">
-                                            User
-                                        </th>
-                                        <th className="px-4 py-3 font-semibold">
-                                            Grade & Section
-                                        </th>
-                                        <th className="px-4 py-3 font-semibold">
-                                            Date & Time of Entry
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
-                                    {recentComputerUsers.length === 0 ? (
-                                        <tr>
-                                            <td
-                                                colSpan={4}
-                                                className="px-4 py-8 text-center text-neutral-400"
-                                            >
-                                                No recent computer use recorded
-                                                yet.
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        recentComputerUsers.map((user) => (
-                                            <tr
-                                                key={user.id}
-                                                className="transition-colors hover:bg-neutral-50/60 dark:hover:bg-neutral-800/40"
-                                            >
-                                                <td className="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">
-                                                    {user.rank}
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <div className="flex items-center gap-2.5">
-                                                        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-purple-100 font-semibold text-purple-700 dark:bg-purple-900/60 dark:text-purple-300">
-                                                            {user.avatar ? (
-                                                                <img
-                                                                    src={
-                                                                        user.avatar
-                                                                    }
-                                                                    alt={
-                                                                        user.name
-                                                                    }
-                                                                    className="h-full w-full object-cover"
-                                                                />
-                                                            ) : (
-                                                                user.name
-                                                                    .charAt(0)
-                                                                    .toUpperCase()
-                                                            )}
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-semibold text-neutral-900 dark:text-neutral-100">
-                                                                {user.name}
-                                                            </div>
-                                                            <div className="text-[10px] text-neutral-400">
-                                                                {user.remarks ||
-                                                                    user.user_type}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <span className="inline-flex items-center rounded-lg bg-neutral-100 px-2 py-1 font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
-                                                        {user.grade_section}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <Clock className="h-3.5 w-3.5 text-neutral-400" />
-                                                        <span>
-                                                            {user.time_in}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2">
+                    <DashboardRankingCard
+                        users={topLibraryUsers}
+                        variant="library"
+                    />
+                    <DashboardRankingCard
+                        users={topResearchUsers}
+                        variant="research"
+                    />
                 </div>
             </div>
         </>
