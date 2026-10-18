@@ -11,6 +11,8 @@ import {
     Upload,
     UserCircle,
     UserPlus,
+    Users,
+    Wrench,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -34,6 +36,11 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import { dashboard, logout } from '@/routes';
+import {
+    employees as importEmployees,
+    students as importStudents,
+} from '@/routes/import';
+import { users as usersIndex } from '@/routes/maintenance';
 import report from '@/routes/report';
 import settings from '@/routes/settings';
 
@@ -43,6 +50,8 @@ export function AppHeader() {
     const { isCurrentUrl } = useCurrentUrl();
     const [isMobileReportOpen, setIsMobileReportOpen] = useState(false);
     const [isMobileImportOpen, setIsMobileImportOpen] = useState(false);
+    const [isMobileMaintenanceOpen, setIsMobileMaintenanceOpen] =
+        useState(false);
 
     const logoRaw = ui?.org_logo_base64 || ui?.org_logo;
     const logoSrc = logoRaw
@@ -58,8 +67,10 @@ export function AppHeader() {
         isCurrentUrl(report.computerUse.url(), undefined, true);
 
     const isImportActive =
-        isCurrentUrl('/import/students', undefined, true) ||
-        isCurrentUrl('/import/employees', undefined, true);
+        isCurrentUrl(importStudents.url(), undefined, true) ||
+        isCurrentUrl(importEmployees.url(), undefined, true);
+
+    const isMaintenanceActive = isCurrentUrl(usersIndex.url(), undefined, true);
 
     const handleLogout = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -218,16 +229,67 @@ export function AppHeader() {
                                         {isMobileImportOpen && (
                                             <div className="mt-2 ml-6 flex flex-col space-y-2 border-l-2 border-primary-100 pl-4">
                                                 <Link
-                                                    href="/import/students"
+                                                    href={importStudents.url()}
                                                     className="py-1 text-sm hover:text-primary-600"
                                                 >
                                                     Import Students
                                                 </Link>
                                                 <Link
-                                                    href="/import/employees"
+                                                    href={importEmployees.url()}
                                                     className="py-1 text-sm hover:text-primary-600"
                                                 >
                                                     Import Employees
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <button
+                                            onClick={() =>
+                                                setIsMobileMaintenanceOpen(
+                                                    !isMobileMaintenanceOpen,
+                                                )
+                                            }
+                                            aria-expanded={
+                                                isMobileMaintenanceOpen
+                                            }
+                                            aria-controls="mobile-maintenance-menu"
+                                            className={cn(
+                                                'flex w-full items-center justify-between rounded-lg p-2 transition-colors',
+                                                isMaintenanceActive
+                                                    ? 'bg-primary-50 font-bold text-primary-700'
+                                                    : 'text-gray-600 hover:bg-gray-50',
+                                            )}
+                                        >
+                                            <span className="flex items-center gap-2">
+                                                <Wrench className="h-5 w-5" />
+                                                Maintenance
+                                            </span>
+                                            <ChevronDown
+                                                className={cn(
+                                                    'h-4 w-4 transition-transform',
+                                                    isMobileMaintenanceOpen &&
+                                                        'rotate-180',
+                                                )}
+                                            />
+                                        </button>
+                                        {isMobileMaintenanceOpen && (
+                                            <div
+                                                id="mobile-maintenance-menu"
+                                                className="mt-2 ml-6 flex flex-col space-y-2 border-l-2 border-primary-100 pl-4"
+                                            >
+                                                <Link
+                                                    href={usersIndex.url()}
+                                                    aria-current={
+                                                        isMaintenanceActive
+                                                            ? 'page'
+                                                            : undefined
+                                                    }
+                                                    className="flex items-center gap-2 py-1 text-sm hover:text-primary-600"
+                                                >
+                                                    <Users className="h-4 w-4" />
+                                                    Users
                                                 </Link>
                                             </div>
                                         )}
@@ -390,7 +452,7 @@ export function AppHeader() {
                                     <DropdownMenuContent className="mt-2 w-56 border-gray-100 shadow-xl">
                                         <DropdownMenuItem asChild>
                                             <Link
-                                                href="/import/students"
+                                                href={importStudents.url()}
                                                 className={dropdownItemClasses}
                                             >
                                                 <UserPlus className="mr-2 h-4 w-4" />{' '}
@@ -399,11 +461,48 @@ export function AppHeader() {
                                         </DropdownMenuItem>
                                         <DropdownMenuItem asChild>
                                             <Link
-                                                href="/import/employees"
+                                                href={importEmployees.url()}
                                                 className={dropdownItemClasses}
                                             >
                                                 <Briefcase className="mr-2 h-4 w-4" />{' '}
                                                 Import Employees
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </li>
+                            <li className="group relative">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <button
+                                            className={navLinkClasses(
+                                                isMaintenanceActive,
+                                            )}
+                                            aria-current={
+                                                isMaintenanceActive
+                                                    ? 'page'
+                                                    : undefined
+                                            }
+                                        >
+                                            <span className="flex items-center">
+                                                Maintenance
+                                                <ChevronDown className="ml-1 h-4 w-4" />
+                                            </span>
+                                        </button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="mt-2 w-56 border-gray-100 shadow-xl">
+                                        <DropdownMenuItem asChild>
+                                            <Link
+                                                href={usersIndex.url()}
+                                                className={dropdownItemClasses}
+                                                aria-current={
+                                                    isMaintenanceActive
+                                                        ? 'page'
+                                                        : undefined
+                                                }
+                                            >
+                                                <Users className="mr-2 h-4 w-4" />
+                                                Users
                                             </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>

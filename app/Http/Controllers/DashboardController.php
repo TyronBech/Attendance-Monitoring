@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Log;
 use App\Models\UISetting;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
     /**
      * Display the home analytics dashboard.
      */
-    public function index()
+    public function index(): Response
     {
         $now = Carbon::now();
 
@@ -89,7 +92,7 @@ class DashboardController extends Controller
         $periodLabel = $startPeriod->format('M Y').' - '.$endPeriod->format('M Y');
 
         // Helper closure to format Grade & Section
-        $formatGradeSection = function ($user) {
+        $formatGradeSection = function (?User $user): string {
             if (! $user) {
                 return 'N/A';
             }
@@ -124,54 +127,33 @@ class DashboardController extends Controller
             return 'N/A';
         };
 
-        // 4. Top 10 recent time-in users in the library (most recent as no. 1)
-        $recentLibraryUsers = Log::with(['user.students', 'user.employees', 'user.visitors', 'user.privileges'])
-            ->where('computer_use', 'No')
-            ->whereNotNull('time_in')
-            ->orderBy('time_in', 'desc')
-            ->orderBy('id', 'desc')
-            ->take(10)
-            ->get()
-            ->values()
-            ->map(function ($log, $index) use ($formatGradeSection) {
-                $user = $log->user;
-                $userType = $user ? ucfirst($user->privileges->user_type ?? ($user->visitors ? 'Visitor' : 'User')) : 'User';
+        $topUsers = function (string $computerUse) use ($formatGradeSection): Collection {
+            return Log::with(['user.students', 'user.employees', 'user.visitors', 'user.privileges'])
+                ->where('computer_use', $computerUse)
+                ->whereNotNull('time_in')
+                ->whereHas('user')
+                ->select('user_id')
+                ->selectRaw('COUNT(*) as activity_count')
+                ->groupBy('user_id')
+                ->orderByDesc('activity_count')
+                ->orderBy('user_id')
+                ->limit(5)
+                ->get()
+                ->values()
+                ->map(function (Log $log, int $index) use ($formatGradeSection): array {
+                    $user = $log->user;
 
-                return [
-                    'rank' => $index + 1,
-                    'id' => $log->id,
-                    'name' => $user ? $user->name : 'Unknown User',
-                    'user_type' => $userType,
-                    'grade_section' => $formatGradeSection($user),
-                    'time_in' => Carbon::parse($log->time_in)->format('M d, Y h:i A'),
-                    'avatar' => $user ? $user->avatar : null,
-                ];
-            });
-
-        // 5. Top 10 recent computer use logs (most recent as no. 1)
-        $recentComputerUsers = Log::with(['user.students', 'user.employees', 'user.visitors', 'user.privileges'])
-            ->where('computer_use', 'Yes')
-            ->whereNotNull('time_in')
-            ->orderBy('time_in', 'desc')
-            ->orderBy('id', 'desc')
-            ->take(10)
-            ->get()
-            ->values()
-            ->map(function ($log, $index) use ($formatGradeSection) {
-                $user = $log->user;
-                $userType = $user ? ucfirst($user->privileges->user_type ?? ($user->visitors ? 'Visitor' : 'User')) : 'User';
-
-                return [
-                    'rank' => $index + 1,
-                    'id' => $log->id,
-                    'name' => $user ? $user->name : 'Unknown User',
-                    'user_type' => $userType,
-                    'grade_section' => $formatGradeSection($user),
-                    'time_in' => Carbon::parse($log->time_in)->format('M d, Y h:i A'),
-                    'remarks' => $log->remarks ?? 'Online Research',
-                    'avatar' => $user ? $user->avatar : null,
-                ];
-            });
+                    return [
+                        'rank' => $index + 1,
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'user_type' => ucfirst($user->privileges->user_type ?? ($user->visitors ? 'Visitor' : 'User')),
+                        'grade_section' => $formatGradeSection($user),
+                        'count' => (int) $log->activity_count,
+                        'avatar' => $user->avatar,
+                    ];
+                });
+        };
 
         $ui = UISetting::latest()->first();
 
@@ -185,8 +167,8 @@ class DashboardController extends Controller
                 'monthlyComputerGraph' => $computerMonthlyGraph,
                 'periodLabel' => $periodLabel,
             ],
-            'recentLibraryUsers' => $recentLibraryUsers,
-            'recentComputerUsers' => $recentComputerUsers,
+            'topLibraryUsers' => $topUsers('No'),
+            'topResearchUsers' => $topUsers('Yes'),
             'currentMonthName' => $now->format('F Y'),
             'ui' => $ui,
         ]);

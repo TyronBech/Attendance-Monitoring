@@ -33,11 +33,6 @@ class ProfileController extends Controller
 
         $user = User::with(['privileges', 'students', 'employees'])->findOrFail(Auth::id());
 
-        $profileImage = null;
-        if ($user->profile_image) {
-            $profileImage = 'data:image/jpeg;base64,'.$user->profile_image;
-        }
-
         $uiSettings = UISetting::latest()->first();
 
         return Inertia::render('settings/profile', [
@@ -48,7 +43,7 @@ class ProfileController extends Controller
                 'last_name' => $user->last_name,
                 'suffix' => $user->suffix,
                 'email' => $user->email,
-                'profile_image' => $profileImage,
+                'profile_image' => $user->avatar,
                 'user_type' => $user->privileges?->user_type ?? 'visitor',
                 'user_id_number' => $user->privileges?->user_type === 'student'
                     ? $user->students?->id_number
