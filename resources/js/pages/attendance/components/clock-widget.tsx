@@ -1,3 +1,4 @@
+import { Calendar, Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function ClockWidget() {
@@ -57,3 +58,4 @@ export default function ClockWidget() {
         </div>
     );
 }
+

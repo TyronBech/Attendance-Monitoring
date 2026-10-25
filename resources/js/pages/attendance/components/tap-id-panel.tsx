@@ -1,3 +1,4 @@
+import { AlertCircle, Scan } from 'lucide-react';
 import React, { useState } from 'react';
 
 const AVATAR_RETRY_LIMIT = 2;
@@ -82,7 +83,7 @@ export default function TapIdPanel({
             return 'bg-blue-600 text-white';
         }
 
-        return 'bg-emerald-600 text-white';
+        return 'bg-emerald-500 text-white shadow-emerald-500/20';
     };
 
     const scanLabel = scanType;

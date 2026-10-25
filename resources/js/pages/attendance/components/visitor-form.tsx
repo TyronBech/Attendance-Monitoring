@@ -371,12 +371,12 @@ export default function VisitorForm({
                                 }
                                 className="h-13 w-full rounded-xl border border-slate-300 bg-white px-4 text-base font-medium text-slate-900 transition-all outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
                             >
-                                <option value="">N/A</option>
-                                <option value="Jr.">Jr.</option>
-                                <option value="Sr.">Sr.</option>
-                                <option value="I">I</option>
-                                <option value="II">II</option>
-                                <option value="III">III</option>
+                                <option value="" className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">N/A</option>
+                                <option value="Jr." className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">Jr.</option>
+                                <option value="Sr." className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">Sr.</option>
+                                <option value="I" className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">I</option>
+                                <option value="II" className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">II</option>
+                                <option value="III" className="bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100">III</option>
                             </select>
                         </div>
 

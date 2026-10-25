@@ -1,3 +1,4 @@
+import { Monitor, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -113,7 +114,7 @@ export default function ComputerModal({
                         onClick={onClose}
                         className="rounded-md p-1 text-2xl leading-none font-bold text-white/80 hover:bg-white/10 hover:text-white"
                     >
-                        &times;
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
 

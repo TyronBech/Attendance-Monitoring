@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ChevronDown, LayoutGrid, LogOut } from 'lucide-react';
+import { Activity, ChevronDown, LayoutGrid, LogIn, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -188,7 +188,7 @@ export default function AttendanceIndex() {
                     setRecentActivity(data.recentScans);
                 }
             })
-            .catch(() => {})
+            .catch(() => { })
             .finally(() => {
                 isRecentScansRequestInFlightRef.current = false;
             });
@@ -236,7 +236,7 @@ export default function AttendanceIndex() {
             return 'bg-blue-100 text-blue-700 border-blue-200';
         }
 
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/80';
     };
 
     return (
@@ -311,7 +311,7 @@ export default function AttendanceIndex() {
                                             </p>
                                         </div>
                                     </DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="my-1 bg-slate-200 dark:bg-slate-800" />
+                                    <DropdownMenuSeparator className="my-1 bg-neutral-100 dark:bg-neutral-800" />
                                     <DropdownMenuGroup>
                                         {isAdmin && (
                                             <DropdownMenuItem asChild>
@@ -343,7 +343,8 @@ export default function AttendanceIndex() {
                                 href="/login"
                                 className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold text-white transition-all hover:bg-white/20 sm:text-sm"
                             >
-                                Login
+                                <LogIn className="w-3.5 h-3.5" />
+                                <span>Login</span>
                             </Link>
                         )}
                     </div>
@@ -399,7 +400,7 @@ export default function AttendanceIndex() {
                                 </span>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="space-y-2.5">
                                 {recentActivity.length ? (
                                     recentActivity.map((scan) => (
                                         <article

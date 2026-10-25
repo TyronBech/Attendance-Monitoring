@@ -1,3 +1,4 @@
+import { LogIn, Monitor, ScanLine } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import useScannerCapture from '@/hooks/use-scanner-capture';
 import TapIdPanel from './tap-id-panel';
@@ -151,9 +152,9 @@ export default function RFIDForm({
                     setErrorMessage(null);
                 },
                 STANDARD_SCAN_DISPLAY_DURATION_MS +
-                    (scanPayload.hasLibraryFine
-                        ? LIBRARY_FINE_EXTRA_DISPLAY_DURATION_MS
-                        : 0),
+                (scanPayload.hasLibraryFine
+                    ? LIBRARY_FINE_EXTRA_DISPLAY_DURATION_MS
+                    : 0),
             );
         } catch {
             setErrorMessage('An error occurred while scanning the ID.');
@@ -276,12 +277,12 @@ export default function RFIDForm({
                         </div>
                     ) : null}
 
-                    <p className="text-center text-sm font-semibold text-slate-600">
+                    <p className="text-center text-sm font-medium text-neutral-600 dark:text-neutral-400">
                         Just visiting?{' '}
                         <a
                             href="#"
                             id="visitorLink"
-                            className="font-bold text-primary-600 hover:underline"
+                            className="font-bold text-primary-600 dark:text-primary-400 hover:underline"
                             onClick={(event) => {
                                 event.preventDefault();
                                 onVisitorClick();
@@ -296,3 +297,4 @@ export default function RFIDForm({
         </div>
     );
 }
+
