@@ -35,7 +35,12 @@ export default function Login({
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email" className="text-gray-700 dark:text-gray-200">Email address</Label>
+                                <Label
+                                    htmlFor="email"
+                                    className="text-gray-700 dark:text-gray-200"
+                                >
+                                    Email address
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -45,18 +50,23 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
-                                    className="focus-visible:ring-primary-500 dark:bg-gray-900 dark:border-gray-700 dark:text-white"
+                                    className="focus-visible:ring-primary-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center justify-between">
-                                    <Label htmlFor="password" className="text-gray-700 dark:text-gray-200">Password</Label>
+                                    <Label
+                                        htmlFor="password"
+                                        className="text-gray-700 dark:text-gray-200"
+                                    >
+                                        Password
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request().url}
-                                            className="text-xs text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+                                            className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
                                             tabIndex={5}
                                         >
                                             Forgot password?
@@ -70,7 +80,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
-                                    className="focus-visible:ring-primary-500 dark:bg-gray-900 dark:border-gray-700 dark:text-white"
+                                    className="focus-visible:ring-primary-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -80,16 +90,19 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
-                                    className="data-[state=checked]:bg-primary-500 data-[state=checked]:border-primary-500"
+                                    className="data-[state=checked]:border-primary-500 data-[state=checked]:bg-primary-500"
                                 />
-                                <Label htmlFor="remember" className="text-sm font-normal text-gray-600 dark:text-gray-300 cursor-pointer">
+                                <Label
+                                    htmlFor="remember"
+                                    className="cursor-pointer text-sm font-normal text-gray-600 dark:text-gray-300"
+                                >
                                     Remember me
                                 </Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all duration-200 dark:bg-primary-600 dark:hover:bg-primary-700"
+                                className="mt-2 w-full rounded-lg bg-primary-500 py-2.5 font-semibold text-white shadow-md transition-all duration-200 hover:bg-primary-600 active:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-700"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -100,9 +113,13 @@ export default function Login({
                         </div>
 
                         {canRegister && (
-                            <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+                            <div className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
                                 Don't have an account?{' '}
-                                <TextLink href={register().url} tabIndex={5} className="font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+                                <TextLink
+                                    href={register().url}
+                                    tabIndex={5}
+                                    className="font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                                >
                                     Sign up
                                 </TextLink>
                             </div>

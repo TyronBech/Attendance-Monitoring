@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AttendanceScanController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Import\ImportController;
 use App\Http\Controllers\Report\ComputerUseController;
 use App\Http\Controllers\Report\UserLogsController;
+use App\Http\Controllers\UserMaintenanceController;
 use App\Models\UISetting;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,8 +25,11 @@ Route::middleware(['auth', 'attendance_display'])->group(function () {
     Route::post('/attendance/computer-use', [AttendanceScanController::class, 'storeComputerUse'])->name('attendance.computer-use');
 });
 
-Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::prefix('maintenance')->name('maintenance.')->group(function () {
+        Route::resource('users', UserMaintenanceController::class)->names(['index' => 'users']);
+    });
 
     // Reports (User logs + Computer use)
     Route::prefix('report')->group(function () {
@@ -37,6 +42,19 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('computer-use/export', [ComputerUseController::class, 'export'])->name('report.computer-use.export');
         Route::get('computer-use/export-pdf', [ComputerUseController::class, 'exportPdf'])->name('report.computer-use.export-pdf');
         Route::get('computer-use/graph', [ComputerUseController::class, 'graph'])->name('report.computer-use.graph');
+    });
+
+    // Bulk Import (Students + Employees)
+    Route::prefix('import')->group(function () {
+        Route::get('students', [ImportController::class, 'studentsIndex'])->name('import.students');
+        Route::get('students/template', [ImportController::class, 'downloadStudentTemplate'])->name('import.students.template');
+        Route::post('students/preview', [ImportController::class, 'previewStudents'])->name('import.students.preview');
+        Route::post('students/execute', [ImportController::class, 'importStudents'])->name('import.students.execute');
+
+        Route::get('employees', [ImportController::class, 'employeesIndex'])->name('import.employees');
+        Route::get('employees/template', [ImportController::class, 'downloadEmployeeTemplate'])->name('import.employees.template');
+        Route::post('employees/preview', [ImportController::class, 'previewEmployees'])->name('import.employees.preview');
+        Route::post('employees/execute', [ImportController::class, 'importEmployees'])->name('import.employees.execute');
     });
 });
 

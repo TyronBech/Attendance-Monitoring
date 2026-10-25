@@ -8,7 +8,10 @@ function encodePayload(payload: any) {
 }
 
 function getDisplayName(userData: any) {
-    return [userData?.first_name, userData?.last_name].filter(Boolean).join(' ') || 'Library User';
+    return (
+        [userData?.first_name, userData?.last_name].filter(Boolean).join(' ') ||
+        'Library User'
+    );
 }
 
 function getDetailText(userData: any) {
@@ -26,7 +29,9 @@ function getCsrfToken(): string {
         return '';
     }
 
-    const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
+    const metaToken = (
+        document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement
+    )?.content;
 
     if (metaToken) {
         return metaToken;
@@ -79,9 +84,12 @@ export default function PCInputForm({
         }
     }, [showForm]);
 
-    useEffect(() => () => {
-        clearTimeout(clearUserTimeoutRef.current);
-    }, []);
+    useEffect(
+        () => () => {
+            clearTimeout(clearUserTimeoutRef.current);
+        },
+        [],
+    );
 
     const submitIdentifier = async (scannedValue: string) => {
         const trimmedIdentifier = scannedValue.trim();
@@ -123,10 +131,15 @@ export default function PCInputForm({
             if (!response.ok || data.status !== 'success') {
                 setUserData(null);
                 setSuccessMessage(null);
-                setErrorMessage(data.message || 'There was an error. Please try again.');
-                onNotify?.(data.message || 'There was an error. Please try again.', {
-                    type: 'error',
-                });
+                setErrorMessage(
+                    data.message || 'There was an error. Please try again.',
+                );
+                onNotify?.(
+                    data.message || 'There was an error. Please try again.',
+                    {
+                        type: 'error',
+                    },
+                );
 
                 return;
             }
@@ -138,10 +151,15 @@ export default function PCInputForm({
             };
             setUserData(scanPayload);
             setErrorMessage(null);
-            setSuccessMessage(data.message || 'Online research use recorded successfully.');
-            onNotify?.(data.message || 'Online research use recorded successfully.', {
-                type: 'success',
-            });
+            setSuccessMessage(
+                data.message || 'Online research use recorded successfully.',
+            );
+            onNotify?.(
+                data.message || 'Online research use recorded successfully.',
+                {
+                    type: 'success',
+                },
+            );
             onScanSuccess?.(data.recentScan ?? null);
             onRecentScansSync?.();
             inputRef.current?.focus();
@@ -177,7 +195,9 @@ export default function PCInputForm({
     });
 
     const resolvedProfileImage = userData?.image ?? '';
-    const hasProfileImage = Boolean(resolvedProfileImage) && !resolvedProfileImage.includes('id_default.png');
+    const hasProfileImage =
+        Boolean(resolvedProfileImage) &&
+        !resolvedProfileImage.includes('id_default.png');
     const detailText = userData ? getDetailText(userData) : null;
 
     if (!showForm) {
@@ -185,47 +205,76 @@ export default function PCInputForm({
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-neutral-950/70 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200" onClick={handleClose}>
-            <div className="w-full max-w-3xl my-auto bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 shadow-2xl border border-neutral-200 dark:border-neutral-800 space-y-6 text-neutral-900 dark:text-neutral-100" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-start justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                            <Monitor className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Online Research Use Form</h2>
-                        </div>
-                        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-normal">
-                            Scan the user's RFID or enter their ID Number to record online research station use.
+        <div
+            className="fixed inset-0 z-50 flex animate-in items-center justify-center overflow-y-auto bg-slate-950/80 p-4 backdrop-blur-md duration-200 fade-in sm:p-8"
+            onClick={handleClose}
+        >
+            <div
+                className="my-auto w-full max-w-4xl space-y-8 rounded-3xl border border-slate-200 bg-white p-8 text-slate-900 shadow-2xl sm:p-10"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-start justify-between border-b border-slate-200 pb-5">
+                    <div>
+                        <p className="text-xs font-extrabold tracking-widest text-primary-600 uppercase">
+                            Attendance Support
+                        </p>
+                        <h2 className="mt-1 text-3xl font-extrabold text-slate-900">
+                            Online Research Use Form
+                        </h2>
+                        <p className="mt-1 text-sm font-medium text-slate-600">
+                            Scan the user's RFID or enter their ID Number to
+                            record online research use.
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="p-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors cursor-pointer"
+                        className="cursor-pointer rounded-full bg-slate-100 p-2.5 text-slate-600 transition-all hover:bg-slate-200"
                         aria-label="Close Online Research Use Form"
                     >
-                        <X className="w-5 h-5" />
+                        <svg
+                            className="h-6 w-6"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                        >
+                            <path d="M6 6l12 12M18 6L6 18" />
+                        </svg>
                     </button>
                 </div>
 
-                <form method="POST" onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                    <div className="md:col-span-6 flex justify-center">
+                <form
+                    method="POST"
+                    onSubmit={handleSubmit}
+                    className="grid grid-cols-1 items-center gap-8 sm:grid-cols-12"
+                >
+                    <div className="flex justify-center sm:col-span-6">
                         <TapIdPanel
                             subtitle="Tap to log online research use"
-                            profileImage={userData && hasProfileImage ? resolvedProfileImage : null}
-                            displayName={userData ? getDisplayName(userData) : null}
+                            profileImage={
+                                userData && hasProfileImage
+                                    ? resolvedProfileImage
+                                    : null
+                            }
+                            displayName={
+                                userData ? getDisplayName(userData) : null
+                            }
                             detailText={detailText}
                             scanType={userData ? userData.scanType : null}
                             successMessage={successMessage}
                             errorMessage={errorMessage}
-                            className="w-full min-h-[220px]"
+                            className="min-h-[240px] w-full"
                         />
                     </div>
 
-                    <div className="md:col-span-6 space-y-4">
+                    <div className="space-y-5 sm:col-span-6">
                         <div className="space-y-2">
-                            <label htmlFor="pcInput" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                                <ScanLine className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
-                                ID Number / RFID
+                            <label
+                                htmlFor="pcInput"
+                                className="block text-xs font-extrabold tracking-wider text-slate-700 uppercase"
+                            >
+                                ID Number
                             </label>
                             <input
                                 ref={inputRef}
@@ -234,20 +283,23 @@ export default function PCInputForm({
                                 name="pcInput"
                                 autoComplete="off"
                                 value={identifier}
-                                onChange={(event) => setIdentifier(event.target.value)}
+                                onChange={(event) =>
+                                    setIdentifier(event.target.value)
+                                }
                                 disabled={isSubmitting}
                                 placeholder="Scan RFID or enter ID Number"
-                                className="w-full h-12 px-4 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-semibold text-base focus:bg-white dark:focus:bg-neutral-800 focus:ring-4 focus:ring-primary-500/15 focus:border-primary-500 outline-none transition-all placeholder:text-neutral-400 dark:placeholder:text-neutral-500 shadow-xs"
+                                className="h-15 w-full rounded-2xl border-2 border-slate-200 bg-slate-50 px-5 text-lg font-bold text-slate-900 transition-all outline-none placeholder:text-slate-400 focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/20"
                             />
                         </div>
 
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full h-12 bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white font-bold text-sm tracking-wide rounded-xl shadow-xs transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                            className="h-14 w-full cursor-pointer rounded-2xl bg-primary-600 text-base font-extrabold text-white shadow-xl shadow-primary-600/25 transition-all hover:bg-primary-700 disabled:opacity-60"
                         >
-                            <Monitor className="w-4 h-4" />
-                            <span>{isSubmitting ? 'Recording...' : 'Submit Computer Use'}</span>
+                            {isSubmitting
+                                ? 'Recording...'
+                                : 'Submit Computer Use'}
                         </button>
                     </div>
                 </form>

@@ -78,7 +78,7 @@
 <body class="antialiased">
   <header class="sticky top-0 z-50">
     <nav class="bg-primary-500 border-gray-200 dark:bg-primary-500" style="background-color: rgb(var(--color-primary-500, 59 130 246));">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <div class="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
           @if($settings && $settings->getOrgLogoBase64Attribute())
           <img class="rounded-full w-16 h-16 md:w-20 md:h-20" src="{{ $settings->getOrgLogoBase64Attribute() }}" alt="{{ $settings->org_name ?? 'Logo' }}">

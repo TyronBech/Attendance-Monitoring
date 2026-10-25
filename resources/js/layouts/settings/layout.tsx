@@ -33,14 +33,14 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
             <Heading
                 title="Settings"
                 description="Manage your profile, appearance, and system settings"
             />
 
             <div className="mt-8 flex flex-col lg:flex-row lg:space-x-10">
-                <aside className="w-full lg:w-64 shrink-0 mb-6 lg:mb-0">
+                <aside className="mb-6 w-full shrink-0 lg:mb-0 lg:w-64">
                     <nav
                         className="flex flex-col space-y-1"
                         aria-label="Settings"
@@ -48,7 +48,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                         {sidebarNavItems.map((item, index) => {
                             const isActive = isCurrentOrParentUrl(item.href);
                             const Icon = item.icon;
-                            
+
                             return (
                                 <Button
                                     key={`${toUrl(item.href)}-${index}`}
@@ -56,15 +56,22 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     variant="ghost"
                                     asChild
                                     className={cn(
-                                        'w-full justify-start px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
+                                        'w-full justify-start rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                                         isActive
-                                            ? 'bg-primary-50 text-primary-700 font-bold dark:bg-primary-900/40 dark:text-primary-300'
-                                            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+                                            ? 'bg-primary-50 font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300'
+                                            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800',
                                     )}
                                 >
                                     <Link href={item.href}>
                                         {Icon && (
-                                            <Icon className={cn('h-4 w-4 mr-2.5 shrink-0', isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-400')} />
+                                            <Icon
+                                                className={cn(
+                                                    'mr-2.5 h-4 w-4 shrink-0',
+                                                    isActive
+                                                        ? 'text-primary-600 dark:text-primary-400'
+                                                        : 'text-gray-400',
+                                                )}
+                                            />
                                         )}
                                         {item.title}
                                     </Link>
@@ -76,9 +83,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
                 <Separator className="my-6 lg:hidden" />
 
-                <div className="flex-1 min-w-0">
-                    {children}
-                </div>
+                <div className="min-w-0 flex-1">{children}</div>
             </div>
         </div>
     );

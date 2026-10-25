@@ -1,5 +1,13 @@
 import { Head, router, usePage } from '@inertiajs/react';
-import { Filter, Search, FileText, Download, Calendar, Monitor, Clock } from 'lucide-react';
+import {
+    Filter,
+    Search,
+    FileText,
+    Download,
+    Calendar,
+    Monitor,
+    Clock,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import report from '@/routes/report';
@@ -57,8 +65,17 @@ interface SharedProps {
 }
 
 export default function ComputersReport() {
-    const { data, search, fromInputDate, toInputDate, peak_hour, perPage, userType, ui } = usePage<SharedProps>().props;
-    
+    const {
+        data,
+        search,
+        fromInputDate,
+        toInputDate,
+        peak_hour,
+        perPage,
+        userType,
+        ui,
+    } = usePage<SharedProps>().props;
+
     const [searchTerm, setSearchTerm] = useState(search || '');
     const [startDate, setStartDate] = useState(fromInputDate || '');
     const [endDate, setEndDate] = useState(toInputDate || '');
@@ -67,18 +84,22 @@ export default function ComputersReport() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        router.get(report.computerUse.url({
-            query: {
-                search: searchTerm,
-                start: startDate,
-                end: endDate,
-                user_type: typeFilter,
-                perPage: limit,
-            }
-        }), {}, {
-            preserveState: true,
-            replace: true,
-        });
+        router.get(
+            report.computerUse.url({
+                query: {
+                    search: searchTerm,
+                    start: startDate,
+                    end: endDate,
+                    user_type: typeFilter,
+                    perPage: limit,
+                },
+            }),
+            {},
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
     };
 
     const handleExportPdf = () => {
@@ -88,7 +109,7 @@ export default function ComputersReport() {
                 start: startDate,
                 end: endDate,
                 user_type: typeFilter,
-            }
+            },
         });
     };
 
@@ -99,7 +120,7 @@ export default function ComputersReport() {
                 search: searchTerm,
                 start: startDate,
                 end: endDate,
-            }
+            },
         });
     };
 
@@ -108,128 +129,170 @@ export default function ComputersReport() {
             <Head title="Online Research Report" />
 
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-white mb-8">Online Research Report</h1>
+                <h1 className="mb-8 text-center text-3xl font-bold text-gray-800 dark:text-white">
+                    Online Research Report
+                </h1>
 
                 {/* Filters Section */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8 border border-gray-100 dark:border-gray-700">
-                    <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                <div className="mb-8 rounded-xl border border-gray-100 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
+                    <form
+                        onSubmit={handleSearch}
+                        className="grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-5"
+                    >
                         <div className="lg:col-span-2">
-                            <label className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1 flex items-center">
-                                <Calendar size={14} className="mr-1" /> Date Range
+                            <label className="mb-1 flex items-center text-sm font-semibold text-gray-600 dark:text-gray-400">
+                                <Calendar size={14} className="mr-1" /> Date
+                                Range
                             </label>
                             <div className="flex items-center gap-2">
-                                <Input 
-                                    type="date" 
+                                <Input
+                                    type="date"
                                     value={startDate}
-                                    onChange={e => setStartDate(e.target.value)}
+                                    onChange={(e) =>
+                                        setStartDate(e.target.value)
+                                    }
                                 />
                                 <span className="text-gray-400">to</span>
-                                <Input 
-                                    type="date" 
+                                <Input
+                                    type="date"
                                     value={endDate}
-                                    onChange={e => setEndDate(e.target.value)}
+                                    onChange={(e) => setEndDate(e.target.value)}
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1 flex items-center">
+                            <label className="mb-1 flex items-center text-sm font-semibold text-gray-600 dark:text-gray-400">
                                 <Search size={14} className="mr-1" /> Search
                             </label>
-                            <Input 
-                                type="text" 
+                            <Input
+                                type="text"
                                 placeholder="Name..."
                                 value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1 flex items-center">
-                                <Monitor size={14} className="mr-1" /> User Group
+                            <label className="mb-1 flex items-center text-sm font-semibold text-gray-600 dark:text-gray-400">
+                                <Monitor size={14} className="mr-1" /> User
+                                Group
                             </label>
-                            <select 
+                            <select
                                 value={typeFilter}
-                                onChange={e => setTypeFilter(e.target.value)}
-                                className="w-full rounded-xl border border-gray-200 bg-gray-50/60 px-3.5 py-2 text-sm text-gray-900 shadow-xs transition-all duration-200 focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary-500/15 dark:border-gray-700/80 dark:bg-gray-900/40 dark:text-gray-100"
+                                onChange={(e) => setTypeFilter(e.target.value)}
+                                className="w-full rounded-xl border border-gray-200 bg-gray-50/60 px-3.5 py-2 text-sm text-gray-900 shadow-xs transition-all duration-200 focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/15 focus:outline-none dark:border-gray-700/80 dark:bg-gray-900/40 dark:text-gray-100"
                             >
                                 <option value="students">Students</option>
-                                <option value="employees">Faculties & Staff</option>
+                                <option value="employees">
+                                    Faculties & Staff
+                                </option>
                             </select>
                         </div>
 
                         <div className="flex gap-2">
-                            <button 
+                            <button
                                 type="submit"
-                                className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
-                                style={{ backgroundColor: ui.theme_colors.primary }}
+                                className="flex flex-1 items-center justify-center rounded-lg bg-primary-600 px-4 py-2 font-bold text-white transition-colors hover:bg-primary-700"
+                                style={{
+                                    backgroundColor: ui.theme_colors.primary,
+                                }}
                             >
                                 <Filter size={18} className="mr-2" /> Find
                             </button>
                         </div>
                     </form>
-                    
-                    <div className="mt-6 flex flex-wrap gap-3 justify-between items-center border-t dark:border-gray-700 pt-6">
+
+                    <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t pt-6 dark:border-gray-700">
                         <div className="flex items-center">
-                            <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg mr-3">
-                                <Clock size={20} className="text-indigo-600 dark:text-indigo-400" />
+                            <div className="mr-3 rounded-lg bg-indigo-50 p-2 dark:bg-indigo-900/20">
+                                <Clock
+                                    size={20}
+                                    className="text-indigo-600 dark:text-indigo-400"
+                                />
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Peak Hour</p>
-                                <p className="text-lg font-bold text-gray-900 dark:text-white">{peak_hour || 'N/A'}</p>
+                                <p className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                                    Peak Hour
+                                </p>
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                    {peak_hour || 'N/A'}
+                                </p>
                             </div>
                         </div>
 
                         <div className="flex gap-2">
-                            <button 
+                            <button
                                 onClick={handleExportPdf}
-                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm"
+                                className="flex items-center rounded-lg bg-red-500 px-4 py-2 font-bold text-white shadow-sm transition-colors hover:bg-red-600"
                             >
-                                <FileText size={18} className="mr-2" /> PDF Export
+                                <FileText size={18} className="mr-2" /> PDF
+                                Export
                             </button>
-                            <button 
+                            <button
                                 onClick={handleExportCsv}
-                                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm"
+                                className="flex items-center rounded-lg bg-green-600 px-4 py-2 font-bold text-white shadow-sm transition-colors hover:bg-green-700"
                             >
-                                <Download size={18} className="mr-2" /> CSV Export
+                                <Download size={18} className="mr-2" /> CSV
+                                Export
                             </button>
                         </div>
                     </div>
                 </div>
 
                 {/* Table Section */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                        <table className="w-full border-collapse text-left">
                             <thead>
-                                <tr className="bg-gray-50 dark:bg-gray-900/50 border-b dark:border-gray-700">
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                        {typeFilter === 'students' ? 'Level & Section' : 'Position/Role'}
+                                <tr className="border-b bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50">
+                                    <th className="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                                        Name
                                     </th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Date & Time</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Purpose / Remarks</th>
+                                    <th className="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                                        {typeFilter === 'students'
+                                            ? 'Level & Section'
+                                            : 'Position/Role'}
+                                    </th>
+                                    <th className="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                                        Date & Time
+                                    </th>
+                                    <th className="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                                        Purpose / Remarks
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y dark:divide-gray-700">
                                 {data.data.length > 0 ? (
                                     data.data.map((log) => (
-                                        <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
+                                        <tr
+                                            key={log.id}
+                                            className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-900/30"
+                                        >
                                             <td className="px-6 py-4">
                                                 <div className="font-semibold text-gray-900 dark:text-white">
-                                                    {log.user.last_name}, {log.user.first_name} {log.user.middle_name ? log.user.middle_name[0] + '.' : ''}
+                                                    {log.user.last_name},{' '}
+                                                    {log.user.first_name}{' '}
+                                                    {log.user.middle_name
+                                                        ? log.user
+                                                              .middle_name[0] +
+                                                          '.'
+                                                        : ''}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                    {typeFilter === 'students' 
+                                                    {typeFilter === 'students'
                                                         ? `${log.user.students?.level || ''} - ${log.user.students?.section || ''}`
-                                                        : (log.user.employees?.employee_role || 'N/A')
-                                                    }
+                                                        : log.user.employees
+                                                              ?.employee_role ||
+                                                          'N/A'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                                {new Date(log.time_in).toLocaleString()}
+                                                {new Date(
+                                                    log.time_in,
+                                                ).toLocaleString()}
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                                                 {log.remarks || '-'}
@@ -238,7 +301,10 @@ export default function ComputersReport() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-10 text-center text-gray-500 italic">
+                                        <td
+                                            colSpan={4}
+                                            className="px-6 py-10 text-center text-gray-500 italic"
+                                        >
                                             No online research logs found.
                                         </td>
                                     </tr>
@@ -249,29 +315,54 @@ export default function ComputersReport() {
 
                     {/* Pagination */}
                     {data.links.length > 3 && (
-                        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-t dark:border-gray-700 flex items-center justify-between">
+                        <div className="flex items-center justify-between border-t bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
                             <div className="text-sm text-gray-500">
-                                Showing <span className="font-medium text-gray-900 dark:text-white">{data.data.length}</span> of <span className="font-medium text-gray-900 dark:text-white">{data.total}</span> entries
+                                Showing{' '}
+                                <span className="font-medium text-gray-900 dark:text-white">
+                                    {data.data.length}
+                                </span>{' '}
+                                of{' '}
+                                <span className="font-medium text-gray-900 dark:text-white">
+                                    {data.total}
+                                </span>{' '}
+                                entries
                             </div>
                             <div className="flex gap-1">
                                 {data.links.map((link, i) => (
                                     <button
                                         key={i}
                                         disabled={!link.url}
-                                        onClick={() => link.url && router.get(link.url, {
-                                            search: searchTerm,
-                                            start: startDate,
-                                            end: endDate,
-                                            user_type: typeFilter,
-                                            perPage: limit
-                                        }, { preserveState: true })}
-                                        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                                            link.active 
-                                                ? 'bg-primary-600 text-white' 
-                                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                                        } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                        style={link.active ? { backgroundColor: ui.theme_colors.primary } : {}}
-                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                        onClick={() =>
+                                            link.url &&
+                                            router.get(
+                                                link.url,
+                                                {
+                                                    search: searchTerm,
+                                                    start: startDate,
+                                                    end: endDate,
+                                                    user_type: typeFilter,
+                                                    perPage: limit,
+                                                },
+                                                { preserveState: true },
+                                            )
+                                        }
+                                        className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+                                            link.active
+                                                ? 'bg-primary-600 text-white'
+                                                : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                                        } ${!link.url ? 'cursor-not-allowed opacity-50' : ''}`}
+                                        style={
+                                            link.active
+                                                ? {
+                                                      backgroundColor:
+                                                          ui.theme_colors
+                                                              .primary,
+                                                  }
+                                                : {}
+                                        }
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
                                     />
                                 ))}
                             </div>

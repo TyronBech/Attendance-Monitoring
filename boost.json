@@ -1,6 +1,7 @@
 {
     "agents": [
-        "copilot"
+        "copilot",
+        "chatgpt"
     ],
     "cloud": false,
     "guidelines": true,
@@ -8,11 +9,11 @@
     "nightwatch": false,
     "sail": false,
     "skills": [
+        "infer-conventions",
         "fortify-development",
         "laravel-best-practices",
+        "testing-best-practices",
         "wayfinder-development",
-        "pest-testing",
-        "inertia-react-development",
         "tailwindcss-development"
     ]
 }

@@ -16,7 +16,9 @@ function getCsrfToken(): string {
         return '';
     }
 
-    const metaToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
+    const metaToken = (
+        document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement
+    )?.content;
 
     if (metaToken) {
         return metaToken;
@@ -27,7 +29,12 @@ function getCsrfToken(): string {
     return match ? decodeURIComponent(match[2]) : '';
 }
 
-export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: Props) {
+export default function ComputerModal({
+    isOpen,
+    onClose,
+    onSuccess,
+    onNotify,
+}: Props) {
     const [identifier, setIdentifier] = useState('');
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -51,7 +58,7 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'X-CSRF-TOKEN': getCsrfToken(),
                     'X-Requested-With': 'XMLHttpRequest',
                 },
@@ -61,7 +68,10 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
 
             const data = await res.json().catch(() => ({}));
 
-            if (res.status === 419 || data.message?.toLowerCase().includes('csrf')) {
+            if (
+                res.status === 419 ||
+                data.message?.toLowerCase().includes('csrf')
+            ) {
                 setErrorMsg('Session expired. Reloading page...');
                 setTimeout(() => {
                     window.location.reload();
@@ -76,7 +86,9 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
                 return;
             }
 
-            onNotify(data.message || 'Online Research Use recorded!', { type: 'success' });
+            onNotify(data.message || 'Online Research Use recorded!', {
+                type: 'success',
+            });
             onSuccess(data.recentScan);
             setIdentifier('');
             onClose();
@@ -88,36 +100,42 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/70 backdrop-blur-xs animate-in fade-in duration-200">
-            <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-800 w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-black/60 p-4 backdrop-blur-xs duration-200 fade-in">
+            <div className="w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800">
                 {/* Header */}
-                <div className="p-5 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+                <div className="flex items-center justify-between bg-primary-500 p-5 text-white">
                     <div className="flex items-center gap-2">
-                        <Monitor className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                        <h3 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">Online Research Use Form</h3>
+                        <span className="text-xl">💻</span>
+                        <h3 className="text-lg font-bold">
+                            Online Research Use Form
+                        </h3>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors cursor-pointer"
+                        className="rounded-md p-1 text-2xl leading-none font-bold text-white/80 hover:bg-white/10 hover:text-white"
                     >
                         <X className="w-4 h-4" />
                     </button>
                 </div>
 
                 {/* Form Body */}
-                <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 p-6">
                     {errorMsg && (
-                        <div className="p-3 text-xs rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 font-semibold border border-rose-200 dark:border-rose-800">
+                        <div className="rounded-lg bg-red-100 p-3 text-xs font-medium text-red-700 dark:bg-red-950 dark:text-red-300">
                             {errorMsg}
                         </div>
                     )}
 
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                        Scan your RFID card or enter your ID / Employee Number below to log computer station usage for research.
+                    <p className="text-xs text-gray-600 dark:text-gray-300">
+                        Scan your RFID card or enter your ID / Employee Number
+                        below to log computer station usage for research.
                     </p>
 
                     <div className="space-y-1">
-                        <Label htmlFor="pc_identifier" className="text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        <Label
+                            htmlFor="pc_identifier"
+                            className="text-xs font-semibold text-gray-700 dark:text-gray-200"
+                        >
                             Scan RFID or Enter ID Number *
                         </Label>
                         <Input
@@ -127,15 +145,24 @@ export default function ComputerModal({ isOpen, onClose, onSuccess, onNotify }: 
                             placeholder="Scan RFID / Enter ID Number"
                             value={identifier}
                             onChange={(e) => setIdentifier(e.target.value)}
-                            className="bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:text-white"
+                            className="dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                         />
                     </div>
 
-                    <div className="pt-3 flex items-center justify-end gap-3 border-t border-neutral-100 dark:border-neutral-800">
-                        <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="rounded-xl">
+                    <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-3 dark:border-gray-700">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={onClose}
+                            disabled={loading}
+                        >
                             Cancel
                         </Button>
-                        <Button type="submit" className="bg-primary-600 hover:bg-primary-700 text-white rounded-xl shadow-xs" disabled={loading}>
+                        <Button
+                            type="submit"
+                            className="bg-primary-500 text-white hover:bg-primary-600"
+                            disabled={loading}
+                        >
                             {loading ? 'Submitting...' : 'Log Computer Use'}
                         </Button>
                     </div>
